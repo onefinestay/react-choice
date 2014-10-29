@@ -1,0 +1,30 @@
+@import "variables";
+
+// Components
+@import "components/header";
+@import "components/footer";
+@import "components/code-snippet";
+@import "components/features";
+@import "components/ofs-credit";
+
+// Base
+body {
+    font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    width: 540px;
+    margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-weight: lighter;
+    letter-spacing: 1.2px;
+    text-rendering: optimizeLegibility;
+}
+
+h1,
+h2 {
+    color: $ofs-pink;
+}
