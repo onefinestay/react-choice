@@ -9,7 +9,6 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
 var reactTools = require('react-tools');
-var render = require('gulp-render');
 var connect = require('gulp-connect');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
@@ -23,6 +22,14 @@ gulp.task('watch-js', function() {
 });
 
 gulp.task('build-example', function() {
+  for (var i in require.cache) {
+    if (!i.match(/node_modules\/gulp\//)) {
+      delete require.cache[i];
+    }
+  }
+
+  var render = require('gulp-render');
+
   return gulp.src('./example/index.jsx')
     .pipe(render({
       template: '<!doctype html>' +
