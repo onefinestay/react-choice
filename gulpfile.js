@@ -5,6 +5,7 @@ var path = require('path');
 var gulp = require('gulp');
 var watch = require('gulp-watch');
 var react = require('gulp-react');
+var render = require('gulp-render');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
@@ -22,14 +23,6 @@ gulp.task('watch-js', function() {
 });
 
 gulp.task('build-example', function() {
-  for (var i in require.cache) {
-    if (!i.match(/node_modules\/gulp\//)) {
-      delete require.cache[i];
-    }
-  }
-
-  var render = require('gulp-render');
-
   return gulp.src('./example/index.jsx')
     .pipe(render({
       template: '<!doctype html>' +
@@ -46,13 +39,18 @@ gulp.task('build-example-scss', function() {
     .pipe(gulp.dest('./example/css'));
 });
 
-gulp.task('watch-example', function() {
+gulp.task('watch-example', ['build-example'], function() {
   watch(['./example/**/*.{js,jsx}', './src/*{js,jsx}'], function(files, cb) {
+    files.on('data', function(d) {
+      // delete file from cache
+      delete require.cache[d.path];
+    });
+
     gulp.start('build-example', cb);
   });
 });
 
-gulp.task('watch-example-scss', function() {
+gulp.task('watch-example-scss', ['build-example-scss'], function() {
   watch('./example/**/*.scss', function(files, cb) {
     gulp.start('build-example-scss', cb);
   });
@@ -65,6 +63,6 @@ gulp.task('example-server', function() {
   });
 });
 
-gulp.task('example-dev', ['watch-example', 'watch-example-scss', 'example-server']);
+gulp.task('example-dev', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-scss', 'example-server']);
 
 gulp.task('develop', ['watch-js']);
