@@ -61,7 +61,7 @@ gulp.task('build-example-js', function() {
 });
 
 gulp.task('build-example-scss', function() {
-  gulp.src('./example/css/*.scss')
+  gulp.src('./example/css/**/*.scss')
     .pipe(sourcemaps.init())
       .pipe(sass())
     .pipe(sourcemaps.write())

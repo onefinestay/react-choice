@@ -10,7 +10,7 @@ var SearchResult = require('./search-result');
 //
 // Auto complete select box
 //
-var SelectAutocomplete = React.createClass({
+var SingleChoice = React.createClass({
   propTypes: {
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
@@ -285,16 +285,27 @@ var SelectAutocomplete = React.createClass({
       this.state.selected[this.props.labelField] : this.state.value;
 
     var classes = cx({
-      'select-autocomplete': true,
-      'in-focus': this.state.focus,
-      'not-in-focus': !this.state.focus
+      'react-choice': true,
+    });
+
+    var inputClasses = cx({
+      'react-choice-input': true,
+      'react-choice-input--in-focus': this.state.focus,
+      'react-choice-input--not-in-focus': !this.state.focus
+    });
+
+    var arrowClasses = cx({
+      'react-choice-icon__arrow': true,
+      'react-choice-icon__arrow--up': this.state.focus,
+      'react-choice-icon__arrow--down': !this.state.focus
     });
 
     return (
-      <div className={classes}>
+      <div className="react-choice">
         <input type="hidden" name={this.props.name} value={value} />
 
         <input type="text"
+          className={inputClasses}
           placeholder={this.props.placeholder}
           value={label}
 
@@ -306,19 +317,19 @@ var SelectAutocomplete = React.createClass({
           autoComplete="off"
           ref="input" />
 
-        <div className="select-autocomplete-icon" onMouseDown={this._handleArrowClick}>
-          {this.state.focus ?
-            <i className="fa fa-caret-up"></i> :
-            <i className="fa fa-caret-down"></i>}
+        <div className="react-choice-icon" onMouseDown={this._handleArrowClick}>
+          <div className={arrowClasses}></div>
         </div>
 
         {this.state.focus ?
-          <ul className="select-autocomplete-options" ref="options">
-            {options}
-          </ul> : null}
+          <div className="react-choice-options" ref="options">
+            <ul className="react-choice-options__list">
+              {options}
+            </ul>
+          </div> : null}
       </div>
     );
   }
 });
 
-module.exports = SelectAutocomplete;
+module.exports = SingleChoice;

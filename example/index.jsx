@@ -10,6 +10,8 @@ var CodeSnippet = require('./components/code-snippet.jsx');
 var Install = require('./components/install.jsx');
 var Features = require('./components/features.jsx');
 
+var Choice = require('../');
+
 var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
 
 var Index = React.createClass({
@@ -18,12 +20,21 @@ var Index = React.createClass({
   },
 
   render: function() {
+    var options = [];
+    for (var i = 0; i < 10; i++) {
+      options.push({
+        value: "" + i,
+        label: "" + i
+      });
+    }
+
     return (
       <html>
         <head>
           <title>React Choice Demo</title>
           <link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/docco.min.css' rel='stylesheet' type='text/css'></link>
           <link href="css/index.css" rel="stylesheet"></link>
+          <link href="css/choice/index.css" rel="stylesheet"></link>
         </head>
         <body>
           <Header />
@@ -31,6 +42,9 @@ var Index = React.createClass({
 
           <div className="content">
             <div className="example">
+
+              <Choice.Single options={options} placeholder="Select an option" />
+
               <CodeSnippet language="javascript">
                 {singleExample}
               </CodeSnippet>

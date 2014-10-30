@@ -1,0 +1,111 @@
+/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
+.react-choice-input {
+  margin-bottom: 0;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: white;
+  font-family: inherit;
+  border: 1px solid #ccc;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.75);
+  display: block;
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0.5rem;
+  height: 2.3125rem;
+  width: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: -webkit-box-shadow 0.45s, border-color 0.45s ease-in-out;
+  -moz-transition: -moz-box-shadow 0.45s, border-color 0.45s ease-in-out;
+  transition: box-shadow 0.45s, border-color 0.45s ease-in-out; }
+  /* line 28, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
+  .react-choice-input--not-in-focus {
+    cursor: pointer;
+    background-color: #f9f9f9;
+    background-image: -moz-linear-gradient(top, #fefefe, #f2f2f2);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fefefe), to(#f2f2f2));
+    background-image: -webkit-linear-gradient(top, #fefefe, #f2f2f2);
+    background-image: -o-linear-gradient(top, #fefefe, #f2f2f2);
+    background-image: linear-gradient(to bottom, #fefefe, #f2f2f2);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffefefe', endColorstr='#fff2f2f2', GradientType=0);
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8); }
+  /* line 43, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
+  .react-choice-input--in-focus {
+    background: #fafafa;
+    border-color: #999;
+    outline: 0;
+    -webkit-box-shadow: 0 0 5px #999;
+    -moz-box-shadow: 0 0 5px #999;
+    box-shadow: 0 0 5px #999;
+    border-color: #999; }
+
+/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
+.react-choice-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 30px;
+  cursor: pointer; }
+  /* line 12, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
+  .react-choice-icon__arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    margin-top: 50%; }
+    /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
+    .react-choice-icon__arrow--down {
+      border-top: 6px solid #222;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent; }
+    /* line 27, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
+    .react-choice-icon__arrow--up {
+      margin-top: 30%;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid #222;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent; }
+
+/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/options */
+.react-choice-options {
+  position: absolute;
+  top: 2.3125rem;
+  z-index: 2;
+  width: 100%;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  max-height: 305px;
+  overflow: auto; }
+  /* line 10, /Users/jkimbo/code/ofs/react-choice/example/css/choice/options */
+  .react-choice-options__list {
+    background: #fff;
+    border: 1px solid #D0D0D0;
+    border-top: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+
+/* line 5, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
+.react-choice {
+  position: relative; }
+  /* line 9, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
+  .react-choice .select-autocomplete-options .select-result {
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: rem-calc(14); }
+    /* line 14, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
+    .react-choice .select-autocomplete-options .select-result.selected {
+      background: #eee; }
+    /* line 18, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
+    .react-choice .select-autocomplete-options .select-result .text-match {
+      font-weight: bold; }
+
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNob2ljZS9faW5wdXQuc2NzcyIsImNob2ljZS9faWNvbi5zY3NzIiwiY2hvaWNlL19vcHRpb25zLnNjc3MiLCJjaG9pY2UvaW5kZXguc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUE7RUFDRSxlQUFlO0VBQ2Ysb0JBQW9CO0VBQ3BCLHVCQUF1QjtFQUN2QixlQUFlO0VBRWYsa0JBQWtCO0VBQ2xCLGFBQWE7RUFDYixRQUFRO0VBRVIsb0JBQW9CO0VBQ3BCLFlBQVk7RUFFWixPQUFPO0VBQ1AsU0FBUztFQUNULFdBQVc7RUFDWCxRQUFRO0VBQ1IsU0FBUztFQUNULFFBQVE7RUFDUixPQUFPO0VBQ1AsaUJBQWlCO0VBQ2pCLG9CQUFvQjtFQUNwQixZQUFZO0VBQ1osb0JBQXVDO0VBQ3ZDLGlCQUFpQztFQUNqQyxZQUF1Qjs7RUFBekI7SUFHSSxRQUFRO0lBRVIsa0JBQWtCO0lBQ2xCLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsa0JBQWtCO0lBQ2xCLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsbUJBQW1CO0lBQ25CLFFBQVE7SUFDUixvQkFBOEM7SUFDOUMsWUFBc0M7O0VBQzFDO0lBR0ksWUFBWTtJQUNaLGNBQWM7SUFDZCxTQUFTO0lBRVQsb0JBQW9CO0lBQ3BCLGlCQUFpQjtJQUNqQixZQUFZO0lBQ1osY0FBYzs7O0FDbERsQjtFQUNFLFVBQVU7RUFDVixLQUFLO0VBQ0wsUUFBUTtFQUNSLE9BQU87RUFDUCxPQUFPO0VBQ1AsUUFBUTs7RUFHVjtJQUdJLFNBQVM7SUFDVCxPQUFPO0lBQ1AsUUFBUTtJQUNSLGFBQWE7SUFDYixZQUFZOztJQUFoQjtNQUdNLFlBQVk7TUFDWixlQUFlO01BRWYsYUFBYTtNQUNiLGNBQWM7O0lBQ3BCO01BR00sWUFBWTtNQUVaLFlBQVk7TUFDWixlQUFlO01BRWYsYUFBYTtNQUNiLGNBQWM7OztBQ2pDcEI7RUFDRSxVQUFVO0VBQ1YsS0FBSztFQUNMLFNBQVM7RUFDVCxPQUFPO0VBQ1AsWUFBWTtFQUNaLFlBQVk7RUFDWixVQUFVOztFQUFaO0lBR0ksWUFBWTtJQUNaLFFBQVE7SUFDUixZQUFZO0lBQ1osaUJBQWlCO0lBQ2pCLFFBQVE7SUFDUixTQUFTOzs7QUNYYjtFQUNJLFVBQVU7O0VBRWQsY0FBYyw2QkFBNkI7SUFFL0IsUUFBUTtJQUNSLFNBQVM7SUFDVCxXQUFXOztJQUF2QixjQUFjLDZCQUE2QixjQUFjO01BR3pDLFlBQVk7O0lBQzVCLGNBQWMsNkJBQTZCLGVBQWU7TUFHMUMsYUFBYSIsImZpbGUiOiJjaG9pY2UvaW5kZXguY3NzIiwic291cmNlc0NvbnRlbnQiOltudWxsLG51bGwsbnVsbCwiQGltcG9ydCBcImlucHV0XCI7XG5AaW1wb3J0IFwiaWNvblwiO1xuQGltcG9ydCBcIm9wdGlvbnNcIjtcblxuLnJlYWN0LWNob2ljZSB7XG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xuXG4gICAgLnNlbGVjdC1hdXRvY29tcGxldGUtb3B0aW9ucyB7XG4gICAgICAgIC5zZWxlY3QtcmVzdWx0IHtcbiAgICAgICAgICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICAgICAgICAgIHBhZGRpbmc6IDVweCAxMHB4O1xuICAgICAgICAgICAgZm9udC1zaXplOiByZW0tY2FsYygxNCk7XG5cbiAgICAgICAgICAgICYuc2VsZWN0ZWQge1xuICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNlZWU7XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIC50ZXh0LW1hdGNoIHtcbiAgICAgICAgICAgICAgICBmb250LXdlaWdodDogYm9sZDtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgIH1cbn1cbiJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ== */

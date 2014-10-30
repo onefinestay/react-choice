@@ -10,7 +10,7 @@ var SearchResult = require('./search-result');
 //
 // Auto complete select box
 //
-var SelectAutocomplete = React.createClass({displayName: 'SelectAutocomplete',
+var SingleChoice = React.createClass({displayName: 'SingleChoice',
   propTypes: {
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
@@ -285,16 +285,27 @@ var SelectAutocomplete = React.createClass({displayName: 'SelectAutocomplete',
       this.state.selected[this.props.labelField] : this.state.value;
 
     var classes = cx({
-      'select-autocomplete': true,
-      'in-focus': this.state.focus,
-      'not-in-focus': !this.state.focus
+      'react-choice': true,
+    });
+
+    var inputClasses = cx({
+      'react-choice-input': true,
+      'react-choice-input--in-focus': this.state.focus,
+      'react-choice-input--not-in-focus': !this.state.focus
+    });
+
+    var arrowClasses = cx({
+      'react-choice-icon__arrow': true,
+      'react-choice-icon__arrow--up': this.state.focus,
+      'react-choice-icon__arrow--down': !this.state.focus
     });
 
     return (
-      React.createElement("div", {className: classes}, 
+      React.createElement("div", {className: "react-choice"}, 
         React.createElement("input", {type: "hidden", name: this.props.name, value: value}), 
 
         React.createElement("input", {type: "text", 
+          className: inputClasses, 
           placeholder: this.props.placeholder, 
           value: label, 
 
@@ -306,19 +317,19 @@ var SelectAutocomplete = React.createClass({displayName: 'SelectAutocomplete',
           autoComplete: "off", 
           ref: "input"}), 
 
-        React.createElement("div", {className: "select-autocomplete-icon", onMouseDown: this._handleArrowClick}, 
-          this.state.focus ?
-            React.createElement("i", {className: "fa fa-caret-up"}) :
-            React.createElement("i", {className: "fa fa-caret-down"})
+        React.createElement("div", {className: "react-choice-icon", onMouseDown: this._handleArrowClick}, 
+          React.createElement("div", {className: arrowClasses})
         ), 
 
         this.state.focus ?
-          React.createElement("ul", {className: "select-autocomplete-options", ref: "options"}, 
-            options
+          React.createElement("div", {className: "react-choice-options", ref: "options"}, 
+            React.createElement("ul", {className: "react-choice-options__list"}, 
+              options
+            )
           ) : null
       )
     );
   }
 });
 
-module.exports = SelectAutocomplete;
+module.exports = SingleChoice;
