@@ -45,7 +45,7 @@ var Index = React.createClass({
           <div className="content">
             <div className="example">
 
-              <Choice.Single options={options} placeholder="Select an option" />
+              <Choice.Single options={options} placeholder="Select a country" />
 
               <CodeSnippet language="javascript">
                 {singleExample}

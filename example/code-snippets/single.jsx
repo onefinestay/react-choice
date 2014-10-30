@@ -7,6 +7,6 @@ var options = [
 ];
 
 // Render component
-<Choice.Single>
+<Choice.Single placeholder="Select a country">
   {options}
 </Choice.Single>
