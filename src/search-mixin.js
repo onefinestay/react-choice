@@ -143,6 +143,7 @@ var SearchMixin = {
       value: '',
       options: this.props.options,
       searchTokens: [],
+      highlighted: _.first(this.props.options)
     });
   },
 };
