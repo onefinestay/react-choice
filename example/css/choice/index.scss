@@ -1,23 +1,12 @@
 @import "input";
 @import "icon";
 @import "options";
+@import "option";
 
 .react-choice {
     position: relative;
 
-    .select-autocomplete-options {
-        .select-result {
-            cursor: pointer;
-            padding: 5px 10px;
-            font-size: rem-calc(14);
-
-            &.selected {
-                background: #eee;
-            }
-
-            .text-match {
-                font-weight: bold;
-            }
-        }
+    .text-match {
+        font-weight: bold;
     }
 }

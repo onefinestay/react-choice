@@ -6,6 +6,7 @@ var Sifter = require('sifter');
 var cx = React.addons.classSet;
 
 var SearchResult = require('./search-result');
+var OptionWrapper = require('./option-wrapper');
 
 //
 // Auto complete select box
@@ -264,19 +265,22 @@ var SingleChoice = React.createClass({
       var highlighted = this.state.highlighted &&
         value == this.state.highlighted[this.props.valueField];
 
-      var Renderer = React.createFactory(this.props.resultRenderer);
+      var Renderer = this.props.resultRenderer;
 
-      return Renderer({
-        key: value,
-        value: value,
-        label: option[this.props.labelField],
-        option: option,
-        tokens: this.state.searchTokens,
-        selected: highlighted,
-        ref: highlighted ? 'highlighted' : null,
-        onHover: this._handleOptionHover,
-        onClick: this._handleOptionClick,
-      });
+      return (
+        <OptionWrapper key={value}
+          selected={highlighted}
+          ref={highlighted ? 'highlighted' : null}
+          option={option}
+          onHover={this._handleOptionHover}
+          onClick={this._handleOptionClick}>
+          <Renderer
+            value={value}
+            label={option[this.props.labelField]}
+            option={option}
+            tokens={this.state.searchTokens}/>
+        </OptionWrapper>
+      );
     }, this);
 
     var value = this.state.selected ?

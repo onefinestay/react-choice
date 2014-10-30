@@ -14,6 +14,8 @@ var Choice = require('../');
 
 var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
 
+var COUNTRIES = require('./data/countries.json');
+
 var Index = React.createClass({
   getDefaultProps: function() {
     return {};
@@ -21,10 +23,10 @@ var Index = React.createClass({
 
   render: function() {
     var options = [];
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < COUNTRIES.length; i++) {
       options.push({
-        value: "" + i,
-        label: "" + i
+        value: COUNTRIES[i].code,
+        label: COUNTRIES[i].name
       });
     }
 
