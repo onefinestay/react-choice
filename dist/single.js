@@ -265,7 +265,9 @@ var SelectAutocomplete = React.createClass({displayName: 'SelectAutocomplete',
       var highlighted = this.state.highlighted &&
         value == this.state.highlighted[this.props.valueField];
 
-      return this.props.resultRenderer({
+      var Renderer = React.createFactory(this.props.resultRenderer);
+
+      return Renderer({
         key: value,
         value: value,
         label: option[this.props.labelField],
@@ -290,10 +292,10 @@ var SelectAutocomplete = React.createClass({displayName: 'SelectAutocomplete',
     });
 
     return (
-      React.DOM.div({className: classes}, 
-        React.DOM.input({type: "hidden", name: this.props.name, value: value}), 
+      React.createElement("div", {className: classes}, 
+        React.createElement("input", {type: "hidden", name: this.props.name, value: value}), 
 
-        React.DOM.input({type: "text", 
+        React.createElement("input", {type: "text", 
           placeholder: this.props.placeholder, 
           value: label, 
 
@@ -305,14 +307,14 @@ var SelectAutocomplete = React.createClass({displayName: 'SelectAutocomplete',
           autoComplete: "off", 
           ref: "input"}), 
 
-        React.DOM.div({className: "select-autocomplete-icon", onMouseDown: this._handleArrowClick}, 
+        React.createElement("div", {className: "select-autocomplete-icon", onMouseDown: this._handleArrowClick}, 
           this.state.focus ?
-            React.DOM.i({className: "fa fa-caret-up"}) :
-            React.DOM.i({className: "fa fa-caret-down"})
+            React.createElement("i", {className: "fa fa-caret-up"}) :
+            React.createElement("i", {className: "fa fa-caret-down"})
         ), 
 
         this.state.focus ?
-          React.DOM.ul({className: "select-autocomplete-options", ref: "options"}, 
+          React.createElement("ul", {className: "select-autocomplete-options", ref: "options"}, 
             options
           ) : null
       )

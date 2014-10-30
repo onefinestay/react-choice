@@ -265,7 +265,9 @@ var SelectAutocomplete = React.createClass({
       var highlighted = this.state.highlighted &&
         value == this.state.highlighted[this.props.valueField];
 
-      return this.props.resultRenderer({
+      var Renderer = React.createFactory(this.props.resultRenderer);
+
+      return Renderer({
         key: value,
         value: value,
         label: option[this.props.labelField],

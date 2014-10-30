@@ -38,10 +38,10 @@ var SearchResult = React.createClass({displayName: 'SearchResult',
     });
 
     return (
-      React.DOM.li({className: classes, 
+      React.createElement("li", {className: classes, 
         onMouseEnter: this.props.onHover.bind(null, this.props.option), 
         onMouseDown: this.props.onClick.bind(null, this.props.option)}, 
-        TextHighlight({text: this.props.label, tokens: this.props.tokens})
+        React.createElement(TextHighlight, {text: this.props.label, tokens: this.props.tokens})
       )
     );
   }
