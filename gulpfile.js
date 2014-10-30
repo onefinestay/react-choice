@@ -136,6 +136,6 @@ gulp.task('example-server', function() {
 
 gulp.task('build', ['build-js', 'build-example', 'build-example-js', 'build-example-scss']);
 
-gulp.task('example-dev', ['build-example', 'build-example-scss', 'build-example-js', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
+gulp.task('develop-example', ['build-example', 'build-example-scss', 'build-example-js', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
 
 gulp.task('develop', ['build-js', 'watch-js']);
