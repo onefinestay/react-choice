@@ -28,29 +28,6 @@
   }
 
   &__input {
-    cursor: inherit;
-
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    background-color: transparent;
-
-    background-color: transparent;
-    font-family: inherit;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-    height: 100%;
     width: 100%;
-
-    font-size: .875rem;
-
-    &:focus {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      outline: none;
-    }
   }
 }

@@ -66,9 +66,11 @@ var MultipleChoice = React.createClass({
   },
 
   _selectOption: function(option) {
+    /*
     this.refs.input.getDOMNode().blur();
     // TODO focus container
     this.refs.container.getDOMNode().focus();
+     */
 
     if (option) {
       var values = this.state.values;
@@ -154,7 +156,7 @@ var MultipleChoice = React.createClass({
           <input type="text"
             placeholder={this.props.placeholder}
             value={label}
-            className="react-choice-multiple__input"
+            className="react-choice-input react-choice-multiple__input"
 
             onKeyDown={this._handleInput}
             onChange={this._handleChange}

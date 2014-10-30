@@ -175,7 +175,7 @@ var SingleChoice = React.createClass({
 
         <div className={wrapperClasses} onClick={this._handleClick}>
           <input type="text"
-            className="react-choice-single__input"
+            className="react-choice-input react-choice-single__input"
             placeholder={this.props.placeholder}
             value={label}
 

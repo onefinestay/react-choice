@@ -1,5 +1,6 @@
 /* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/wrapper */
 .react-choice-wrapper {
+  overflow: hidden;
   font-family: inherit;
   border: 1px solid #ccc;
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -16,6 +17,67 @@
   -webkit-transition: -webkit-box-shadow 0.45s, border-color 0.45s ease-in-out;
   -moz-transition: -moz-box-shadow 0.45s, border-color 0.45s ease-in-out;
   transition: box-shadow 0.45s, border-color 0.45s ease-in-out; }
+
+/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
+.react-choice-input {
+  cursor: inherit;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: transparent;
+  background-color: transparent;
+  font-family: inherit;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-size: 0.875rem; }
+  /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
+  .react-choice-input:focus {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    outline: none; }
+
+/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
+.react-choice-single {
+  height: 2.3125rem; }
+  /* line 4, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
+  .react-choice-single--not-in-focus {
+    cursor: pointer;
+    background-color: #f9f9f9;
+    background-image: -moz-linear-gradient(top, #fefefe, #f2f2f2);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fefefe), to(#f2f2f2));
+    background-image: -webkit-linear-gradient(top, #fefefe, #f2f2f2);
+    background-image: -o-linear-gradient(top, #fefefe, #f2f2f2);
+    background-image: linear-gradient(to bottom, #fefefe, #f2f2f2);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffefefe', endColorstr='#fff2f2f2', GradientType=0);
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8); }
+  /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
+  .react-choice-single--in-focus {
+    background: #fafafa;
+    border-color: #999;
+    outline: 0;
+    -webkit-box-shadow: 0 0 5px #999;
+    -moz-box-shadow: 0 0 5px #999;
+    box-shadow: 0 0 5px #999;
+    border-color: #999; }
+  /* line 30, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
+  .react-choice-single__input {
+    width: 100%; }
+
+/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
+.react-choice-multiple {
+  cursor: text;
+  padding-bottom: 3px; }
+  /* line 5, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
+  .react-choice-multiple__input {
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 10px; }
 
 /* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
 .react-choice-icon {
@@ -76,93 +138,21 @@
 .text-highlight__match {
   font-weight: bold; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
-.react-choice-single {
-  height: 2.3125rem; }
-  /* line 4, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
-  .react-choice-single--not-in-focus {
-    cursor: pointer;
-    background-color: #f9f9f9;
-    background-image: -moz-linear-gradient(top, #fefefe, #f2f2f2);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fefefe), to(#f2f2f2));
-    background-image: -webkit-linear-gradient(top, #fefefe, #f2f2f2);
-    background-image: -o-linear-gradient(top, #fefefe, #f2f2f2);
-    background-image: linear-gradient(to bottom, #fefefe, #f2f2f2);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffefefe', endColorstr='#fff2f2f2', GradientType=0);
-    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8); }
-  /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
-  .react-choice-single--in-focus {
-    background: #fafafa;
-    border-color: #999;
-    outline: 0;
-    -webkit-box-shadow: 0 0 5px #999;
-    -moz-box-shadow: 0 0 5px #999;
-    box-shadow: 0 0 5px #999;
-    border-color: #999; }
-  /* line 30, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
-  .react-choice-single__input {
-    cursor: inherit;
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    background-color: transparent;
-    background-color: transparent;
-    font-family: inherit;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    font-size: 0.875rem; }
-    /* line 49, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
-    .react-choice-single__input:focus {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      outline: none; }
-
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
-.react-choice-multiple {
-  cursor: text; }
-  /* line 4, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
-  .react-choice-multiple__input {
-    margin-bottom: 0;
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    background-color: transparent;
-    font-family: inherit;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    font-size: 0.875rem; }
-    /* line 20, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
-    .react-choice-multiple__input:focus {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      outline: none; }
-
 /* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/value */
 .react-choice-value {
   float: left;
   border: 1px solid #eee;
   margin-right: 5px;
-  margin-bottom: 3px;
   cursor: pointer;
-  padding: 3px; }
+  padding: 4px;
+  margin-bottom: 5px; }
   /* line 9, /Users/jkimbo/code/ofs/react-choice/example/css/choice/value */
   .react-choice-value--is-selected {
     background: #eee; }
 
-/* line 10, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
+/* line 11, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
 .react-choice {
   position: relative; }
 
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNob2ljZS9fd3JhcHBlci5zY3NzIiwiY2hvaWNlL19pY29uLnNjc3MiLCJjaG9pY2UvX29wdGlvbnMuc2NzcyIsImNob2ljZS9fb3B0aW9uLnNjc3MiLCJjaG9pY2UvX3RleHQtaGlnaGxpZ2h0LnNjc3MiLCJjaG9pY2UvX3NpbmdsZS5zY3NzIiwiY2hvaWNlL19tdWx0aXBsZS5zY3NzIiwiY2hvaWNlL192YWx1ZS5zY3NzIiwiY2hvaWNlL2luZGV4LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBO0VBQ0UsYUFBYTtFQUNiLFFBQVE7RUFFUixvQkFBb0I7RUFDcEIsWUFBWTtFQUVaLE9BQU87RUFDUCxTQUFTO0VBQ1QsV0FBVztFQUNYLFFBQVE7RUFDUixTQUFTO0VBQ1QsT0FBTztFQUNQLGlCQUFpQjtFQUNqQixvQkFBb0I7RUFDcEIsWUFBWTtFQUNaLG9CQUF1QztFQUN2QyxpQkFBaUM7RUFDakMsWUFBdUI7OztBQ2xCekI7RUFDRSxVQUFVO0VBQ1YsS0FBSztFQUNMLFFBQVE7RUFDUixPQUFPO0VBQ1AsT0FBTztFQUNQLFFBQVE7O0VBR1Y7SUFHSSxTQUFTO0lBQ1QsT0FBTztJQUNQLFFBQVE7SUFDUixhQUFhO0lBQ2IsWUFBWTs7SUFBaEI7TUFHTSxZQUFZO01BQ1osZUFBZTtNQUVmLGFBQWE7TUFDYixjQUFjOztJQUNwQjtNQUdNLFlBQVk7TUFFWixZQUFZO01BQ1osZUFBZTtNQUVmLGFBQWE7TUFDYixjQUFjOzs7QUNqQ3BCO0VBQ0UsVUFBVTtFQUNWLFNBQVM7RUFDVCxPQUFPO0VBQ1AsWUFBWTtFQUNaLFlBQVk7RUFDWixVQUFVOztFQUFaO0lBR0ksWUFBWTtJQUNaLFFBQVE7SUFDUixZQUFZO0lBQ1osaUJBQWlCO0lBQ2pCLFFBQVE7SUFDUixTQUFTOzs7QUNkYjtFQUNFLFFBQVE7RUFDUixTQUFTO0VBQ1QsV0FBVzs7RUFBYjtJQUdJLFlBQVk7OztBQ05oQjtFQUVJLGFBQWE7OztBQ0ZqQjtFQUNFLFFBQVE7O0VBQVY7SUFHSSxRQUFRO0lBRVIsa0JBQWtCO0lBQ2xCLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsa0JBQWtCO0lBQ2xCLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsbUJBQW1CO0lBQ25CLFFBQVE7SUFDUixvQkFBOEM7SUFDOUMsWUFBc0M7O0VBQzFDO0lBR0ksWUFBWTtJQUNaLGNBQWM7SUFDZCxTQUFTO0lBRVQsb0JBQW9CO0lBQ3BCLGlCQUFpQjtJQUNqQixZQUFZO0lBQ1osY0FBYzs7RUFDbEI7SUFHSSxRQUFRO0lBRVIsb0JBQW9CO0lBQ3BCLHVCQUF1QjtJQUN2QixlQUFlO0lBQ2Ysa0JBQWtCO0lBRWxCLGtCQUFrQjtJQUNsQixhQUFhO0lBQ2IsUUFBUTtJQUNSLFlBQVk7SUFDWixTQUFTO0lBQ1QsUUFBUTtJQUNSLFFBQVE7SUFDUixPQUFPO0lBRVAsV0FBVzs7SUFBZiwyQkFBMkI7TUFHckIsWUFBWTtNQUNaLFFBQVE7TUFDUixZQUFZO01BQ1osU0FBUzs7O0FDcERmO0VBQ0UsUUFBUTs7RUFBVjtJQUdJLGVBQWU7SUFDZixvQkFBb0I7SUFDcEIsdUJBQXVCO0lBQ3ZCLGVBQWU7SUFFZixrQkFBa0I7SUFDbEIsYUFBYTtJQUNiLFFBQVE7SUFDUixZQUFZO0lBQ1osU0FBUztJQUNULFFBQVE7SUFDUixRQUFRO0lBRVIsV0FBVzs7SUFBZiw2QkFBNkI7TUFHdkIsWUFBWTtNQUNaLFFBQVE7TUFDUixZQUFZO01BQ1osU0FBUzs7O0FDdkJmO0VBQ0UsT0FBTztFQUNQLFFBQVE7RUFDUixjQUFjO0VBQ2QsZUFBZTtFQUNmLFFBQVE7RUFDUixTQUFTOztFQUFYO0lBR0ksWUFBWTs7O0FDQWhCO0VBQ0ksVUFBVSIsImZpbGUiOiJjaG9pY2UvaW5kZXguY3NzIiwic291cmNlc0NvbnRlbnQiOltudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkBpbXBvcnQgXCJ3cmFwcGVyXCI7XG5AaW1wb3J0IFwiaWNvblwiO1xuQGltcG9ydCBcIm9wdGlvbnNcIjtcbkBpbXBvcnQgXCJvcHRpb25cIjtcbkBpbXBvcnQgXCJ0ZXh0LWhpZ2hsaWdodFwiO1xuQGltcG9ydCBcInNpbmdsZVwiO1xuQGltcG9ydCBcIm11bHRpcGxlXCI7XG5AaW1wb3J0IFwidmFsdWVcIjtcblxuLnJlYWN0LWNob2ljZSB7XG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xufVxuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNob2ljZS9fd3JhcHBlci5zY3NzIiwiY2hvaWNlL19pbnB1dC5zY3NzIiwiY2hvaWNlL19zaW5nbGUuc2NzcyIsImNob2ljZS9fbXVsdGlwbGUuc2NzcyIsImNob2ljZS9faWNvbi5zY3NzIiwiY2hvaWNlL19vcHRpb25zLnNjc3MiLCJjaG9pY2UvX29wdGlvbi5zY3NzIiwiY2hvaWNlL190ZXh0LWhpZ2hsaWdodC5zY3NzIiwiY2hvaWNlL192YWx1ZS5zY3NzIiwiY2hvaWNlL2luZGV4LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBO0VBQ0UsVUFBVTtFQUNWLGFBQWE7RUFDYixRQUFRO0VBRVIsb0JBQW9CO0VBQ3BCLFlBQVk7RUFFWixPQUFPO0VBQ1AsU0FBUztFQUNULFdBQVc7RUFDWCxRQUFRO0VBQ1IsU0FBUztFQUNULE9BQU87RUFDUCxpQkFBaUI7RUFDakIsb0JBQW9CO0VBQ3BCLFlBQVk7RUFDWixvQkFBdUM7RUFDdkMsaUJBQWlDO0VBQ2pDLFlBQXVCOzs7QUNuQnpCO0VBQ0UsUUFBUTtFQUVSLG9CQUFvQjtFQUNwQix1QkFBdUI7RUFDdkIsZUFBZTtFQUNmLGtCQUFrQjtFQUVsQixrQkFBa0I7RUFDbEIsYUFBYTtFQUNiLFFBQVE7RUFDUixZQUFZO0VBQ1osU0FBUztFQUNULFFBQVE7RUFDUixRQUFRO0VBRVIsV0FBVzs7RUFBYixtQkFBbUI7SUFHZixZQUFZO0lBQ1osUUFBUTtJQUNSLFlBQVk7SUFDWixTQUFTOzs7QUN0QmI7RUFDRSxRQUFROztFQUFWO0lBR0ksUUFBUTtJQUVSLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsa0JBQWtCO0lBQ2xCLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsa0JBQWtCO0lBQ2xCLG1CQUFtQjtJQUNuQixRQUFRO0lBQ1Isb0JBQThDO0lBQzlDLFlBQXNDOztFQUMxQztJQUdJLFlBQVk7SUFDWixjQUFjO0lBQ2QsU0FBUztJQUVULG9CQUFvQjtJQUNwQixpQkFBaUI7SUFDakIsWUFBWTtJQUNaLGNBQWM7O0VBQ2xCO0lBR0ksT0FBTzs7O0FDOUJYO0VBQ0UsUUFBUTtFQUNSLGdCQUFnQjs7RUFBbEI7SUFHSSxPQUFPO0lBQ1AsWUFBWTtJQUNaLGVBQWU7OztBQ1BuQjtFQUNFLFVBQVU7RUFDVixLQUFLO0VBQ0wsUUFBUTtFQUNSLE9BQU87RUFDUCxPQUFPO0VBQ1AsUUFBUTs7RUFHVjtJQUdJLFNBQVM7SUFDVCxPQUFPO0lBQ1AsUUFBUTtJQUNSLGFBQWE7SUFDYixZQUFZOztJQUFoQjtNQUdNLFlBQVk7TUFDWixlQUFlO01BRWYsYUFBYTtNQUNiLGNBQWM7O0lBQ3BCO01BR00sWUFBWTtNQUVaLFlBQVk7TUFDWixlQUFlO01BRWYsYUFBYTtNQUNiLGNBQWM7OztBQ2pDcEI7RUFDRSxVQUFVO0VBQ1YsU0FBUztFQUNULE9BQU87RUFDUCxZQUFZO0VBQ1osWUFBWTtFQUNaLFVBQVU7O0VBQVo7SUFHSSxZQUFZO0lBQ1osUUFBUTtJQUNSLFlBQVk7SUFDWixpQkFBaUI7SUFDakIsUUFBUTtJQUNSLFNBQVM7OztBQ2RiO0VBQ0UsUUFBUTtFQUNSLFNBQVM7RUFDVCxXQUFXOztFQUFiO0lBR0ksWUFBWTs7O0FDTmhCO0VBRUksYUFBYTs7O0FDRmpCO0VBQ0UsT0FBTztFQUNQLFFBQVE7RUFDUixjQUFjO0VBQ2QsUUFBUTtFQUNSLFNBQVM7RUFDVCxlQUFlOztFQUFqQjtJQUdJLFlBQVk7OztBQ0NoQjtFQUNFLFVBQVUiLCJmaWxlIjoiY2hvaWNlL2luZGV4LmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkBpbXBvcnQgXCJ3cmFwcGVyXCI7XG5AaW1wb3J0IFwiaW5wdXRcIjtcbkBpbXBvcnQgXCJzaW5nbGVcIjtcbkBpbXBvcnQgXCJtdWx0aXBsZVwiO1xuQGltcG9ydCBcImljb25cIjtcbkBpbXBvcnQgXCJvcHRpb25zXCI7XG5AaW1wb3J0IFwib3B0aW9uXCI7XG5AaW1wb3J0IFwidGV4dC1oaWdobGlnaHRcIjtcbkBpbXBvcnQgXCJ2YWx1ZVwiO1xuXG4ucmVhY3QtY2hvaWNlIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xufVxuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */
