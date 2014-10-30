@@ -69,7 +69,7 @@ gulp.task('build-example-scss', function() {
 });
 
 gulp.task('watch-example', ['build-example'], function() {
-  watch(['./example/**/*.{js,jsx}', './src/*{js,jsx}'], function(files, cb) {
+  watch(['./example/**/*.{js,jsx}', './src/*{js,jsx}', '!./example/build/*.{js, jsx}'], function(files, cb) {
     files.on('data', function(d) {
       // delete file from cache
       delete require.cache[d.path];
@@ -110,6 +110,7 @@ gulp.task('watch-example-js', function() {
           message: "<%= error.message %>"
         }).apply(this, args);
 
+        // Keep gulp from hanging on this task
         this.emit('end');
       })
       .pipe(bundleTimer)
@@ -135,6 +136,6 @@ gulp.task('example-server', function() {
 
 gulp.task('build', ['build-js', 'build-example', 'build-example-js', 'build-example-scss']);
 
-gulp.task('example-dev', ['build-example', 'build-example-scss', 'build-example-js', 'watch-example', 'watch-example-scss', 'example-server']);
+gulp.task('example-dev', ['build-example', 'build-example-scss', 'build-example-js', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
 
 gulp.task('develop', ['build-js', 'watch-js']);
