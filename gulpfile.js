@@ -69,6 +69,8 @@ gulp.task('example-server', function() {
   });
 });
 
+gulp.task('build', ['build-js', 'build-example', 'build-example-scss']);
+
 gulp.task('example-dev', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-scss', 'example-server']);
 
 gulp.task('develop', ['build-js', 'watch-js']);
