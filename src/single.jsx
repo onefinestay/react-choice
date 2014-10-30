@@ -271,7 +271,6 @@ var SingleChoice = React.createClass({
         <OptionWrapper key={value}
           selected={highlighted}
           ref={highlighted ? 'highlighted' : null}
-          option={option}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
           <Renderer

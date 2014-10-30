@@ -271,7 +271,6 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
         React.createElement(OptionWrapper, {key: value, 
           selected: highlighted, 
           ref: highlighted ? 'highlighted' : null, 
-          option: option, 
           onHover: this._handleOptionHover, 
           onClick: this._handleOptionClick}, 
           React.createElement(Renderer, {
