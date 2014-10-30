@@ -14,12 +14,18 @@ var connect = require('gulp-connect');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 
-gulp.task('watch-js', function() {
-  // build and watch javascript files
+gulp.task('build-js', function() {
+  // build javascript files
   return gulp.src('src/*{js,jsx}')
-    .pipe(watch('src/*{js,jsx}'))
     .pipe(react())
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('watch-js', function() {
+  // watch js files
+  watch('./src/*{js,jsx}', function(files, cb) {
+    gulp.start('build-js', cb);
+  });
 });
 
 gulp.task('build-example', function() {
@@ -65,4 +71,4 @@ gulp.task('example-server', function() {
 
 gulp.task('example-dev', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-scss', 'example-server']);
 
-gulp.task('develop', ['watch-js']);
+gulp.task('develop', ['build-js', 'watch-js']);
