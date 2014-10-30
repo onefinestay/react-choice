@@ -22,8 +22,10 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
     searchField: React.PropTypes.array, // array of search fields
 
+    /*
     options: React.PropTypes.array.isRequired, // array of objects
     resultRenderer: React.PropTypes.func, // search result React component
+    */
 
     onSelect: React.PropTypes.func, // function called when option is selected
   },
@@ -33,15 +35,28 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       valueField: 'value',
       labelField: 'label',
       searchField: ['label'],
-      resultRenderer: SearchResult,
+      /*resultRenderer: SearchResult,*/
     };
   },
 
   getInitialState: function() {
     var selected = null;
+
+    var props = this.props.searchField;
+    props.push(this.props.valueField);
+    props.push(this.props.searchField);
+    props = _.uniq(props);
+
+    var options = _.map(this.props.children, function(child) {
+      // TODO Validation ?
+      return _.pick(child.props, props);
+    }, this);
+
+    var initialOptions = _.clone(options);
+
     if (this.props.value) {
       // find selected value
-      selected = _.find(this.props.options, function(option) {
+      selected = _.find(options, function(option) {
         return option[this.props.valueField] == this.props.value;
       }, this);
     }
@@ -49,7 +64,8 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     return {
       value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
-      options: this.props.options,
+      options: options,
+      initialOptions: initialOptions,
       highlighted: null,
       selected: selected,
       searchTokens: [],
@@ -91,15 +107,16 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
     var query = event.target.value;
 
-    var searcher = new Sifter(this.props.options);
+    var initialOptions = this.state.initialOptions;
+    var searcher = new Sifter(initialOptions);
 
     var result = searcher.search(query, {
       fields: this.props.searchField
     });
 
     var options = _.map(result.items, function(res) {
-      return this.props.options[res.id];
-    }, this);
+      return initialOptions[res.id];
+    });
 
     var highlighted = _.first(options);
 
@@ -191,9 +208,9 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       this.setState({
         value: '',
         selected: null,
-        highlighted: _.first(this.props.options),
+        highlighted: _.first(this.state.initialOptions),
         focus: true,
-        options: this.props.options
+        options: this.state.initialOptions
       });
     }
   },
@@ -239,7 +256,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
   _resetSearch: function() {
     this.setState({
       value: '',
-      options: this.props.options,
+      options: this.state.initialOptions,
       searchTokens: [],
     });
   },
@@ -260,12 +277,18 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
   render: function() {
     var options = _.map(this.state.options, function(option) {
-      var value = option[this.props.valueField];
+      var valueField = this.props.valueField;
+      var value = option[valueField];
+
+      var child = _.find(this.props.children, function(child) {
+        return child.props[valueField] == value;
+      });
 
       var highlighted = this.state.highlighted &&
-        value == this.state.highlighted[this.props.valueField];
+        value == this.state.highlighted[valueField];
 
-      var Renderer = this.props.resultRenderer;
+      // TODO
+      child.props.tokens = this.state.searchTokens;
 
       return (
         React.createElement(OptionWrapper, {key: value, 
@@ -274,11 +297,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
           option: option, 
           onHover: this._handleOptionHover, 
           onClick: this._handleOptionClick}, 
-          React.createElement(Renderer, {
-            value: value, 
-            label: option[this.props.labelField], 
-            option: option, 
-            tokens: this.state.searchTokens})
+          child
         )
       );
     }, this);

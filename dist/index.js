@@ -1,3 +1,4 @@
 module.exports = {
-  'Single': require('./single')
+  'Single': require('./single'),
+  'SearchResult': require('./search-result')
 };

@@ -24,10 +24,9 @@ var Index = React.createClass({
   render: function() {
     var options = [];
     for (var i = 0; i < COUNTRIES.length; i++) {
-      options.push({
-        value: COUNTRIES[i].code,
-        label: COUNTRIES[i].name
-      });
+      options.push(
+        <Choice.SearchResult key={COUNTRIES[i].code} value={COUNTRIES[i].code} label={COUNTRIES[i].name} />
+      );
     }
 
     return (
@@ -45,7 +44,9 @@ var Index = React.createClass({
           <div className="content">
             <div className="example">
 
-              <Choice.Single options={options} placeholder="Select a country" />
+              <Choice.Single placeholder="Select a country">
+                {options}
+              </Choice.Single>
 
               <CodeSnippet language="javascript">
                 {singleExample}
