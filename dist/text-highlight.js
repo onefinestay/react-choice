@@ -74,14 +74,14 @@ var TextHighlight = React.createClass({displayName: 'TextHighlight',
     var output = _.map(splits, function(split, i) {
       var key = [split.text, split.match, i].join('.');
       if (split.match) {
-        return React.createElement("span", {className: "text-match", key: key}, split.text);
+        return React.createElement("span", {className: "text-highlight__match", key: key}, split.text);
       } else {
         return React.createElement("span", {key: key}, split.text);
       }
     });
 
     return (
-      React.createElement("span", null, 
+      React.createElement("span", {className: "text-highlight"}, 
         output
       )
     );

@@ -2,11 +2,8 @@
 @import "icon";
 @import "options";
 @import "option";
+@import "text-highlight";
 
 .react-choice {
     position: relative;
-
-    .text-match {
-        font-weight: bold;
-    }
 }
