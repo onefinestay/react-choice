@@ -52,6 +52,10 @@ var Index = React.createClass({
               </CodeSnippet>
             </div>
 
+            <div className="example">
+              <Choice.Multiple options={options} placeholder="Select a country" />
+            </div>
+
             <Features />
             <Install />
           </div>

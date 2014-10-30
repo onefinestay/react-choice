@@ -2,6 +2,7 @@
 
 var React = require('react/addons');
 var _ = require('lodash');
+var Sifter = require('sifter');
 var cx = React.addons.classSet;
 
 var SearchResult = require('./search-result');
@@ -9,16 +10,23 @@ var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
 
-//
-// Auto complete select box
-//
-var SingleChoice = React.createClass({
+var ValueWrapper = React.createClass({
+  render: function() {
+    return (
+      <div className="react-choice-value">
+        {this.props.children}
+      </div>
+    );
+  }
+});
+
+var MultipleChoice = React.createClass({
   mixins: [SearchMixin],
 
   propTypes: {
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
-    value: React.PropTypes.string, // initial value for input field
+    values: React.PropTypes.array, // initial values
 
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
@@ -33,6 +41,7 @@ var SingleChoice = React.createClass({
 
   getDefaultProps: function() {
     return {
+      values: [],
       valueField: 'value',
       labelField: 'label',
       searchField: ['label'],
@@ -41,64 +50,35 @@ var SingleChoice = React.createClass({
   },
 
   getInitialState: function() {
-    var selected = null;
-    if (this.props.value) {
-      // find selected value
-      selected = _.find(this.props.options, function(option) {
-        return option[this.props.valueField] == this.props.value;
-      }, this);
-    }
-
     return {
-      value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
       options: this.props.options,
+      values: this.props.values,
       highlighted: null,
-      selected: selected,
+      selected: null,
+      selectedValue: null,
       searchTokens: [],
     };
   },
 
-  //
-  // Public methods
-  //
-  getValue: function() {
-    return this.state.selected ?
-      this.state.selected[this.props.valueField] : null;
-  },
-
-  //
-  // Events
-  //
-  _handleArrowClick: function(event) {
-    if (this.state.focus) {
-      this._handleBlur(event);
-      this.refs.input.getDOMNode().blur();
-    } else {
-      this._handleFocus(event);
-      this.refs.input.getDOMNode().focus();
-    }
-  },
-
-  _remove: function(event) {
-    if (this.state.selected) {
-      event.preventDefault();
-      this.setState({
-        value: '',
-        selected: null,
-        highlighted: _.first(this.props.options),
-        focus: true,
-        options: this.props.options
-      });
-    }
+  _handleClick: function(event) {
+    this.refs.input.getDOMNode().focus();
   },
 
   _selectOption: function(option) {
     this.refs.input.getDOMNode().blur();
+    // TODO focus container
+    this.refs.container.getDOMNode().focus();
 
     if (option) {
+      var values = this.state.values;
+
+      // TODO remove from available options
+
+      values.push(option);
+
       this.setState({
-        selected: option,
+        values: values
       });
       this._resetSearch();
 
@@ -108,25 +88,32 @@ var SingleChoice = React.createClass({
     }
   },
 
-  /*
-  componentDidMount: function() {
-    this._updateScrollPosition();
-  },
-   */
-
   componentDidUpdate: function() {
     this._updateScrollPosition();
-
-    /*
-    if (this.state.selected && this.state.focus) {
-      setTimeout(function() {
-        this.refs.input.getDOMNode().select();
-      }.bind(this), 50);
-    }
-     */
   },
 
   render: function() {
+    var values = _.map(this.state.values, function(value) {
+      var key = value[this.props.valueField];
+
+      var selectedValue = this.state.selectedValue;
+
+      var selected = (
+        selectedValue &&
+        selectedValue[this.props.valueField] == key
+      );
+
+      var label = value[this.props.labelField];
+
+      return (
+        <ValueWrapper key={key}
+          onClick={this._selectValue}
+          selected={selected}>
+          <div>{label}</div>
+        </ValueWrapper>
+      );
+    }, this);
+
     var options = _.map(this.state.options, function(option) {
       var value = option[this.props.valueField];
 
@@ -151,33 +138,23 @@ var SingleChoice = React.createClass({
       );
     }, this);
 
-    var value = this.state.selected ?
-      this.state.selected[this.props.valueField] : null;
-    var label = this.state.selected ?
-      this.state.selected[this.props.labelField] : this.state.value;
+    var label = this.state.value;
 
     var wrapperClasses = cx({
       'react-choice-wrapper': true,
-      'react-choice-single': true,
-      'react-choice-single--in-focus': this.state.focus,
-      'react-choice-single--not-in-focus': !this.state.focus
-    });
-
-    var arrowClasses = cx({
-      'react-choice-icon__arrow': true,
-      'react-choice-icon__arrow--up': this.state.focus,
-      'react-choice-icon__arrow--down': !this.state.focus
+      'react-choice-multiple': true,
+      'react-choice-multiple--in-focus': this.state.focus,
+      'react-choice-multiple--not-in-focus': !this.state.focus
     });
 
     return (
-      <div className="react-choice">
-        <input type="hidden" name={this.props.name} value={value} />
-
+      <div className="react-choice" ref="container">
         <div className={wrapperClasses} onClick={this._handleClick}>
+          {values}
           <input type="text"
-            className="react-choice-single__input"
             placeholder={this.props.placeholder}
             value={label}
+            className="react-choice-multiple__input"
 
             onKeyDown={this._handleInput}
             onChange={this._handleChange}
@@ -186,10 +163,6 @@ var SingleChoice = React.createClass({
 
             autoComplete="off"
             ref="input" />
-        </div>
-
-        <div className="react-choice-icon" onMouseDown={this._handleArrowClick}>
-          <div className={arrowClasses}></div>
         </div>
 
         {this.state.focus ?
@@ -203,4 +176,4 @@ var SingleChoice = React.createClass({
   }
 });
 
-module.exports = SingleChoice;
+module.exports = MultipleChoice;

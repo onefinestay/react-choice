@@ -1,8 +1,11 @@
-@import "input";
+@import "wrapper";
 @import "icon";
 @import "options";
 @import "option";
 @import "text-highlight";
+@import "single";
+@import "multiple";
+@import "value";
 
 .react-choice {
     position: relative;

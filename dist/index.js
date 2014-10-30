@@ -1,3 +1,4 @@
 module.exports = {
-  'Single': require('./single')
+  'Single': require('./single'),
+  'Multiple': require('./multiple')
 };
