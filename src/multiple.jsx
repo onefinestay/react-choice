@@ -53,6 +53,7 @@ var MultipleChoice = React.createClass({
     return {
       focus: false,
       options: this.props.options,
+      searchResults: this.props.options,
       values: this.props.values,
       highlighted: null,
       selected: null,
@@ -74,13 +75,20 @@ var MultipleChoice = React.createClass({
 
     if (option) {
       var values = this.state.values;
-
-      // TODO remove from available options
-
       values.push(option);
 
+      var valueField = this.props.valueField;
+
+      var options = _.filter(this.props.options, function(option) {
+        var index = _.findIndex(values, function(value) {
+          return value[valueField] == option[valueField];
+        });
+        return index === -1;
+      });
+
       this.setState({
-        values: values
+        values: values,
+        options: options
       });
       this._resetSearch();
 
@@ -116,7 +124,7 @@ var MultipleChoice = React.createClass({
       );
     }, this);
 
-    var options = _.map(this.state.options, function(option) {
+    var options = _.map(this.state.searchResults, function(option) {
       var value = option[this.props.valueField];
 
       var highlighted = this.state.highlighted &&

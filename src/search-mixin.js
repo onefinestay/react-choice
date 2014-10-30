@@ -31,21 +31,23 @@ var SearchMixin = {
 
     var query = event.target.value;
 
-    var searcher = new Sifter(this.props.options);
+    var options = this.state.options;
+
+    var searcher = new Sifter(options);
 
     var result = searcher.search(query, {
       fields: this.props.searchField
     });
 
-    var options = _.map(result.items, function(res) {
-      return this.props.options[res.id];
-    }, this);
+    var searchResults = _.map(result.items, function(res) {
+      return options[res.id];
+    });
 
-    var highlighted = _.first(options);
+    var highlighted = _.first(searchResults);
 
     this.setState({
       value: query,
-      options: options,
+      searchResults: searchResults,
       searchTokens: result.tokens,
       highlighted: highlighted,
       selected: null,
@@ -57,11 +59,11 @@ var SearchMixin = {
 
     var highlighted;
     if (this.state.selected) {
-      highlighted = _.find(this.state.options, function(option) {
+      highlighted = _.find(this.state.searchResults, function(option) {
         return option[this.props.valueField] == this.state.selected[this.props.valueField];
       }, this);
     } else {
-      highlighted = _.first(this.state.options);
+      highlighted = _.first(this.state.searchResults);
     }
 
     this.setState({
@@ -90,7 +92,7 @@ var SearchMixin = {
   },
 
   _moveUp: function(event) {
-    var options = this.state.options;
+    var options = this.state.searchResults;
     if (options.length > 0) {
       event.preventDefault();
       var index = _.indexOf(options, this.state.highlighted);
@@ -103,7 +105,7 @@ var SearchMixin = {
   },
 
   _moveDown: function(event) {
-    var options = this.state.options;
+    var options = this.state.searchResults;
     if (options.length > 0) {
       event.preventDefault();
       var index = _.indexOf(options, this.state.highlighted);
@@ -141,9 +143,9 @@ var SearchMixin = {
   _resetSearch: function() {
     this.setState({
       value: '',
-      options: this.props.options,
+      searchResults: this.state.options,
       searchTokens: [],
-      highlighted: _.first(this.props.options)
+      highlighted: _.first(this.state.options)
     });
   },
 };

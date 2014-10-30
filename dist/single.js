@@ -53,6 +53,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
       options: this.props.options,
+      searchResults: this.props.options,
       highlighted: null,
       selected: selected,
       searchTokens: [],
@@ -86,9 +87,10 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       this.setState({
         value: '',
         selected: null,
-        highlighted: _.first(this.props.options),
+        highlighted: _.first(this.state.options),
         focus: true,
-        options: this.props.options
+        options: this.state.options,
+        searchResults: this.state.options
       });
     }
   },
@@ -117,17 +119,16 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
   componentDidUpdate: function() {
     this._updateScrollPosition();
 
-    /*
+    // select selected text in input box
     if (this.state.selected && this.state.focus) {
       setTimeout(function() {
         this.refs.input.getDOMNode().select();
       }.bind(this), 50);
     }
-     */
   },
 
   render: function() {
-    var options = _.map(this.state.options, function(option) {
+    var options = _.map(this.state.searchResults, function(option) {
       var value = option[this.props.valueField];
 
       var highlighted = this.state.highlighted &&
