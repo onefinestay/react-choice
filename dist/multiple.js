@@ -50,16 +50,25 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   },
 
   getInitialState: function() {
+    var options = this._sort(this.props.options);
+
     return {
       focus: false,
-      options: this.props.options,
-      searchResults: this.props.options,
+      options: options,
+      searchResults: options,
       values: this.props.values,
       highlighted: null,
       selected: null,
       selectedValue: null,
       searchTokens: [],
     };
+  },
+
+  _sort: function(list) {
+    if (typeof this.props.sorter === 'function') {
+      return this.props.sorter(list);
+    }
+    return _.sortBy(list, this.props.labelField);
   },
 
   _handleClick: function(event) {
@@ -88,12 +97,41 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
 
       this.setState({
         values: values,
-        options: options
+        options: options,
+        value: '',
+        searchResults: options,
+        searchTokens: [],
+        highlighted: _.first(options)
       });
-      this._resetSearch();
 
       if (typeof this.props.onSelect === 'function') {
         this.props.onSelect(option);
+      }
+    }
+  },
+
+  _remove: function(event) {
+    if (!this.state.value) {
+      // remove latest value
+      event.preventDefault();
+
+      // remove last stage
+      if (this.state.values.length) {
+        var valueToRemove = _.last(this.state.values);
+        var values = _.without(this.state.values, valueToRemove);
+
+        var options = this.state.options;
+        options.push(valueToRemove);
+        options = this._sort(options);
+
+        this.setState({
+          options: options,
+          values: values,
+          value: '',
+          searchResults: options,
+          searchTokens: [],
+          highlighted: _.first(options)
+        });
       }
     }
   },
