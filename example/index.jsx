@@ -10,13 +10,7 @@ var CodeSnippet = require('./components/code-snippet.jsx');
 var Install = require('./components/install.jsx');
 var Features = require('./components/features.jsx');
 
-function processCodeSnippet(src) {
-  var lines = src.split('\n');
-  lines.splice(0, 3);
-  return lines.join('\n');
-}
-
-/*var mainCodeSnippet = fs.readFileSync(__dirname + '/code-snippets/main.jsx', 'utf8');*/
+var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
 
 var Index = React.createClass({
   getDefaultProps: function() {
@@ -38,6 +32,7 @@ var Index = React.createClass({
           <div className="content">
             <div className="example">
               <CodeSnippet language="javascript">
+                {singleExample}
               </CodeSnippet>
             </div>
 

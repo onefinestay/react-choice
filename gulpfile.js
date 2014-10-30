@@ -13,6 +13,8 @@ var reactTools = require('react-tools');
 var connect = require('gulp-connect');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
+var notify = require('gulp-notify');
+var duration = require('gulp-duration');
 
 gulp.task('build-js', function() {
   // build javascript files
@@ -37,6 +39,27 @@ gulp.task('build-example', function() {
     .pipe(gulp.dest('./example'));
 });
 
+gulp.task('build-example-js', function() {
+  var bundle = browserify('./example/js/index.js', {
+    debug: true,
+    extensions: ['.jsx', '.js'],
+  });
+
+  bundle.transform(function(file) {
+    return reactify(file, {
+      extension: ['jsx', 'js']
+    });
+  });
+
+  bundle.transform('brfs');
+
+  var dest = fs.createWriteStream('./example/build/index.js');
+
+  // bundle it all up
+  return bundle.bundle()
+    .pipe(dest);
+});
+
 gulp.task('build-example-scss', function() {
   gulp.src('./example/css/*.scss')
     .pipe(sourcemaps.init())
@@ -56,6 +79,47 @@ gulp.task('watch-example', ['build-example'], function() {
   });
 });
 
+gulp.task('watch-example-js', function() {
+  var bundle = watchify(browserify('./example/js/index.js', {
+    // Required watchify args
+    cache: {}, packageCache: {}, fullPaths: true,
+    debug: true,
+    extensions: ['.jsx', '.js'],
+  }));
+
+  bundle.transform(function(file) {
+    return reactify(file, {
+      extension: ['jsx', 'js']
+    });
+  });
+
+  bundle.transform('brfs');
+
+  var bundleFile = './example/build/index.js';
+
+  var rebundle = function() {
+    var bundleTimer = duration('Rebuild time');
+
+    // bundle it all up
+    return bundle.bundle()
+      .on('error', function() {
+        var args = Array.prototype.slice.call(arguments);
+
+        notify.onError({
+          title: "Compile Error",
+          message: "<%= error.message %>"
+        }).apply(this, args);
+
+        this.emit('end');
+      })
+      .pipe(bundleTimer)
+      .pipe(fs.createWriteStream(bundleFile));
+  };
+
+  bundle.on('update', rebundle);
+  return rebundle();
+});
+
 gulp.task('watch-example-scss', ['build-example-scss'], function() {
   watch('./example/**/*.scss', function(files, cb) {
     gulp.start('build-example-scss', cb);
@@ -69,8 +133,8 @@ gulp.task('example-server', function() {
   });
 });
 
-gulp.task('build', ['build-js', 'build-example', 'build-example-scss']);
+gulp.task('build', ['build-js', 'build-example', 'build-example-js', 'build-example-scss']);
 
-gulp.task('example-dev', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-scss', 'example-server']);
+gulp.task('example-dev', ['build-example', 'build-example-scss', 'build-example-js', 'watch-example', 'watch-example-scss', 'example-server']);
 
 gulp.task('develop', ['build-js', 'watch-js']);
