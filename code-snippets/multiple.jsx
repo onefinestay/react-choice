@@ -1,9 +1,9 @@
 var Choice = require('react-choice');
 
 var countries = [
-  {"name": "Afghanistan", "code": "AF"},
-  {"name": "Albania", "code": "AL"},
-  {"name": "Algeria", "code": "DZ"},
+  {"label": "Afghanistan", "value": "AF"},
+  {"label": "Albania", "value": "AL"},
+  {"label": "Algeria", "value": "DZ"},
   // etc...
 ];
 
