@@ -15,6 +15,7 @@ var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var notify = require('gulp-notify');
 var duration = require('gulp-duration');
+var deploy = require('gulp-gh-pages');
 
 gulp.task('build-js', function() {
   // build javascript files
@@ -141,3 +142,8 @@ gulp.task('build', ['build-js', 'build-example', 'build-example-js', 'build-exam
 gulp.task('develop-example', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
 
 gulp.task('develop', ['build-js', 'watch-js', 'build-example', 'build-example-scss', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
+
+gulp.task('deploy-example', ['build'], function() {
+  return gulp.src('./example/**/*')
+    .pipe(deploy());
+});
