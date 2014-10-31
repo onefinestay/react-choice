@@ -9,10 +9,13 @@ var Features = React.createClass({
         <h2>Features</h2>
         <ul className="features__list">
           <li className="features__point">
-            Search text highlighting.
+            Search text highlighting
           </li>
           <li className="features__point">
-            Single or multiple selection.
+            Single or multiple selection
+          </li>
+          <li className="features__point">
+            Custom results rendering
           </li>
         </ul>
       </div>
