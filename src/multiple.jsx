@@ -12,8 +12,13 @@ var SearchMixin = require('./search-mixin');
 
 var ValueWrapper = React.createClass({
   render: function() {
+    var classes = cx({
+      'react-choice-value': true,
+      'react-choice-value--is-selected': this.props.selected
+    });
+
     return (
-      <div className="react-choice-value">
+      <div className={classes}>
         {this.props.children}
       </div>
     );
@@ -75,12 +80,26 @@ var MultipleChoice = React.createClass({
     this.refs.input.getDOMNode().focus();
   },
 
+  _handleContainerInput: function(event) {
+    var keys = {
+      37: this._moveLeft,
+      39: this._moveRight
+    };
+
+    if (typeof keys[event.keyCode] == 'function') {
+      keys[event.keyCode](event);
+    }
+  },
+
+  _handleContainerBlur: function(event) {
+    if (this.state.selectedValue) {
+      this.setState({
+        selectedValue: null
+      });
+    }
+  },
+
   _selectOption: function(option) {
-    /*
-    this.refs.input.getDOMNode().blur();
-    // TODO focus container
-    this.refs.container.getDOMNode().focus();
-     */
 
     if (option) {
       var values = this.state.values;
@@ -106,6 +125,60 @@ var MultipleChoice = React.createClass({
 
       if (typeof this.props.onSelect === 'function') {
         this.props.onSelect(option);
+      }
+    }
+  },
+
+  _moveLeft: function(event) {
+    var input = this.refs.input.getDOMNode();
+
+    if (!this.state.values.length) {
+      return false;
+    }
+
+    if (
+      event.target == input &&
+      event.target.selectionStart === 0
+    ) {
+      event.preventDefault();
+
+      // select stage
+      this.setState({
+        selectedValue: _.last(this.state.values)
+      });
+
+      // focus on container
+      this.refs.container.getDOMNode().focus();
+    } else {
+      // select previous value
+      var index = _.indexOf(this.state.values, this.state.selectedValue);
+      var prevValue = this.state.values[index - 1];
+      if (!_.isUndefined(prevValue)) {
+        this.setState({
+          selectedValue: prevValue
+        });
+      }
+    }
+  },
+
+  _moveRight: function(event) {
+    var input = this.refs.input.getDOMNode();
+
+    if (!this.state.values.length) {
+      return false;
+    }
+
+    if (this.state.selectedValue) {
+      // select next value
+      var index = _.indexOf(this.state.values, this.state.selectedValue);
+      var nextValue = this.state.values[index + 1];
+      if (!_.isUndefined(nextValue)) {
+        this.setState({
+          selectedValue: nextValue
+        });
+      } else {
+        // focus input box
+        this.refs.input.getDOMNode().focus();
       }
     }
   },
@@ -196,8 +269,10 @@ var MultipleChoice = React.createClass({
     });
 
     return (
-      <div className="react-choice" ref="container">
-        <div className={wrapperClasses} onClick={this._handleClick}>
+      <div className="react-choice">
+        <div className={wrapperClasses} onClick={this._handleClick}
+          tabIndex="-1" ref="container" onKeyDown={this._handleContainerInput}
+          onBlur={this._handleContainerBlur}>
           {values}
           <input type="text"
             placeholder={this.props.placeholder}

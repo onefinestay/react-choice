@@ -14,15 +14,15 @@ var SearchMixin = {
   _handleInput: function(event) {
     var keys = {
       13: this._enter,
+      37: this._moveLeft,
       38: this._moveUp,
+      39: this._moveRight,
       40: this._moveDown,
       8: this._remove
     };
 
-    if (_.contains(_.keys(keys), event.keyCode + "")) {
-      if (typeof keys[event.keyCode] == 'function') {
-        keys[event.keyCode](event);
-      }
+    if (typeof keys[event.keyCode] == 'function') {
+      keys[event.keyCode](event);
     }
   },
 

@@ -2,6 +2,10 @@
   cursor: text;
   padding-bottom: 3px;
 
+  &:focus {
+    outline: none;
+  }
+
   &__input {
     float: left;
     margin-top: 5px;
