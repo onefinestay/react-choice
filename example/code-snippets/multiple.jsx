@@ -8,6 +8,6 @@ var countries = [
 ];
 
 // Render component
-<Choice.Single
+<Choice.Multiple
   options={countries}
   placeholder="Select a country" />

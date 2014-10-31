@@ -11,6 +11,9 @@ var Features = React.createClass({
           <li className="features__point">
             Search text highlighting.
           </li>
+          <li className="features__point">
+            Single or multiple selection.
+          </li>
         </ul>
       </div>
     );

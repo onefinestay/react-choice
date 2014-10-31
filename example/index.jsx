@@ -13,6 +13,7 @@ var Features = require('./components/features.jsx');
 var Choice = require('../');
 
 var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
+var multipleExample = fs.readFileSync(__dirname + '/code-snippets/multiple.jsx', 'utf8');
 
 var COUNTRIES = require('./data/countries.json');
 
@@ -43,17 +44,29 @@ var Index = React.createClass({
           <GithubRibbon />
 
           <div className="content">
-            <div className="example">
+            <div className="examples">
+              <div className="example-single">
+                <div className="example">
+                  <h2>Single Choice</h2>
+                  <Choice.Single options={options} placeholder="Select a country" />
 
-              <Choice.Single options={options} placeholder="Select a country" />
+                  <CodeSnippet language="javascript" toggle={false}>
+                    {singleExample}
+                  </CodeSnippet>
+                </div>
+              </div>
 
-              <CodeSnippet language="javascript">
-                {singleExample}
-              </CodeSnippet>
-            </div>
+              <div className="example-multiple">
+                <div className="example">
+                  <h2>Multiple Choice</h2>
+                  <Choice.Multiple options={options} placeholder="Select a country" />
 
-            <div className="example">
-              <Choice.Multiple options={options} placeholder="Select a country" />
+                  <CodeSnippet language="javascript" toggle={false}>
+                    {multipleExample}
+                  </CodeSnippet>
+                </div>
+              </div>
+              <div style={{clear: 'both'}}></div>
             </div>
 
             <Features />
