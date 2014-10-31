@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
-  "author": "",
+  "author": "Jonathan Kim <jonathan.kim@onefinestay.com>",
   "license": "Apache 2.0",
   "dependencies": {
     "lodash": "^2.4.1",
