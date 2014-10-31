@@ -18,7 +18,7 @@ var ValueWrapper = React.createClass({displayName: 'ValueWrapper',
     });
 
     return (
-      React.createElement("div", {className: classes}, 
+      React.createElement("div", {className: classes, onClick: this.props.onClick}, 
         this.props.children
       )
     );
@@ -230,6 +230,19 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
+  _selectValue: function(value, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    this.setState({
+      selectedValue: value
+    });
+
+    this.refs.container.getDOMNode().focus();
+  },
+
   componentDidUpdate: function() {
     this._updateScrollPosition();
   },
@@ -249,7 +262,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
 
       return (
         React.createElement(ValueWrapper, {key: key, 
-          onClick: this._selectValue, 
+          onClick: this._selectValue.bind(null, value), 
           selected: selected}, 
           React.createElement("div", null, label)
         )
