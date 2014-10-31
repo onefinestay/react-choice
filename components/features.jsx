@@ -6,7 +6,7 @@ var Features = React.createClass({
   render: function() {
     return (
       <div className="features">
-        <h2>Features</h2>
+        <h2 className="features__header">Features</h2>
         <ul className="features__list">
           <li className="features__point">
             Search text highlighting
