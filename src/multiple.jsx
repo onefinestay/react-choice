@@ -83,7 +83,8 @@ var MultipleChoice = React.createClass({
   _handleContainerInput: function(event) {
     var keys = {
       37: this._moveLeft,
-      39: this._moveRight
+      39: this._moveRight,
+      8: this._removeContainer
     };
 
     if (typeof keys[event.keyCode] == 'function') {
@@ -100,7 +101,6 @@ var MultipleChoice = React.createClass({
   },
 
   _selectOption: function(option) {
-
     if (option) {
       var values = this.state.values;
       values.push(option);
@@ -183,6 +183,23 @@ var MultipleChoice = React.createClass({
     }
   },
 
+  _removeValue: function(value) {
+    var values = _.without(this.state.values, value);
+
+    var options = this.state.options;
+    options.push(value);
+    options = this._sort(options);
+
+    return {
+      options: options,
+      values: values,
+      value: '',
+      searchResults: options,
+      searchTokens: [],
+      highlighted: _.first(options)
+    };
+  },
+
   _remove: function(event) {
     if (!this.state.value) {
       // remove latest value
@@ -191,21 +208,25 @@ var MultipleChoice = React.createClass({
       // remove last stage
       if (this.state.values.length) {
         var valueToRemove = _.last(this.state.values);
-        var values = _.without(this.state.values, valueToRemove);
-
-        var options = this.state.options;
-        options.push(valueToRemove);
-        options = this._sort(options);
-
-        this.setState({
-          options: options,
-          values: values,
-          value: '',
-          searchResults: options,
-          searchTokens: [],
-          highlighted: _.first(options)
-        });
+        this.setState(this._removeValue(valueToRemove));
       }
+    }
+  },
+
+  _removeContainer: function(event) {
+    if (this.state.selectedValue) {
+      event.preventDefault();
+      var state = this._removeValue(this.state.selectedValue);
+      // find next value
+      var index = _.indexOf(this.state.values, this.state.selectedValue);
+      var nextValue = state.values[index];
+      if (!_.isUndefined(nextValue)) {
+        state.selectedValue = nextValue;
+      } else {
+        // focus input
+        this.refs.input.getDOMNode().focus();
+      }
+      this.setState(state);
     }
   },
 
