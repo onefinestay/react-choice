@@ -23,14 +23,6 @@ var Index = React.createClass({
   },
 
   render: function() {
-    var options = [];
-    for (var i = 0; i < COUNTRIES.length; i++) {
-      options.push({
-        value: COUNTRIES[i].code,
-        label: COUNTRIES[i].name
-      });
-    }
-
     return (
       <html>
         <head>
@@ -48,7 +40,7 @@ var Index = React.createClass({
               <div className="example-single">
                 <div className="example">
                   <h2>Single Choice</h2>
-                  <Choice.Single options={options} placeholder="Select a country" />
+                  <Choice.Single options={COUNTRIES} placeholder="Select a country" />
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {singleExample}
@@ -59,7 +51,7 @@ var Index = React.createClass({
               <div className="example-multiple">
                 <div className="example">
                   <h2>Multiple Choice</h2>
-                  <Choice.Multiple options={options} placeholder="Select a country" />
+                  <Choice.Multiple options={COUNTRIES} placeholder="Select a country" />
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {multipleExample}
