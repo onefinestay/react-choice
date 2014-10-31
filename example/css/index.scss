@@ -22,12 +22,17 @@ h4 {
   font-weight: lighter;
   letter-spacing: 1.2px;
   text-rendering: optimizeLegibility;
+  color: $ofs-pink;
 }
 
 .example-single,
 .example-multiple {
   width: 450px;
   float: left;
+
+  h2 {
+    text-align: center;
+  }
 }
 
 .example-single {
