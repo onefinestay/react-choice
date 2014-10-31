@@ -1,0 +1,15 @@
+.react-choice-multiple {
+  cursor: text;
+  padding-bottom: 3px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &__input {
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 110px;
+  }
+}

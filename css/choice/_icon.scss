@@ -1,0 +1,37 @@
+.react-choice-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 30px;
+  cursor: pointer;
+
+  $arrow-size: 6px;
+  $arrow-colour: #222;
+
+  &__arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    margin-top: 50%;
+
+    &--down {
+      border-top: $arrow-size solid $arrow-colour;
+      border-bottom: $arrow-size solid transparent;
+
+      border-left: $arrow-size solid transparent;
+      border-right: $arrow-size solid transparent;
+    }
+
+    &--up {
+      margin-top: 30%;
+
+      border-top: $arrow-size solid transparent;
+      border-bottom: $arrow-size solid $arrow-colour;
+
+      border-left: $arrow-size solid transparent;
+      border-right: $arrow-size solid transparent;
+    }
+  }
+}

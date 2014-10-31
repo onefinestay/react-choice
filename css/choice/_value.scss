@@ -1,0 +1,12 @@
+.react-choice-value {
+  float: left;
+  border: 1px solid #eee;
+  margin-right: 5px;
+  cursor: pointer;
+  padding: 4px;
+  margin-bottom: 5px;
+
+  &--is-selected {
+    background: #eee;
+  }
+}
