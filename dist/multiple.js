@@ -114,13 +114,27 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
         return index === -1;
       });
 
+      // determine which item to highlight
+      var optionIndex = _.findIndex(this.state.options, function(o) {
+        return option[valueField] == o[valueField];
+      });
+
+      var nextOption = options[optionIndex];
+      if (_.isUndefined(nextOption)) {
+        // at the end of the list so select previous one
+        nextOption = options[optionIndex - 1];
+        if (_.isUndefined(nextOption)) {
+          nextOption = null;
+        }
+      }
+
       this.setState({
         values: values,
         options: options,
         value: '',
         searchResults: options,
         searchTokens: [],
-        highlighted: _.first(options)
+        highlighted: nextOption
       });
 
       if (typeof this.props.onSelect === 'function') {
