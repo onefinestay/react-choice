@@ -40,6 +40,12 @@ var SingleChoice = React.createClass({
     };
   },
 
+  _getAvailableOptions: function() {
+    var options = this.props.options;
+
+    return this._sort(options);
+  },
+
   getInitialState: function() {
     var selected = null;
     if (this.props.value) {
@@ -52,7 +58,6 @@ var SingleChoice = React.createClass({
     return {
       value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
-      options: this.props.options,
       searchResults: this.props.options,
       highlighted: null,
       selected: selected,
@@ -84,14 +89,7 @@ var SingleChoice = React.createClass({
   _remove: function(event) {
     if (this.state.selected) {
       event.preventDefault();
-      this.setState({
-        value: '',
-        selected: null,
-        highlighted: _.first(this.state.options),
-        focus: true,
-        options: this.state.options,
-        searchResults: this.state.options
-      });
+      this._resetSearch();
     }
   },
 
