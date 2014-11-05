@@ -87,10 +87,13 @@ var SingleChoice = React.createClass({
   },
 
   _remove: function(event) {
-    debugger;
     if (this.state.selected) {
       event.preventDefault();
-      this.setState(this._resetSearch());
+
+      var state = this._resetSearch();
+      state.selected = null;
+
+      this.setState(state);
     }
   },
 
