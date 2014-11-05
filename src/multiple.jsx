@@ -30,7 +30,7 @@ var ValueWrapper = React.createClass({
     return (
       <div className={classes} onClick={this.props.onClick}>
         <div className="react-choice-value__children">{this.props.children}</div>
-        <span className="react-choice-value__delete" onClick={this.onDeleteClick}>x</span>
+        <a className="react-choice-value__delete" onClick={this.onDeleteClick}>x</a>
       </div>
     );
   }
