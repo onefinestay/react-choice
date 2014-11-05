@@ -122,14 +122,15 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   _getAvailableOptions: function() {
     var options = this.props.options;
     var values = this.state.values;
+    var valueField = this.props.valueField;
 
     if (this.props.allowDuplicates === false) {
       options = _.filter(options, function(option) {
         var found = _.find(values, function(value) {
-          return value[this.props.valueField] === option[this.props.valueField];
+          return value[valueField] === option[valueField];
         });
 
-        return found === undefined;
+        return typeof found === 'undefined';
       });
     }
 
