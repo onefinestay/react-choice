@@ -152,7 +152,7 @@ var MultipleChoice = React.createClass({
 
       // select stage
       this.setState({
-        selectedIndex: this.state.values.length -1
+        selectedIndex: this.state.values.length - 1
       });
 
       // focus on container
