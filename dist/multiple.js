@@ -191,12 +191,13 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   },
 
   _removeValue: function(index) {
-    this.state.values.splice(index, 1);
+    var values = this.state.values.slice(0);
+    values.splice(index, 1);
 
     this._resetSearch();
 
     this.setState({
-      values: this.state.values,
+      values: values,
     });
   },
 
