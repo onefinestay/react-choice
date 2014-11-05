@@ -192,7 +192,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     var values = this.state.values.slice(0); // copy
     values.splice(index, 1);
 
-    var state = this._resetSearch();
+    var state = this._resetSearch(values);
     state.values = values;
 
     this.setState(state);
