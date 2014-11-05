@@ -147,15 +147,15 @@ var SearchMixin = {
     }
   },
 
-  _resetSearch: function() {
-    var options = this._getAvailableOptions();
+  _resetSearch: function(values) {
+    var options = this._getAvailableOptions(values);
 
-    this.setState({
+    return {
       value: '',
       searchResults: options,
       searchTokens: [],
       highlighted: _.first(options)
-    });
+    };
   },
 };
 

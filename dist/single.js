@@ -87,9 +87,10 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
   },
 
   _remove: function(event) {
+    debugger;
     if (this.state.selected) {
       event.preventDefault();
-      this._resetSearch();
+      this.setState(this._resetSearch());
     }
   },
 
@@ -97,10 +98,10 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     this.refs.input.getDOMNode().blur();
 
     if (option) {
-      this.setState({
-        selected: option,
-      });
-      this._resetSearch();
+      var state = this._resetSearch();
+      state.selected = option;
+
+      this.setState(state);
 
       if (typeof this.props.onSelect === 'function') {
         this.props.onSelect(option);
