@@ -108,7 +108,9 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
       var values = this.state.values.slice(0); // copy
       values.push(option);
 
-      var state = this._resetSearch(values);
+      var options = this._getAvailableOptions(values);
+
+      var state = this._resetSearch(options);
       state.values = values;
 
       this.setState(state);
@@ -193,7 +195,9 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     var values = this.state.values.slice(0); // copy
     values.splice(index, 1);
 
-    var state = this._resetSearch(values);
+    var options = this._getAvailableOptions(values);
+
+    var state = this._resetSearch(options);
     state.values = values;
 
     this.setState(state);

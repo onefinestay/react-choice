@@ -90,7 +90,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     if (this.state.selected) {
       event.preventDefault();
 
-      var state = this._resetSearch();
+      var state = this._resetSearch(this.props.options);
       state.selected = null;
 
       this.setState(state);
@@ -101,7 +101,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     this.refs.input.getDOMNode().blur();
 
     if (option) {
-      var state = this._resetSearch();
+      var state = this._resetSearch(this.props.options);
       state.selected = option;
 
       this.setState(state);

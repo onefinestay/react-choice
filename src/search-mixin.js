@@ -147,9 +147,7 @@ var SearchMixin = {
     }
   },
 
-  _resetSearch: function(values) {
-    var options = this._getAvailableOptions(values);
-
+  _resetSearch: function(options) {
     return {
       value: '',
       searchResults: options,
