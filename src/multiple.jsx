@@ -53,6 +53,7 @@ var MultipleChoice = React.createClass({
     resultRenderer: React.PropTypes.func, // search result React component
 
     onSelect: React.PropTypes.func, // function called when option is selected
+    allowDuplicates: React.PropTypes.bool, // if true, the same values can be added multiple times
   },
 
   getDefaultProps: function() {
