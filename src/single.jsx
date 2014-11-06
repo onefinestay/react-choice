@@ -58,7 +58,7 @@ var SingleChoice = React.createClass({
     return {
       value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
-      searchResults: this.props.options,
+      searchResults: this._sort(this.props.options),
       highlighted: null,
       selected: selected,
       searchTokens: [],
