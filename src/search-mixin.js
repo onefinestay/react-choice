@@ -18,6 +18,10 @@ var SearchMixin = {
     return _.sortBy(list, this.props.labelField);
   },
 
+  _handleClick: function(event) {
+    this.refs.input.getDOMNode().focus();
+  },
+
   _handleInput: function(event) {
     var keys = {
       13: this._enter,

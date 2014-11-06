@@ -80,10 +80,6 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     };
   },
 
-  _handleClick: function(event) {
-    this.refs.input.getDOMNode().focus();
-  },
-
   _handleContainerInput: function(event) {
     var keys = {
       37: this._moveLeft,
@@ -187,7 +183,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
         this.refs.input.getDOMNode().focus();
         this.setState({
           selectedIndex: -1
-        })
+        });
       }
     }
   },
