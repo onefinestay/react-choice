@@ -123,7 +123,7 @@ var MultipleChoice = React.createClass({
     var options = this.props.options;
     var valueField = this.props.valueField;
 
-    if (this.props.allowDuplicates === false) {
+    if (this.props.allowDuplicates === false && values) {
       options = _.filter(options, function(option) {
         var found = _.find(values, function(value) {
           return value[valueField] === option[valueField];
