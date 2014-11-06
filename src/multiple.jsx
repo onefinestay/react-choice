@@ -53,6 +53,7 @@ var MultipleChoice = React.createClass({
     resultRenderer: React.PropTypes.func, // search result React component
 
     onSelect: React.PropTypes.func, // function called when option is selected
+    onDelete: React.PropTypes.func, // function called when option is deleted
     allowDuplicates: React.PropTypes.bool, // if true, the same values can be added multiple times
   },
 
@@ -116,7 +117,7 @@ var MultipleChoice = React.createClass({
       this.setState(state);
 
       if (typeof this.props.onSelect === 'function') {
-        this.props.onSelect(option);
+        this.props.onSelect(option, values);
       }
     }
   },
@@ -193,7 +194,7 @@ var MultipleChoice = React.createClass({
 
   _removeValue: function(index) {
     var values = this.state.values.slice(0); // copy
-    values.splice(index, 1);
+    var removedOption = values.splice(index, 1);
 
     var options = this._getAvailableOptions(values);
 
@@ -201,6 +202,10 @@ var MultipleChoice = React.createClass({
     state.values = values;
 
     this.setState(state);
+
+    if (typeof this.props.onDelete === 'function') {
+      this.props.onDelete(removedOption, values);
+    }
   },
 
   // removes last element
