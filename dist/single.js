@@ -40,6 +40,12 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     };
   },
 
+  _getAvailableOptions: function() {
+    var options = this.props.options;
+
+    return this._sort(options);
+  },
+
   getInitialState: function() {
     var selected = null;
     if (this.props.value) {
@@ -52,8 +58,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     return {
       value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
-      options: this.props.options,
-      searchResults: this.props.options,
+      searchResults: this._sort(this.props.options),
       highlighted: null,
       selected: selected,
       searchTokens: [],
@@ -84,14 +89,11 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
   _remove: function(event) {
     if (this.state.selected) {
       event.preventDefault();
-      this.setState({
-        value: '',
-        selected: null,
-        highlighted: _.first(this.state.options),
-        focus: true,
-        options: this.state.options,
-        searchResults: this.state.options
-      });
+
+      var state = this._resetSearch(this.props.options);
+      state.selected = null;
+
+      this.setState(state);
     }
   },
 
@@ -99,10 +101,10 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     this.refs.input.getDOMNode().blur();
 
     if (option) {
-      this.setState({
-        selected: option,
-      });
-      this._resetSearch();
+      var state = this._resetSearch(this.props.options);
+      state.selected = option;
+
+      this.setState(state);
 
       if (typeof this.props.onSelect === 'function') {
         this.props.onSelect(option);

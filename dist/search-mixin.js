@@ -11,6 +11,13 @@ var SearchMixin = {
     this.refs.input.getDOMNode().focus();
   },
 
+  _sort: function(list) {
+    if (typeof this.props.sorter === 'function') {
+      return this.props.sorter(list);
+    }
+    return _.sortBy(list, this.props.labelField);
+  },
+
   _handleInput: function(event) {
     var keys = {
       13: this._enter,
@@ -31,7 +38,7 @@ var SearchMixin = {
 
     var query = event.target.value;
 
-    var options = this.state.options;
+    var options = this._getAvailableOptions();
 
     var searcher = new Sifter(options);
 
@@ -140,13 +147,13 @@ var SearchMixin = {
     }
   },
 
-  _resetSearch: function() {
-    this.setState({
+  _resetSearch: function(options) {
+    return {
       value: '',
-      searchResults: this.state.options,
+      searchResults: options,
       searchTokens: [],
-      highlighted: _.first(this.state.options)
-    });
+      highlighted: _.first(options)
+    };
   },
 };
 

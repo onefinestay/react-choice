@@ -11,6 +11,16 @@ var OptionWrapper = require('./option-wrapper');
 var SearchMixin = require('./search-mixin');
 
 var ValueWrapper = React.createClass({
+  propTypes: {
+    onClick: React.PropTypes.func.isRequired,
+    onDeleteClick: React.PropTypes.func.isRequired,
+  },
+
+  onDeleteClick: function(event) {
+    event.stopPropagation();
+    this.props.onDeleteClick(event);
+  },
+
   render: function() {
     var classes = cx({
       'react-choice-value': true,
@@ -19,7 +29,8 @@ var ValueWrapper = React.createClass({
 
     return (
       <div className={classes} onClick={this.props.onClick}>
-        {this.props.children}
+        <div className="react-choice-value__children">{this.props.children}</div>
+        <a className="react-choice-value__delete" onClick={this.onDeleteClick}>x</a>
       </div>
     );
   }
@@ -42,6 +53,7 @@ var MultipleChoice = React.createClass({
     resultRenderer: React.PropTypes.func, // search result React component
 
     onSelect: React.PropTypes.func, // function called when option is selected
+    allowDuplicates: React.PropTypes.bool, // if true, the same values can be added multiple times
   },
 
   getDefaultProps: function() {
@@ -51,29 +63,20 @@ var MultipleChoice = React.createClass({
       labelField: 'label',
       searchField: ['label'],
       resultRenderer: SearchResult,
+      allowDuplicates: false,
     };
   },
 
   getInitialState: function() {
-    var options = this._sort(this.props.options);
-
     return {
       focus: false,
-      options: options,
-      searchResults: options,
+      searchResults: this._sort(this.props.options),
       values: this.props.values,
       highlighted: null,
       selected: null,
-      selectedValue: null,
+      selectedIndex: -1,
       searchTokens: [],
     };
-  },
-
-  _sort: function(list) {
-    if (typeof this.props.sorter === 'function') {
-      return this.props.sorter(list);
-    }
-    return _.sortBy(list, this.props.labelField);
   },
 
   _handleClick: function(event) {
@@ -84,7 +87,7 @@ var MultipleChoice = React.createClass({
     var keys = {
       37: this._moveLeft,
       39: this._moveRight,
-      8: this._removeContainer
+      8: this._removeSelectedContainer
     };
 
     if (typeof keys[event.keyCode] == 'function') {
@@ -93,54 +96,46 @@ var MultipleChoice = React.createClass({
   },
 
   _handleContainerBlur: function(event) {
-    if (this.state.selectedValue) {
+    if (this.state.selectedIndex) {
       this.setState({
-        selectedValue: null
+        selectedIndex: -1
       });
     }
   },
 
   _selectOption: function(option) {
     if (option) {
-      var values = this.state.values;
+      var values = this.state.values.slice(0); // copy
       values.push(option);
 
-      var valueField = this.props.valueField;
+      var options = this._getAvailableOptions(values);
 
-      var options = _.filter(this.props.options, function(option) {
-        var index = _.findIndex(values, function(value) {
-          return value[valueField] == option[valueField];
-        });
-        return index === -1;
-      });
+      var state = this._resetSearch(options);
+      state.values = values;
 
-      // determine which item to highlight
-      var optionIndex = _.findIndex(this.state.options, function(o) {
-        return option[valueField] == o[valueField];
-      });
-
-      var nextOption = options[optionIndex];
-      if (_.isUndefined(nextOption)) {
-        // at the end of the list so select previous one
-        nextOption = options[optionIndex - 1];
-        if (_.isUndefined(nextOption)) {
-          nextOption = null;
-        }
-      }
-
-      this.setState({
-        values: values,
-        options: options,
-        value: '',
-        searchResults: options,
-        searchTokens: [],
-        highlighted: nextOption
-      });
+      this.setState(state);
 
       if (typeof this.props.onSelect === 'function') {
         this.props.onSelect(option);
       }
     }
+  },
+
+  _getAvailableOptions: function(values) {
+    var options = this.props.options;
+    var valueField = this.props.valueField;
+
+    if (this.props.allowDuplicates === false && values) {
+      options = _.filter(options, function(option) {
+        var found = _.find(values, function(value) {
+          return value[valueField] === option[valueField];
+        });
+
+        return typeof found === 'undefined';
+      });
+    }
+
+    return this._sort(options);
   },
 
   _moveLeft: function(event) {
@@ -158,18 +153,16 @@ var MultipleChoice = React.createClass({
 
       // select stage
       this.setState({
-        selectedValue: _.last(this.state.values)
+        selectedIndex: this.state.values.length - 1
       });
 
       // focus on container
       this.refs.container.getDOMNode().focus();
-    } else {
-      // select previous value
-      var index = _.indexOf(this.state.values, this.state.selectedValue);
-      var prevValue = this.state.values[index - 1];
-      if (!_.isUndefined(prevValue)) {
+    } else if (this.state.selectedIndex !== -1) {
+      var nextIndex = this.state.selectedIndex - 1;
+      if (nextIndex > -1) {
         this.setState({
-          selectedValue: prevValue
+          selectedIndex: nextIndex
         });
       }
     }
@@ -182,76 +175,72 @@ var MultipleChoice = React.createClass({
       return false;
     }
 
-    if (this.state.selectedValue) {
-      // select next value
-      var index = _.indexOf(this.state.values, this.state.selectedValue);
-      var nextValue = this.state.values[index + 1];
-      if (!_.isUndefined(nextValue)) {
+    if (this.state.selectedIndex !== -1) {
+      var nextIndex = this.state.selectedIndex + 1;
+      if (nextIndex < this.state.values.length) {
         this.setState({
-          selectedValue: nextValue
+          selectedIndex: nextIndex
         });
       } else {
         // focus input box
         this.refs.input.getDOMNode().focus();
+        this.setState({
+          selectedIndex: -1
+        })
       }
     }
   },
 
-  _removeValue: function(value) {
-    var values = _.without(this.state.values, value);
+  _removeValue: function(index) {
+    var values = this.state.values.slice(0); // copy
+    values.splice(index, 1);
 
-    var options = this.state.options;
-    options.push(value);
-    options = this._sort(options);
+    var options = this._getAvailableOptions(values);
 
-    return {
-      options: options,
-      values: values,
-      value: '',
-      searchResults: options,
-      searchTokens: [],
-      highlighted: _.first(options)
-    };
+    var state = this._resetSearch(options);
+    state.values = values;
+
+    this.setState(state);
   },
 
+  // removes last element
   _remove: function(event) {
     if (!this.state.value) {
-      // remove latest value
       event.preventDefault();
 
       // remove last stage
       if (this.state.values.length) {
-        var valueToRemove = _.last(this.state.values);
-        this.setState(this._removeValue(valueToRemove));
+        this._removeValue(this.state.values.length - 1);
       }
     }
   },
 
-  _removeContainer: function(event) {
-    if (this.state.selectedValue) {
+  // called from within, removes selected element
+  _removeSelectedContainer: function(event) {
+    if (this.state.selectedIndex !== -1) {
       event.preventDefault();
-      var state = this._removeValue(this.state.selectedValue);
-      // find next value
-      var index = _.indexOf(this.state.values, this.state.selectedValue);
-      var nextValue = state.values[index];
-      if (!_.isUndefined(nextValue)) {
-        state.selectedValue = nextValue;
-      } else {
-        // focus input
-        this.refs.input.getDOMNode().focus();
-      }
-      this.setState(state);
+
+      // move selection to the element before the removed one (gmail behavior)
+      this.setState({
+        selectedIndex: this.state.selectedIndex - 1
+      });
+
+      this._removeValue(this.state.selectedIndex);
     }
   },
 
-  _selectValue: function(value, event) {
+  _removeDeletedContainer: function(index) {
+    this._removeValue(index);
+  },
+
+  _selectValue: function(index, event) {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
     }
 
     this.setState({
-      selectedValue: value
+      selectedIndex: index
     });
 
     this.refs.container.getDOMNode().focus();
@@ -262,21 +251,17 @@ var MultipleChoice = React.createClass({
   },
 
   render: function() {
-    var values = _.map(this.state.values, function(value) {
+    var values = _.map(this.state.values, function(value, i) {
       var key = value[this.props.valueField];
 
-      var selectedValue = this.state.selectedValue;
-
-      var selected = (
-        selectedValue &&
-        selectedValue[this.props.valueField] == key
-      );
+      var selected = i === this.state.selectedIndex;
 
       var label = value[this.props.labelField];
 
       return (
-        <ValueWrapper key={key}
-          onClick={this._selectValue.bind(null, value)}
+        <ValueWrapper key={i}
+          onClick={this._selectValue.bind(null, i)}
+          onDeleteClick={this._removeDeletedContainer.bind(null, i)}
           selected={selected}>
           <div>{label}</div>
         </ValueWrapper>
