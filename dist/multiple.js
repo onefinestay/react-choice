@@ -70,7 +70,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   getInitialState: function() {
     return {
       focus: false,
-      searchResults: this.props.options,
+      searchResults: this._sort(this.props.options),
       values: this.props.values,
       highlighted: null,
       selected: null,
