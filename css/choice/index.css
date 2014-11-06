@@ -1,4 +1,3 @@
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/wrapper */
 .react-choice-wrapper {
   overflow: hidden;
   font-family: inherit;
@@ -18,7 +17,6 @@
   -moz-transition: -moz-box-shadow 0.45s, border-color 0.45s ease-in-out;
   transition: box-shadow 0.45s, border-color 0.45s ease-in-out; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
 .react-choice-input {
   cursor: inherit;
   -webkit-appearance: none;
@@ -33,17 +31,14 @@
   margin: 0;
   height: 100%;
   font-size: 0.875rem; }
-  /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/input */
   .react-choice-input:focus {
     background: transparent;
     border: none;
     box-shadow: none;
     outline: none; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
 .react-choice-single {
   height: 2.3125rem; }
-  /* line 4, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
   .react-choice-single--not-in-focus {
     cursor: pointer;
     background-color: #f9f9f9;
@@ -56,7 +51,6 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffefefe', endColorstr='#fff2f2f2', GradientType=0);
     -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8); }
-  /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
   .react-choice-single--in-focus {
     background: #fafafa;
     border-color: #999;
@@ -65,25 +59,20 @@
     -moz-box-shadow: 0 0 5px #999;
     box-shadow: 0 0 5px #999;
     border-color: #999; }
-  /* line 30, /Users/jkimbo/code/ofs/react-choice/example/css/choice/single */
   .react-choice-single__input {
     width: 100%; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
 .react-choice-multiple {
   cursor: text;
   padding-bottom: 3px; }
-  /* line 5, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
   .react-choice-multiple:focus {
     outline: none; }
-  /* line 9, /Users/jkimbo/code/ofs/react-choice/example/css/choice/multiple */
   .react-choice-multiple__input {
     float: left;
     margin-top: 5px;
     margin-bottom: 10px;
     width: 110px; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
 .react-choice-icon {
   position: absolute;
   top: 0;
@@ -91,20 +80,17 @@
   right: 0;
   width: 30px;
   cursor: pointer; }
-  /* line 12, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
   .react-choice-icon__arrow {
     display: inline-block;
     width: 0;
     height: 0;
     margin-left: 5px;
     margin-top: 50%; }
-    /* line 19, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
     .react-choice-icon__arrow--down {
       border-top: 6px solid #222;
       border-bottom: 6px solid transparent;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent; }
-    /* line 27, /Users/jkimbo/code/ofs/react-choice/example/css/choice/icon */
     .react-choice-icon__arrow--up {
       margin-top: 30%;
       border-top: 6px solid transparent;
@@ -112,7 +98,6 @@
       border-left: 6px solid transparent;
       border-right: 6px solid transparent; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/options */
 .react-choice-options {
   position: absolute;
   z-index: 2;
@@ -120,7 +105,6 @@
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
   max-height: 305px;
   overflow: auto; }
-  /* line 9, /Users/jkimbo/code/ofs/react-choice/example/css/choice/options */
   .react-choice-options__list {
     background: #fff;
     border: 1px solid #D0D0D0;
@@ -129,20 +113,16 @@
     margin: 0;
     padding: 0; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/option */
 .react-choice-option {
   cursor: pointer;
   padding: 6px 10px;
   font-size: 0.875rem; }
-  /* line 6, /Users/jkimbo/code/ofs/react-choice/example/css/choice/option */
   .react-choice-option--selected {
     background: #eee; }
 
-/* line 2, /Users/jkimbo/code/ofs/react-choice/example/css/choice/text-highlight */
 .text-highlight__match {
   font-weight: bold; }
 
-/* line 1, /Users/jkimbo/code/ofs/react-choice/example/css/choice/value */
 .react-choice-value {
   float: left;
   border: 1px solid #eee;
@@ -150,13 +130,13 @@
   cursor: pointer;
   padding: 4px;
   margin-bottom: 5px; }
-  /* line 9, /Users/jkimbo/code/ofs/react-choice/example/css/choice/value */
   .react-choice-value--is-selected {
     background: #eee; }
+  .react-choice-value__delete {
+    padding-left: 5px;
+    font-weight: bold; }
+  .react-choice-value__children {
+    display: inline-block; }
 
-/* line 11, /Users/jkimbo/code/ofs/react-choice/example/css/choice/index.scss */
 .react-choice {
   position: relative; }
-
-
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNob2ljZS9fd3JhcHBlci5zY3NzIiwiY2hvaWNlL19pbnB1dC5zY3NzIiwiY2hvaWNlL19zaW5nbGUuc2NzcyIsImNob2ljZS9fbXVsdGlwbGUuc2NzcyIsImNob2ljZS9faWNvbi5zY3NzIiwiY2hvaWNlL19vcHRpb25zLnNjc3MiLCJjaG9pY2UvX29wdGlvbi5zY3NzIiwiY2hvaWNlL190ZXh0LWhpZ2hsaWdodC5zY3NzIiwiY2hvaWNlL192YWx1ZS5zY3NzIiwiY2hvaWNlL2luZGV4LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBO0VBQ0UsVUFBVTtFQUNWLGFBQWE7RUFDYixRQUFRO0VBRVIsb0JBQW9CO0VBQ3BCLFlBQVk7RUFFWixPQUFPO0VBQ1AsU0FBUztFQUNULFdBQVc7RUFDWCxRQUFRO0VBQ1IsU0FBUztFQUNULE9BQU87RUFDUCxpQkFBaUI7RUFDakIsb0JBQW9CO0VBQ3BCLFlBQVk7RUFDWixvQkFBdUM7RUFDdkMsaUJBQWlDO0VBQ2pDLFlBQXVCOzs7QUNuQnpCO0VBQ0UsUUFBUTtFQUVSLG9CQUFvQjtFQUNwQix1QkFBdUI7RUFDdkIsZUFBZTtFQUNmLGtCQUFrQjtFQUVsQixrQkFBa0I7RUFDbEIsYUFBYTtFQUNiLFFBQVE7RUFDUixZQUFZO0VBQ1osU0FBUztFQUNULFFBQVE7RUFDUixRQUFRO0VBRVIsV0FBVzs7RUFBYixtQkFBbUI7SUFHZixZQUFZO0lBQ1osUUFBUTtJQUNSLFlBQVk7SUFDWixTQUFTOzs7QUN0QmI7RUFDRSxRQUFROztFQUFWO0lBR0ksUUFBUTtJQUVSLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsa0JBQWtCO0lBQ2xCLGtCQUFrQjtJQUNsQixrQkFBa0I7SUFDbEIsa0JBQWtCO0lBQ2xCLG1CQUFtQjtJQUNuQixRQUFRO0lBQ1Isb0JBQThDO0lBQzlDLFlBQXNDOztFQUMxQztJQUdJLFlBQVk7SUFDWixjQUFjO0lBQ2QsU0FBUztJQUVULG9CQUFvQjtJQUNwQixpQkFBaUI7SUFDakIsWUFBWTtJQUNaLGNBQWM7O0VBQ2xCO0lBR0ksT0FBTzs7O0FDOUJYO0VBQ0UsUUFBUTtFQUNSLGdCQUFnQjs7RUFBbEIsc0JBQXNCO0lBR2xCLFNBQVM7O0VBQ2I7SUFHSSxPQUFPO0lBQ1AsWUFBWTtJQUNaLGVBQWU7SUFDZixPQUFPOzs7QUNaWDtFQUNFLFVBQVU7RUFDVixLQUFLO0VBQ0wsUUFBUTtFQUNSLE9BQU87RUFDUCxPQUFPO0VBQ1AsUUFBUTs7RUFHVjtJQUdJLFNBQVM7SUFDVCxPQUFPO0lBQ1AsUUFBUTtJQUNSLGFBQWE7SUFDYixZQUFZOztJQUFoQjtNQUdNLFlBQVk7TUFDWixlQUFlO01BRWYsYUFBYTtNQUNiLGNBQWM7O0lBQ3BCO01BR00sWUFBWTtNQUVaLFlBQVk7TUFDWixlQUFlO01BRWYsYUFBYTtNQUNiLGNBQWM7OztBQ2pDcEI7RUFDRSxVQUFVO0VBQ1YsU0FBUztFQUNULE9BQU87RUFDUCxZQUFZO0VBQ1osWUFBWTtFQUNaLFVBQVU7O0VBQVo7SUFHSSxZQUFZO0lBQ1osUUFBUTtJQUNSLFlBQVk7SUFDWixpQkFBaUI7SUFDakIsUUFBUTtJQUNSLFNBQVM7OztBQ2RiO0VBQ0UsUUFBUTtFQUNSLFNBQVM7RUFDVCxXQUFXOztFQUFiO0lBR0ksWUFBWTs7O0FDTmhCO0VBRUksYUFBYTs7O0FDRmpCO0VBQ0UsT0FBTztFQUNQLFFBQVE7RUFDUixjQUFjO0VBQ2QsUUFBUTtFQUNSLFNBQVM7RUFDVCxlQUFlOztFQUFqQjtJQUdJLFlBQVk7OztBQ0NoQjtFQUNFLFVBQVUiLCJmaWxlIjoiY2hvaWNlL2luZGV4LmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkBpbXBvcnQgXCJ3cmFwcGVyXCI7XG5AaW1wb3J0IFwiaW5wdXRcIjtcbkBpbXBvcnQgXCJzaW5nbGVcIjtcbkBpbXBvcnQgXCJtdWx0aXBsZVwiO1xuQGltcG9ydCBcImljb25cIjtcbkBpbXBvcnQgXCJvcHRpb25zXCI7XG5AaW1wb3J0IFwib3B0aW9uXCI7XG5AaW1wb3J0IFwidGV4dC1oaWdobGlnaHRcIjtcbkBpbXBvcnQgXCJ2YWx1ZVwiO1xuXG4ucmVhY3QtY2hvaWNlIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xufVxuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */
