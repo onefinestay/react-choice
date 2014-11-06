@@ -12,7 +12,6 @@ var reactify = require('reactify');
 var reactTools = require('react-tools');
 var connect = require('gulp-connect');
 var sass = require('gulp-sass');
-var sourcemaps = require('gulp-sourcemaps');
 var notify = require('gulp-notify');
 var duration = require('gulp-duration');
 var deploy = require('gulp-gh-pages');
@@ -63,9 +62,7 @@ gulp.task('build-example-js', function() {
 
 gulp.task('build-example-scss', function() {
   gulp.src('./example/css/**/*.scss')
-    .pipe(sourcemaps.init())
-      .pipe(sass())
-    .pipe(sourcemaps.write())
+    .pipe(sass())
     .pipe(gulp.dest('./example/css'));
 });
 
