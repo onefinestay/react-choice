@@ -247,6 +247,18 @@ var MultipleChoice = React.createClass({
     this.refs.container.getDOMNode().focus();
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.values !== this.props.values) {
+      var options = this._getAvailableOptions(nextProps.values);
+
+      var state = this._resetSearch(options);
+      state.values = nextProps.values;
+      state.selected = null;
+
+      this.setState(state);
+    }
+  },
+
   componentDidUpdate: function() {
     this._updateScrollPosition();
   },
