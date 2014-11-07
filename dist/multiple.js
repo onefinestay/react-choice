@@ -305,7 +305,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
       );
     }, this);
 
-    var label = this.state.value;
+    var value = this.state.value;
 
     var wrapperClasses = cx({
       'react-choice-wrapper': true,
@@ -322,7 +322,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
           values, 
           React.createElement("input", {type: "text", 
             placeholder: this.props.placeholder, 
-            value: label, 
+            value: value, 
             className: "react-choice-input react-choice-multiple__input", 
 
             onKeyDown: this._handleInput, 
