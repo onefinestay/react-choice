@@ -112,12 +112,6 @@ var SingleChoice = React.createClass({
     }
   },
 
-  /*
-  componentDidMount: function() {
-    this._updateScrollPosition();
-  },
-   */
-
   componentWillReceiveProps: function(nextProps) {
     if (nextProps.value !== this.props.value) {
       var options = this._getAvailableOptions();
