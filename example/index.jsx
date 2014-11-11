@@ -25,7 +25,7 @@ var Index = React.createClass({
 
   render: function() {
     var options = _.map(COUNTRIES, function(option) {
-      return <Choice.SearchResult key={option.value} value={option.value}
+      return <Choice.Option key={option.value} value={option.value}
         label={option.label} />;
     });
 

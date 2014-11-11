@@ -5,7 +5,7 @@ var _ = require('lodash');
 var Sifter = require('sifter');
 var cx = React.addons.classSet;
 
-var SearchResult = require('./search-result');
+var SearchResult = require('./option');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');

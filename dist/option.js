@@ -6,9 +6,9 @@ var cx = React.addons.classSet;
 var TextHighlight = require('./text-highlight');
 
 //
-// Search result
+// Select option
 //
-var SearchResult = React.createClass({
+var SelectOption = React.createClass({displayName: 'SelectOption',
   propTypes: {
     label: React.PropTypes.string.isRequired,
     tokens: React.PropTypes.array.isRequired,
@@ -28,11 +28,11 @@ var SearchResult = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <TextHighlight text={this.props.label} tokens={this.props.tokens} />
-      </div>
+      React.createElement("div", null, 
+        React.createElement(TextHighlight, {text: this.props.label, tokens: this.props.tokens})
+      )
     );
   }
 });
 
-module.exports = SearchResult;
+module.exports = SelectOption;
