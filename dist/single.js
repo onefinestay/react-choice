@@ -112,11 +112,21 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     }
   },
 
-  /*
-  componentDidMount: function() {
-    this._updateScrollPosition();
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      var options = this._getAvailableOptions();
+
+      var selected = _.find(options, function(option) {
+        return option[this.props.valueField] == nextProps.value;
+      }, this);
+
+      var state = this._resetSearch(options);
+      state.value = selected ? selected[this.props.labelField] : nextProps.value;
+      state.selected = selected;
+
+      this.setState(state);
+    }
   },
-   */
 
   componentDidUpdate: function() {
     this._updateScrollPosition();
