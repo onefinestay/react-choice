@@ -8,10 +8,11 @@ var countries = [
 ];
 
 var options = countries.map(function(country) {
-  return <Choice.Option
-    key={country.value}
-    value={country.value}
-    label={country.label} />;
+  return (
+    <Choice.Option value={country.value}>
+      {country.label}
+    </Choice.Option>
+  );
 });
 
 // Render component
