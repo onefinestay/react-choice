@@ -7,7 +7,14 @@ var countries = [
   // etc...
 ];
 
+var options = countries.map(function(country) {
+  <Choice.Option
+    key={country.value}
+    value={country.value}
+    label={country.label} />;
+});
+
 // Render component
-<Choice.Multiple
-  options={countries}
-  placeholder="Select a country" />
+<Choice.Multiple placeholder="Select a country">
+  {options}
+</Choice.Multiple>
