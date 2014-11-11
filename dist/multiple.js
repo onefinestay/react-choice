@@ -110,12 +110,31 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   _selectOption: function(option) {
     if (option) {
       var values = this.state.values.slice(0); // copy
-      values.push(option);
-
       var options = this._getAvailableOptions(values);
 
+      // determine which item to highlight
+      var valueField = this.props.valueField;
+      var optionIndex = _.findIndex(options, function(o) {
+        return option[valueField] == o[valueField];
+      });
+
+      values.push(option);
+
+      options = this._getAvailableOptions(values);
       var state = this._resetSearch(options);
       state.values = values;
+
+      var nextOption = options[optionIndex];
+      if (_.isUndefined(nextOption)) {
+        // at the end of the list so select previous one
+        nextOption = options[optionIndex - 1];
+        if (_.isUndefined(nextOption)) {
+          // bail out
+          nextOption = _.first(options);
+        }
+      }
+
+      state.highlighted = nextOption;
 
       this.setState(state);
 
