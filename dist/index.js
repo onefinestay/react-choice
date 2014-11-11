@@ -1,4 +1,5 @@
 module.exports = {
   'Single': require('./single'),
-  'Multiple': require('./multiple')
+  'Multiple': require('./multiple'),
+  'SearchResult': require('./search-result')
 };

@@ -3,8 +3,8 @@
 var React = require('react/addons');
 var _ = require('lodash');
 var cx = React.addons.classSet;
+var cloneWithProps = React.addons.cloneWithProps;
 
-var SearchResult = require('./search-result');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -25,9 +25,6 @@ var SingleChoice = React.createClass({
 
     searchField: React.PropTypes.array, // array of search fields
 
-    options: React.PropTypes.array.isRequired, // array of objects
-    resultRenderer: React.PropTypes.func, // search result React component
-
     onSelect: React.PropTypes.func, // function called when option is selected
   },
 
@@ -35,22 +32,32 @@ var SingleChoice = React.createClass({
     return {
       valueField: 'value',
       labelField: 'label',
-      searchField: ['label'],
-      resultRenderer: SearchResult,
+      searchField: ['label']
     };
   },
 
   _getAvailableOptions: function() {
-    var options = this.props.options;
+    var options = this.state.initialOptions;
 
     return this._sort(options);
   },
 
   getInitialState: function() {
     var selected = null;
+
+    var props = this.props.searchField;
+    props.push(this.props.valueField);
+    props.push(this.props.searchField);
+    props = _.uniq(props);
+
+    var options = _.map(this.props.children, function(child) {
+      // TODO Validation ?
+      return _.pick(child.props, props);
+    }, this);
+
     if (this.props.value) {
       // find selected value
-      selected = _.find(this.props.options, function(option) {
+      selected = _.find(options, function(option) {
         return option[this.props.valueField] == this.props.value;
       }, this);
     }
@@ -58,7 +65,8 @@ var SingleChoice = React.createClass({
     return {
       value: selected ? selected[this.props.labelField] : this.props.value,
       focus: false,
-      searchResults: this._sort(this.props.options),
+      searchResults: this._sort(options),
+      initialOptions: options,
       highlighted: null,
       selected: selected,
       searchTokens: [],
@@ -90,7 +98,7 @@ var SingleChoice = React.createClass({
     if (this.state.selected) {
       event.preventDefault();
 
-      var state = this._resetSearch(this.props.options);
+      var state = this._resetSearch(this.state.initialOptions);
       state.selected = null;
 
       this.setState(state);
@@ -101,7 +109,7 @@ var SingleChoice = React.createClass({
     this.refs.input.getDOMNode().blur();
 
     if (option) {
-      var state = this._resetSearch(this.props.options);
+      var state = this._resetSearch(this.state.initialOptions);
       state.selected = option;
 
       this.setState(state);
@@ -141,12 +149,17 @@ var SingleChoice = React.createClass({
 
   render: function() {
     var options = _.map(this.state.searchResults, function(option) {
+      var valueField = this.props.valueField;
       var value = option[this.props.valueField];
 
-      var highlighted = this.state.highlighted &&
-        value == this.state.highlighted[this.props.valueField];
+      var child = _.find(this.props.children, function(child) {
+        return child.props[valueField] == value;
+      });
 
-      var Renderer = this.props.resultRenderer;
+      var highlighted = this.state.highlighted &&
+        value == this.state.highlighted[valueField];
+
+      child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
       return (
         <OptionWrapper key={value}
@@ -155,11 +168,7 @@ var SingleChoice = React.createClass({
           option={option}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
-          <Renderer
-            value={value}
-            label={option[this.props.labelField]}
-            option={option}
-            tokens={this.state.searchTokens}/>
+          {child}
         </OptionWrapper>
       );
     }, this);

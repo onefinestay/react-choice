@@ -11,7 +11,6 @@ var TextHighlight = require('./text-highlight');
 var SearchResult = React.createClass({
   propTypes: {
     label: React.PropTypes.string.isRequired,
-    option: React.PropTypes.object.isRequired,
     tokens: React.PropTypes.array.isRequired,
   },
 
