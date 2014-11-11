@@ -59,7 +59,9 @@ var Index = React.createClass({
               <div className="example-multiple">
                 <div className="example">
                   <h2>Multiple Choice</h2>
-                  <Choice.Multiple options={COUNTRIES} placeholder="Select a country" />
+                  <Choice.Multiple placeholder="Select a country">
+                    {options}
+                  </Choice.Multiple>
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {multipleExample}

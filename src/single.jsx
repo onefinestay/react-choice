@@ -109,7 +109,8 @@ var SingleChoice = React.createClass({
     this.refs.input.getDOMNode().blur();
 
     if (option) {
-      var state = this._resetSearch(this.state.initialOptions);
+      var options = this._getAvailableOptions();
+      var state = this._resetSearch(options);
       state.selected = option;
 
       this.setState(state);
@@ -150,7 +151,7 @@ var SingleChoice = React.createClass({
   render: function() {
     var options = _.map(this.state.searchResults, function(option) {
       var valueField = this.props.valueField;
-      var value = option[this.props.valueField];
+      var value = option[valueField];
 
       var child = _.find(this.props.children, function(child) {
         return child.props[valueField] == value;

@@ -4,8 +4,8 @@ var React = require('react/addons');
 var _ = require('lodash');
 var Sifter = require('sifter');
 var cx = React.addons.classSet;
+var cloneWithProps = React.addons.cloneWithProps;
 
-var SearchResult = require('./option');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -49,9 +49,6 @@ var MultipleChoice = React.createClass({
 
     searchField: React.PropTypes.array, // array of search fields
 
-    options: React.PropTypes.array.isRequired, // array of objects
-    resultRenderer: React.PropTypes.func, // search result React component
-
     onSelect: React.PropTypes.func, // function called when option is selected
     onDelete: React.PropTypes.func, // function called when option is deleted
     allowDuplicates: React.PropTypes.bool, // if true, the same values can be added multiple times
@@ -63,16 +60,26 @@ var MultipleChoice = React.createClass({
       valueField: 'value',
       labelField: 'label',
       searchField: ['label'],
-      resultRenderer: SearchResult,
       allowDuplicates: false,
     };
   },
 
   getInitialState: function() {
+    var props = this.props.searchField;
+    props.push(this.props.valueField);
+    props.push(this.props.searchField);
+    props = _.uniq(props);
+
+    var options = _.map(this.props.children, function(child) {
+      // TODO Validation ?
+      return _.pick(child.props, props);
+    }, this);
+
     return {
       focus: false,
-      searchResults: this._sort(this.props.options),
+      searchResults: this._sort(options),
       values: this.props.values,
+      initialOptions: options,
       highlighted: null,
       selected: null,
       selectedIndex: -1,
@@ -119,7 +126,7 @@ var MultipleChoice = React.createClass({
   },
 
   _getAvailableOptions: function(values) {
-    var options = this.props.options;
+    var options = this.state.initialOptions;
     var valueField = this.props.valueField;
 
     if (this.props.allowDuplicates === false && values) {
@@ -282,12 +289,17 @@ var MultipleChoice = React.createClass({
     }, this);
 
     var options = _.map(this.state.searchResults, function(option) {
-      var value = option[this.props.valueField];
+      var valueField = this.props.valueField;
+      var value = option[valueField];
+
+      var child = _.find(this.props.children, function(child) {
+        return child.props[valueField] == value;
+      });
 
       var highlighted = this.state.highlighted &&
-        value == this.state.highlighted[this.props.valueField];
+        value == this.state.highlighted[valueField];
 
-      var Renderer = this.props.resultRenderer;
+      child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
       return (
         <OptionWrapper key={value}
@@ -296,11 +308,7 @@ var MultipleChoice = React.createClass({
           option={option}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
-          <Renderer
-            value={value}
-            label={option[this.props.labelField]}
-            option={option}
-            tokens={this.state.searchTokens}/>
+          {child}
         </OptionWrapper>
       );
     }, this);
