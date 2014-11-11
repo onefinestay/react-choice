@@ -58,8 +58,8 @@ var MultipleChoice = React.createClass({
     return {
       values: [],
       valueField: 'value',
-      labelField: 'label',
-      searchField: ['label'],
+      labelField: 'children',
+      searchField: ['children'],
       allowDuplicates: false,
     };
   },

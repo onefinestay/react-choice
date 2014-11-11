@@ -31,8 +31,8 @@ var SingleChoice = React.createClass({
   getDefaultProps: function() {
     return {
       valueField: 'value',
-      labelField: 'label',
-      searchField: ['label']
+      labelField: 'children',
+      searchField: ['children']
     };
   },
 

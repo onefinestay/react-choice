@@ -7,7 +7,6 @@ var humanizeString = require('./humanize-string');
 
 var TextHighlight = React.createClass({
   propTypes: {
-    text: React.PropTypes.string.isRequired, // text to display
     tokens: React.PropTypes.array.isRequired // array of search tokens
   },
 
@@ -59,7 +58,7 @@ var TextHighlight = React.createClass({
   },
 
   render: function() {
-    var label = this.props.text;
+    var label = this.props.children;
     var tokens = this.props.tokens;
 
     var splits = [{
