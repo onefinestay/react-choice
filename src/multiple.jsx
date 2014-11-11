@@ -248,7 +248,7 @@ var MultipleChoice = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if (nextProps.values !== this.props.values) {
+    if (_.isEqual(nextProps.values, this.props.values)) {
       var options = this._getAvailableOptions(nextProps.values);
 
       var state = this._resetSearch(options);
