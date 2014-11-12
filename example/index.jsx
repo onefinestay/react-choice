@@ -49,9 +49,9 @@ var Index = React.createClass({
               <div className="example-single">
                 <div className="example">
                   <h2>Single Choice</h2>
-                  <Choice.Single placeholder="Select a country">
+                  <Choice.Select placeholder="Select a country">
                     {options}
-                  </Choice.Single>
+                  </Choice.Select>
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {singleExample}
@@ -62,9 +62,9 @@ var Index = React.createClass({
               <div className="example-multiple">
                 <div className="example">
                   <h2>Multiple Choice</h2>
-                  <Choice.Multiple placeholder="Select a country">
+                  <Choice.SelectMultiple placeholder="Select a country">
                     {options}
-                  </Choice.Multiple>
+                  </Choice.SelectMultiple>
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {multipleExample}

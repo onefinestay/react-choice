@@ -1,5 +1,5 @@
 module.exports = {
-  'Single': require('./single'),
-  'Multiple': require('./multiple'),
+  'Select': require('./single'),
+  'SelectMultiple': require('./multiple'),
   'Option': require('./option')
 };

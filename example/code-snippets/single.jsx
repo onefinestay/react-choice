@@ -16,6 +16,6 @@ var options = countries.map(function(country) {
 });
 
 // Render component
-<Choice.Single placeholder="Select a country">
+<Choice.Select placeholder="Select a country">
   {options}
-</Choice.Single>
+</Choice.Select>
