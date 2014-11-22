@@ -1,5 +1,6 @@
 "use strict";
 
+var fs = require('fs');
 var React = require('react/addons');
 var CodeSnippet = require('./code-snippet');
 var Choice = require('../../');
@@ -37,6 +38,8 @@ var PokemonRenderer = React.createClass({
   }
 });
 
+var customExample = fs.readFileSync(__dirname + '/../code-snippets/custom-render.jsx', 'utf8');
+
 var CustomRender = React.createClass({
   render: function() {
     var options = _.map(POKEMON, function(pokemon) {
@@ -54,15 +57,21 @@ var CustomRender = React.createClass({
 
     return (
       <section className="tutorial">
-        <h2>Custom Renderer</h2>
+        <h3>Custom Renderer</h3>
         <div className="tutorial__example">
           <Choice.Select placeholder="Select a pokemon" sorter={sorter}>
             {options}
           </Choice.Select>
         </div>
         <div className="tutorial__guide">
+          <p>Creating a custom renderer for the options is easy:</p>
+          <CodeSnippet language="javascript" toggle={false}>
+            {customExample}
+          </CodeSnippet>
+          <p><code>TextHighlight</code> is a component that contains the logic
+            to highlight the text from the search tokens that Sifter returns.</p>
+          <p className="info">Pokemon data provided by <a href="http://pokeapi.co/">Pokéapi</a></p>
         </div>
-        <div style={{clear: 'both'}}></div>
       </section>
     );
   }

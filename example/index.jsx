@@ -77,7 +77,10 @@ var Index = React.createClass({
 
             <Features />
             <Install />
-            <CustomRender />
+            <div className="tutorials">
+              <h2>Tutorials</h2>
+              <CustomRender />
+            </div>
           </div>
 
           <Footer />
