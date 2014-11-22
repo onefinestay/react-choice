@@ -7,7 +7,8 @@ var humanizeString = require('./humanize-string');
 
 var TextHighlight = React.createClass({
   propTypes: {
-    tokens: React.PropTypes.array.isRequired // array of search tokens
+    tokens: React.PropTypes.array.isRequired, // array of search tokens
+    children: React.PropTypes.string.isRequired // text to highlight
   },
 
   shouldComponentUpdate: function(nextProps) {
