@@ -1,0 +1,15 @@
+.tutorial {
+  &__example {
+    width: 450px;
+    float: left;
+
+    padding-right: 9px;
+    border-right: 1px solid #ccc;
+    margin-right: 10px;
+  }
+
+  &__guide {
+    width: 450px;
+    float: left;
+  }
+}

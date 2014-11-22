@@ -10,6 +10,7 @@ var GithubRibbon = require('./components/github-ribbon.jsx');
 var CodeSnippet = require('./components/code-snippet.jsx');
 var Install = require('./components/install.jsx');
 var Features = require('./components/features.jsx');
+var CustomRender = require('./components/custom-render.jsx');
 
 var Choice = require('../');
 
@@ -76,6 +77,7 @@ var Index = React.createClass({
 
             <Features />
             <Install />
+            <CustomRender />
           </div>
 
           <Footer />
