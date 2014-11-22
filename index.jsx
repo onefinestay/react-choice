@@ -2,6 +2,7 @@
 
 var React = require('react/addons');
 var fs = require('fs');
+var _ = require('lodash');
 
 var Header = require('./components/header.jsx');
 var Footer = require('./components/footer.jsx');
@@ -23,6 +24,14 @@ var Index = React.createClass({
   },
 
   render: function() {
+    var options = _.map(COUNTRIES, function(option) {
+      return (
+        <Choice.Option key={option.value} value={option.value}>
+          {option.label}
+        </Choice.Option>
+      );
+    });
+
     return (
       <html>
         <head>
@@ -40,7 +49,9 @@ var Index = React.createClass({
               <div className="example-single">
                 <div className="example">
                   <h2>Single Choice</h2>
-                  <Choice.Single options={COUNTRIES} placeholder="Select a country" />
+                  <Choice.Select placeholder="Select a country">
+                    {options}
+                  </Choice.Select>
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {singleExample}
@@ -51,7 +62,9 @@ var Index = React.createClass({
               <div className="example-multiple">
                 <div className="example">
                   <h2>Multiple Choice</h2>
-                  <Choice.Multiple options={COUNTRIES} placeholder="Select a country" />
+                  <Choice.SelectMultiple placeholder="Select a country">
+                    {options}
+                  </Choice.SelectMultiple>
 
                   <CodeSnippet language="javascript" toggle={false}>
                     {multipleExample}
