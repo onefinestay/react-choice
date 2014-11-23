@@ -113,8 +113,7 @@
 .react-choice-option {
   cursor: pointer;
   padding: 6px 10px;
-  font-size: 0.875rem;
-  height: 18px; }
+  font-size: 0.875rem; }
   .react-choice-option--selected {
     background: #eee; }
 
