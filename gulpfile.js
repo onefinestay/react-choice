@@ -67,16 +67,19 @@ gulp.task('build-example-scss', function() {
 });
 
 gulp.task('watch-example', ['build-js', 'build-example'], function() {
-  watch(['./example/**/*.{js,jsx}', './src/*.{js,jsx}', '!./example/build/*.js'], function(files, cb) {
-    // delete all files in require cache
-    for (var i in require.cache) {
-      if (!i.match(/node_modules/)) {
-        delete require.cache[i];
+  watch(
+    ['./example/**/*.{js,jsx}', './src/*.{js,jsx}', '!./example/build/*.js'],
+    function(files, cb) {
+      // delete all files in require cache
+      for (var i in require.cache) {
+        if (!i.match(/node_modules/) && !i.match(/gulpfile/)) {
+          delete require.cache[i];
+        }
       }
-    }
 
-    gulp.start('build-example', cb);
-  });
+      gulp.start('build-example', cb);
+    }
+  );
 });
 
 gulp.task('watch-example-js', function() {
@@ -138,7 +141,7 @@ gulp.task('build', ['build-js', 'build-example', 'build-example-js', 'build-exam
 
 gulp.task('develop-example', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
 
-gulp.task('develop', ['build-js', 'watch-js', 'build-example', 'build-example-scss', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
+gulp.task('develop', ['watch-js', 'watch-example', 'watch-example-scss', 'example-server']);
 
 gulp.task('deploy-example', ['build'], function() {
   return gulp.src('./example/**/*')
