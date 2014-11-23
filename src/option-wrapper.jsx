@@ -15,11 +15,11 @@ var OptionWrapper = React.createClass({
     });
 
     return (
-      <li className={classes}
+      <div className={classes}
         onMouseEnter={this.props.onHover.bind(null, this.props.option)}
         onMouseDown={this.props.onClick.bind(null, this.props.option)}>
         {this.props.children}
-      </li>
+      </div>
     );
   }
 });

@@ -15,7 +15,7 @@ var OptionWrapper = React.createClass({displayName: 'OptionWrapper',
     });
 
     return (
-      React.createElement("li", {className: classes, 
+      React.createElement("div", {className: classes, 
         onMouseEnter: this.props.onHover.bind(null, this.props.option), 
         onMouseDown: this.props.onClick.bind(null, this.props.option)}, 
         this.props.children

@@ -3,14 +3,11 @@
   z-index: 2;
   width: 100%;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
-  max-height: 305px;
-  overflow: auto;
 
   &__list {
     background: #fff;
     border: 1px solid #D0D0D0;
     border-top: none;
-    list-style-type: none;
     margin: 0;
     padding: 0;
   }

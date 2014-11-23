@@ -5,6 +5,8 @@ var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
+var LazyRender = require('../lib/lazy-render');
+
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -163,9 +165,8 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
       return (
-        React.createElement(OptionWrapper, {key: value, 
+        React.createElement(OptionWrapper, {
           selected: highlighted, 
-          ref: highlighted ? 'highlighted' : null, 
           option: option, 
           onHover: this._handleOptionHover, 
           onClick: this._handleOptionClick}, 
@@ -217,7 +218,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
         this.state.focus ?
           React.createElement("div", {className: "react-choice-options", ref: "options"}, 
-            React.createElement("ul", {className: "react-choice-options__list"}, 
+            React.createElement(LazyRender, {maxHeight: 300, className: "react-choice-options__list"}, 
               options
             )
           ) : null
