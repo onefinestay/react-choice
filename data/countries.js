@@ -1,4 +1,4 @@
-[ 
+module.exports = [ 
 {"label": "Afghanistan", "value": "AF"}, 
 {"label": "Albania", "value": "AL"}, 
 {"label": "Algeria", "value": "DZ"}, 
@@ -241,4 +241,4 @@
 {"label": "Yemen", "value": "YE"}, 
 {"label": "Zambia", "value": "ZM"}, 
 {"label": "Zimbabwe", "value": "ZW"} 
-]
+];

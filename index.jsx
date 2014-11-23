@@ -10,13 +10,14 @@ var GithubRibbon = require('./components/github-ribbon.jsx');
 var CodeSnippet = require('./components/code-snippet.jsx');
 var Install = require('./components/install.jsx');
 var Features = require('./components/features.jsx');
+var CustomRender = require('./components/custom-render.jsx');
 
 var Choice = require('../');
 
 var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
 var multipleExample = fs.readFileSync(__dirname + '/code-snippets/multiple.jsx', 'utf8');
 
-var COUNTRIES = require('./data/countries.json');
+var COUNTRIES = require('./data/countries.js');
 
 var Index = React.createClass({
   getDefaultProps: function() {
@@ -76,6 +77,10 @@ var Index = React.createClass({
 
             <Features />
             <Install />
+            <div className="tutorials">
+              <h2>Tutorials</h2>
+              <CustomRender />
+            </div>
           </div>
 
           <Footer />

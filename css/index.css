@@ -63,6 +63,28 @@
     width: 200px;
     margin: 0 auto; }
 
+.tutorial__example {
+  margin-bottom: 20px; }
+
+.pokemon__image {
+  width: 40px;
+  height: 40px;
+  display: inline-block; }
+  .pokemon__image img {
+    width: 100%; }
+.pokemon__number {
+  color: #777;
+  margin-right: 5px; }
+.pokemon__name {
+  display: inline-block;
+  padding-left: 20px;
+  margin-top: 5px;
+  vertical-align: top; }
+.pokemon__attributes {
+  color: #777;
+  font-size: 0.8rem;
+  margin-top: 5px; }
+
 body {
   font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -88,3 +110,7 @@ h1, h2, h3, h4 {
   padding-bottom: 20px; }
   .example-single .code-snippet {
     margin-top: 23px; }
+
+p.info {
+  font-weight: 0.8rem;
+  color: #777; }
