@@ -6,7 +6,7 @@ var CodeSnippet = require('./code-snippet');
 var Choice = require('../../');
 var _ = require('lodash');
 
-var POKEMON = require('../data/pokemon.json');
+var POKEMON = require('../data/pokemon.js');
 
 var PokemonRenderer = React.createClass({
   mixins: [Choice.OptionMixin],

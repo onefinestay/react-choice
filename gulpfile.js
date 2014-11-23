@@ -6,8 +6,6 @@ var gulp = require('gulp');
 var watch = require('gulp-watch');
 var react = require('gulp-react');
 var render = require('gulp-render');
-var browserify = require('browserify');
-var watchify = require('watchify');
 var reactify = require('reactify');
 var reactTools = require('react-tools');
 var connect = require('gulp-connect');
@@ -39,27 +37,6 @@ gulp.task('build-example', ['build-js'], function() {
     .pipe(gulp.dest('./example'));
 });
 
-gulp.task('build-example-js', function() {
-  var bundle = browserify('./example/js/index.js', {
-    debug: true,
-    extensions: ['.jsx', '.js'],
-  });
-
-  bundle.transform(function(file) {
-    return reactify(file, {
-      extension: ['jsx', 'js']
-    });
-  });
-
-  bundle.transform('brfs');
-
-  var dest = fs.createWriteStream('./example/build/index.js');
-
-  // bundle it all up
-  return bundle.bundle()
-    .pipe(dest);
-});
-
 gulp.task('build-example-scss', function() {
   gulp.src('./example/css/**/*.scss')
     .pipe(sass())
@@ -67,58 +44,19 @@ gulp.task('build-example-scss', function() {
 });
 
 gulp.task('watch-example', ['build-js', 'build-example'], function() {
-  watch(['./example/**/*.{js,jsx}', './src/*.{js,jsx}', '!./example/build/*.js'], function(files, cb) {
-    // delete all files in require cache
-    for (var i in require.cache) {
-      if (!i.match(/node_modules/)) {
-        delete require.cache[i];
+  watch(
+    ['./example/**/*.{js,jsx}', './src/*.{js,jsx}', '!./example/build/*.js', '!./example/js/*.js'],
+    function(files, cb) {
+      // delete all files in require cache
+      for (var i in require.cache) {
+        if (!i.match(/node_modules/) && !i.match(/gulpfile/)) {
+          delete require.cache[i];
+        }
       }
+
+      gulp.start('build-example', cb);
     }
-
-    gulp.start('build-example', cb);
-  });
-});
-
-gulp.task('watch-example-js', function() {
-  var bundle = watchify(browserify('./example/js/index.js', {
-    // Required watchify args
-    cache: {}, packageCache: {}, fullPaths: true,
-    debug: true,
-    extensions: ['.jsx', '.js'],
-  }));
-
-  bundle.transform(function(file) {
-    return reactify(file, {
-      extension: ['jsx', 'js']
-    });
-  });
-
-  bundle.transform('brfs');
-
-  var bundleFile = './example/build/index.js';
-
-  var rebundle = function() {
-    var bundleTimer = duration('Rebuild time');
-
-    // bundle it all up
-    return bundle.bundle()
-      .on('error', function() {
-        var args = Array.prototype.slice.call(arguments);
-
-        notify.onError({
-          title: "Compile Error",
-          message: "<%= error.message %>"
-        }).apply(this, args);
-
-        // Keep gulp from hanging on this task
-        this.emit('end');
-      })
-      .pipe(bundleTimer)
-      .pipe(fs.createWriteStream(bundleFile));
-  };
-
-  bundle.on('update', rebundle);
-  return rebundle();
+  );
 });
 
 gulp.task('watch-example-scss', ['build-example-scss'], function() {
@@ -134,11 +72,11 @@ gulp.task('example-server', function() {
   });
 });
 
-gulp.task('build', ['build-js', 'build-example', 'build-example-js', 'build-example-scss']);
+gulp.task('build', ['build-js', 'build-example', 'build-example-scss']);
 
-gulp.task('develop-example', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
+gulp.task('develop-example', ['build-example', 'build-example-scss', 'watch-example', 'watch-example-scss', 'example-server']);
 
-gulp.task('develop', ['build-js', 'watch-js', 'build-example', 'build-example-scss', 'watch-example', 'watch-example-js', 'watch-example-scss', 'example-server']);
+gulp.task('develop', ['watch-js', 'watch-example', 'watch-example-scss', 'example-server']);
 
 gulp.task('deploy-example', ['build'], function() {
   return gulp.src('./example/**/*')
