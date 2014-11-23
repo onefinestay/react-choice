@@ -1,4 +1,4 @@
-[
+module.exports = [
 {"name":"Bulbasaur","national_id":1,"hp":45,"attack":49,"sp_atk":65,"sp_def":65,"speed":45,"height":"7","weight":"69","image":"http://pokeapi.co/media/img/1.png"},
 {"name":"Ivysaur","national_id":2,"hp":60,"attack":62,"sp_atk":80,"sp_def":80,"speed":60,"height":"10","weight":"130","image":"http://pokeapi.co/media/img/2.png"},
 {"name":"Venusaur","national_id":3,"hp":80,"attack":82,"sp_atk":100,"sp_def":100,"speed":80,"height":"20","weight":"1000","image":"http://pokeapi.co/media/img/3.png"},
@@ -150,4 +150,4 @@
 {"name":"Dragonite","national_id":149,"hp":91,"attack":134,"sp_atk":100,"sp_def":100,"speed":80,"height":"22","weight":"2100","image":"http://pokeapi.co/media/img/149.png"},
 {"name":"Mewtwo","national_id":150,"hp":106,"attack":110,"sp_atk":154,"sp_def":90,"speed":130,"height":"20","weight":"1220","image":"http://pokeapi.co/media/img/150.png"},
 {"name":"Mew","national_id":151,"hp":100,"attack":100,"sp_atk":100,"sp_def":100,"speed":100,"height":"4","weight":"40","image":"http://pokeapi.co/media/img/151.png"}
-]
+];
