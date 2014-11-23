@@ -45,7 +45,7 @@ gulp.task('build-example-scss', function() {
 
 gulp.task('watch-example', ['build-js', 'build-example'], function() {
   watch(
-    ['./example/**/*.{js,jsx}', './src/*.{js,jsx}', '!./example/build/*.js'],
+    ['./example/**/*.{js,jsx}', './src/*.{js,jsx}', '!./example/build/*.js', '!./example/js/*.js'],
     function(files, cb) {
       // delete all files in require cache
       for (var i in require.cache) {

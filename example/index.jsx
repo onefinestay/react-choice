@@ -17,7 +17,7 @@ var Choice = require('../');
 var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
 var multipleExample = fs.readFileSync(__dirname + '/code-snippets/multiple.jsx', 'utf8');
 
-var COUNTRIES = require('./data/countries.json');
+var COUNTRIES = require('./data/countries.js');
 
 var Index = React.createClass({
   getDefaultProps: function() {
