@@ -6,6 +6,8 @@
 @import "components/code-snippet";
 @import "components/features";
 @import "components/ofs-credit";
+@import "components/tutorial";
+@import "components/pokemon";
 
 // Base
 body {
@@ -44,4 +46,9 @@ h4 {
   .code-snippet {
     margin-top: 23px;
   }
+}
+
+p.info {
+  font-weight: 0.8rem;
+  color: #777;
 }
