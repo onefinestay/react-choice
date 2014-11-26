@@ -143,7 +143,9 @@ var SingleChoice = React.createClass({
     // select selected text in input box
     if (this.state.selected && this.state.focus) {
       setTimeout(function() {
-        this.refs.input.getDOMNode().select();
+        if (this.isMounted()) {
+          this.refs.input.getDOMNode().select();
+        }
       }.bind(this), 50);
     }
   },
