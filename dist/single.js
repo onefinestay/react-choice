@@ -4,8 +4,7 @@ var React = require('react/addons');
 var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
-
-var LazyRender = require('../lib/lazy-render');
+var LazyRender = require('react-lazy-render');
 
 var OptionWrapper = require('./option-wrapper');
 

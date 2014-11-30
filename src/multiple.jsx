@@ -5,6 +5,7 @@ var _ = require('lodash');
 var Sifter = require('sifter');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
+var LazyRender = require('react-lazy-render');
 
 var OptionWrapper = require('./option-wrapper');
 
@@ -321,9 +322,8 @@ var MultipleChoice = React.createClass({
       child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
       return (
-        <OptionWrapper key={value}
+        <OptionWrapper
           selected={highlighted}
-          ref={highlighted ? 'highlighted' : null}
           option={option}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
@@ -363,9 +363,9 @@ var MultipleChoice = React.createClass({
 
         {this.state.focus ?
           <div className="react-choice-options" ref="options">
-            <ul className="react-choice-options__list">
+            <LazyRender maxHeight={300} className="react-choice-options__list">
               {options}
-            </ul>
+            </LazyRender>
           </div> : null}
       </div>
     );
