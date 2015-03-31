@@ -5,6 +5,7 @@ var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
+var Icon = require('./icon');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -188,11 +189,7 @@ var SingleChoice = React.createClass({
       'react-choice-single--not-in-focus': !this.state.focus
     });
 
-    var arrowClasses = cx({
-      'react-choice-icon__arrow': true,
-      'react-choice-icon__arrow--up': this.state.focus,
-      'react-choice-icon__arrow--down': !this.state.focus
-    });
+    var IconRenderer = this.props.icon || Icon;
 
     return (
       <div className="react-choice">
@@ -214,7 +211,7 @@ var SingleChoice = React.createClass({
         </div>
 
         <div className="react-choice-icon" onMouseDown={this._handleArrowClick}>
-          <div className={arrowClasses}></div>
+          <IconRenderer focused={this.state.focus} />
         </div>
 
         {this.state.focus ?
