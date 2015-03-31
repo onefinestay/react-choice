@@ -26,7 +26,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
     searchField: React.PropTypes.array, // array of search fields
 
-    icon: React.PropTypes.object, // icon render
+    icon: React.PropTypes.func, // icon render
 
     onSelect: React.PropTypes.func, // function called when option is selected
   },
