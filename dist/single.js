@@ -5,6 +5,7 @@ var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
+var Icon = require('./icon');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -24,6 +25,8 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     labelField: React.PropTypes.string, // label field name
 
     searchField: React.PropTypes.array, // array of search fields
+
+    icon: React.PropTypes.func, // icon render
 
     onSelect: React.PropTypes.func, // function called when option is selected
   },
@@ -188,11 +191,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       'react-choice-single--not-in-focus': !this.state.focus
     });
 
-    var arrowClasses = cx({
-      'react-choice-icon__arrow': true,
-      'react-choice-icon__arrow--up': this.state.focus,
-      'react-choice-icon__arrow--down': !this.state.focus
-    });
+    var IconRenderer = this.props.icon || Icon;
 
     return (
       React.createElement("div", {className: "react-choice"}, 
@@ -214,7 +213,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
         ), 
 
         React.createElement("div", {className: "react-choice-icon", onMouseDown: this._handleArrowClick}, 
-          React.createElement("div", {className: arrowClasses})
+          React.createElement(IconRenderer, {focused: this.state.focus})
         ), 
 
         this.state.focus ?
