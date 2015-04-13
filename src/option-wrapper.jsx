@@ -17,7 +17,8 @@ var OptionWrapper = React.createClass({
     return (
       <li className={classes}
         onMouseEnter={this.props.onHover.bind(null, this.props.option)}
-        onMouseDown={this.props.onClick.bind(null, this.props.option)}>
+        onMouseDown={this.props.onClick.bind(null, this.props.option)}
+        onTouchStart={this.props.onClick.bind(null, this.props.option)}>
         {this.props.children}
       </li>
     );
