@@ -28,7 +28,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
     icon: React.PropTypes.func, // icon render
 
-    onSelect: React.PropTypes.func, // function called when option is selected
+    onSelect: React.PropTypes.func // function called when option is selected
   },
 
   getDefaultProps: function() {
@@ -61,7 +61,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     if (this.props.value) {
       // find selected value
       selected = _.find(options, function(option) {
-        return option[this.props.valueField] == this.props.value;
+        return option[this.props.valueField] === this.props.value;
       }, this);
     }
 
@@ -72,7 +72,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       initialOptions: options,
       highlighted: null,
       selected: selected,
-      searchTokens: [],
+      searchTokens: []
     };
   },
 
@@ -129,7 +129,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
       var options = this._getAvailableOptions();
 
       var selected = _.find(options, function(option) {
-        return option[this.props.valueField] == nextProps.value;
+        return option[this.props.valueField] === nextProps.value;
       }, this);
 
       var state = this._resetSearch(options);
@@ -156,19 +156,19 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
   render: function() {
     var options = _.map(this.state.searchResults, function(option) {
       var valueField = this.props.valueField;
-      var value = option[valueField];
+      var v = option[valueField];
 
-      var child = _.find(this.props.children, function(child) {
-        return child.props[valueField] == value;
+      var child = _.find(this.props.children, function(c) {
+        return c.props[valueField] === v;
       });
 
       var highlighted = this.state.highlighted &&
-        value == this.state.highlighted[valueField];
+        v === this.state.highlighted[valueField];
 
       child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
       return (
-        React.createElement(OptionWrapper, {key: value, 
+        React.createElement(OptionWrapper, {key: v, 
           selected: highlighted, 
           ref: highlighted ? 'highlighted' : null, 
           option: option, 
