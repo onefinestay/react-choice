@@ -5,6 +5,7 @@ var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
+var Options = require('./options');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -42,6 +43,8 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
     values: React.PropTypes.array, // initial values
+
+    children: React.PropTypes.array.isRequired,
 
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
@@ -272,6 +275,24 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     this.refs.container.getDOMNode().focus();
   },
 
+  _handleBlur: function(event) {
+    if (this._optionsMouseDown === true) {
+      this._optionsMouseDown = false;
+      this.refs.input.getDOMNode().focus();
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      event.preventDefault();
+      this.setState({
+        focus: false
+      });
+    }
+  },
+
+  _handleOptionsMouseDown: function() {
+    this._optionsMouseDown = true;
+  },
+
   componentWillReceiveProps: function(nextProps) {
     if (_.isEqual(nextProps.values, this.props.values)) {
       var options = this._getAvailableOptions(nextProps.values);
@@ -357,14 +378,15 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
             onBlur: this._handleBlur, 
 
             autoComplete: "off", 
+            role: "combobox", 
+            'aria-autocomplete': "list", 
+            'aria-expanded': this.state.focus, 
             ref: "input"})
         ), 
 
         this.state.focus ?
-          React.createElement("div", {className: "react-choice-options", ref: "options"}, 
-            React.createElement("ul", {className: "react-choice-options__list"}, 
-              options
-            )
+          React.createElement(Options, {onMouseDown: this._handleOptionsMouseDown, ref: "options"}, 
+            options
           ) : null
       )
     );

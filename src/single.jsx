@@ -6,6 +6,7 @@ var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
 var Icon = require('./icon');
+var Options = require('./options');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -20,6 +21,7 @@ var SingleChoice = React.createClass({
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
     value: React.PropTypes.string, // initial value for input field
+    children: React.PropTypes.array.isRequired,
 
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
@@ -109,7 +111,11 @@ var SingleChoice = React.createClass({
   },
 
   _selectOption: function(option) {
+    this._optionsMouseDown = false;
     this.refs.input.getDOMNode().blur();
+    this.setState({
+      focus: false
+    });
 
     if (option) {
       var options = this._getAvailableOptions();
@@ -122,6 +128,24 @@ var SingleChoice = React.createClass({
         this.props.onSelect(option);
       }
     }
+  },
+
+  _handleBlur: function(event) {
+    if (this._optionsMouseDown === true) {
+      this._optionsMouseDown = false;
+      this.refs.input.getDOMNode().focus();
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      event.preventDefault();
+      this.setState({
+        focus: false
+      });
+    }
+  },
+
+  _handleOptionsMouseDown: function() {
+    this._optionsMouseDown = true;
   },
 
   componentWillReceiveProps: function(nextProps) {
@@ -140,8 +164,10 @@ var SingleChoice = React.createClass({
     }
   },
 
-  componentDidUpdate: function() {
-    this._updateScrollPosition();
+  componentDidUpdate: function(prevProps, prevState) {
+    if (prevState.focus === false && this.state.focus === true) {
+      this._updateScrollPosition();
+    }
 
     // select selected text in input box
     if (this.state.selected && this.state.focus) {
@@ -209,6 +235,9 @@ var SingleChoice = React.createClass({
             onBlur={this._handleBlur}
 
             autoComplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={this.state.focus}
             ref="input" />
         </div>
 
@@ -217,11 +246,9 @@ var SingleChoice = React.createClass({
         </div>
 
         {this.state.focus ?
-          <div className="react-choice-options" ref="options">
-            <ul className="react-choice-options__list">
-              {options}
-            </ul>
-          </div> : null}
+          <Options onMouseDown={this._handleOptionsMouseDown} ref="options">
+            {options}
+          </Options> : null}
       </div>
     );
   }

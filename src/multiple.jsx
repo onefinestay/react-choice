@@ -5,6 +5,7 @@ var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
+var Options = require('./options');
 var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
@@ -42,6 +43,8 @@ var MultipleChoice = React.createClass({
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
     values: React.PropTypes.array, // initial values
+
+    children: React.PropTypes.array.isRequired,
 
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
@@ -272,6 +275,24 @@ var MultipleChoice = React.createClass({
     this.refs.container.getDOMNode().focus();
   },
 
+  _handleBlur: function(event) {
+    if (this._optionsMouseDown === true) {
+      this._optionsMouseDown = false;
+      this.refs.input.getDOMNode().focus();
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      event.preventDefault();
+      this.setState({
+        focus: false
+      });
+    }
+  },
+
+  _handleOptionsMouseDown: function() {
+    this._optionsMouseDown = true;
+  },
+
   componentWillReceiveProps: function(nextProps) {
     if (_.isEqual(nextProps.values, this.props.values)) {
       var options = this._getAvailableOptions(nextProps.values);
@@ -357,15 +378,16 @@ var MultipleChoice = React.createClass({
             onBlur={this._handleBlur}
 
             autoComplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={this.state.focus}
             ref="input" />
         </div>
 
         {this.state.focus ?
-          <div className="react-choice-options" ref="options">
-            <ul className="react-choice-options__list">
-              {options}
-            </ul>
-          </div> : null}
+          <Options onMouseDown={this._handleOptionsMouseDown} ref="options">
+            {options}
+          </Options> : null}
       </div>
     );
   }

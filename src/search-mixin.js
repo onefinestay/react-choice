@@ -83,13 +83,6 @@ var SearchMixin = {
     });
   },
 
-  _handleBlur: function(event) {
-    event.preventDefault();
-    this.setState({
-      focus: false
-    });
-  },
-
   _handleOptionHover: function(option, event) {
     event.preventDefault();
     this.setState({
@@ -99,6 +92,7 @@ var SearchMixin = {
 
   _handleOptionClick: function(option, event) {
     event.preventDefault();
+    event.stopPropagation();
     this._selectOption(option);
   },
 
