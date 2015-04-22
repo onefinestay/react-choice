@@ -131,13 +131,12 @@ var SingleChoice = React.createClass({
   },
 
   _handleBlur: function(event) {
+    event.preventDefault();
     if (this._optionsMouseDown === true) {
       this._optionsMouseDown = false;
       this.refs.input.getDOMNode().focus();
-      event.preventDefault();
       event.stopPropagation();
     } else {
-      event.preventDefault();
       this.setState({
         focus: false
       });
