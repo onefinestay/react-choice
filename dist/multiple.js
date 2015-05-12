@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var React = require('react/addons');
 var _ = require('lodash');
@@ -10,33 +10,45 @@ var OptionWrapper = require('./option-wrapper');
 
 var SearchMixin = require('./search-mixin');
 
-var ValueWrapper = React.createClass({displayName: 'ValueWrapper',
+var ValueWrapper = React.createClass({
+  displayName: 'ValueWrapper',
+
   propTypes: {
     onClick: React.PropTypes.func.isRequired,
     onDeleteClick: React.PropTypes.func.isRequired
   },
 
-  onDeleteClick: function(event) {
+  onDeleteClick: function onDeleteClick(event) {
     event.stopPropagation();
     this.props.onDeleteClick(event);
   },
 
-  render: function() {
+  render: function render() {
     var classes = cx({
       'react-choice-value': true,
       'react-choice-value--is-selected': this.props.selected
     });
 
-    return (
-      React.createElement("div", {className: classes, onClick: this.props.onClick}, 
-        React.createElement("div", {className: "react-choice-value__children"}, this.props.children), 
-        React.createElement("a", {className: "react-choice-value__delete", onClick: this.onDeleteClick}, "x")
+    return React.createElement(
+      'div',
+      { className: classes, onClick: this.props.onClick },
+      React.createElement(
+        'div',
+        { className: 'react-choice-value__children' },
+        this.props.children
+      ),
+      React.createElement(
+        'a',
+        { className: 'react-choice-value__delete', onClick: this.onDeleteClick },
+        'x'
       )
     );
   }
 });
 
-var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
+var MultipleChoice = React.createClass({
+  displayName: 'MultipleChoice',
+
   mixins: [SearchMixin],
 
   propTypes: {
@@ -56,7 +68,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     allowDuplicates: React.PropTypes.bool // if true, the same values can be added multiple times
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       values: [],
       valueField: 'value',
@@ -66,13 +78,13 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     };
   },
 
-  getInitialState: function() {
+  getInitialState: function getInitialState() {
     var props = this.props.searchField;
     props.push(this.props.valueField);
     props.push(this.props.searchField);
     props = _.uniq(props);
 
-    var options = _.map(this.props.children, function(child) {
+    var options = _.map(this.props.children, function (child) {
       // TODO Validation ?
       return _.pick(child.props, props);
     }, this);
@@ -89,7 +101,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     };
   },
 
-  _handleContainerInput: function(event) {
+  _handleContainerInput: function _handleContainerInput(event) {
     var keys = {
       37: this._moveLeft,
       39: this._moveRight,
@@ -101,7 +113,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _handleContainerBlur: function() {
+  _handleContainerBlur: function _handleContainerBlur() {
     if (this.state.selectedIndex) {
       this.setState({
         selectedIndex: -1
@@ -109,14 +121,14 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _selectOption: function(option) {
+  _selectOption: function _selectOption(option) {
     if (option) {
       var values = this.state.values.slice(0); // copy
       var options = this._getAvailableOptions(values);
 
       // determine which item to highlight
       var valueField = this.props.valueField;
-      var optionIndex = _.findIndex(options, function(o) {
+      var optionIndex = _.findIndex(options, function (o) {
         return option[valueField] === o[valueField];
       });
 
@@ -146,13 +158,13 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _getAvailableOptions: function(values) {
+  _getAvailableOptions: function _getAvailableOptions(values) {
     var options = this.state.initialOptions;
     var valueField = this.props.valueField;
 
     if (this.props.allowDuplicates === false && values) {
-      options = _.filter(options, function(option) {
-        var found = _.find(values, function(value) {
+      options = _.filter(options, function (option) {
+        var found = _.find(values, function (value) {
           return value[valueField] === option[valueField];
         });
 
@@ -163,17 +175,14 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     return this._sort(options);
   },
 
-  _moveLeft: function(event) {
+  _moveLeft: function _moveLeft(event) {
     var input = this.refs.input.getDOMNode();
 
     if (!this.state.values.length) {
       return false;
     }
 
-    if (
-      event.target === input &&
-      event.target.selectionStart === 0
-    ) {
+    if (event.target === input && event.target.selectionStart === 0) {
       event.preventDefault();
 
       // select stage
@@ -193,7 +202,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _moveRight: function() {
+  _moveRight: function _moveRight() {
     var input = this.refs.input.getDOMNode();
 
     if (!this.state.values.length) {
@@ -216,7 +225,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _removeValue: function(index) {
+  _removeValue: function _removeValue(index) {
     var values = this.state.values.slice(0); // copy
     var removedOption = values.splice(index, 1);
 
@@ -233,7 +242,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   },
 
   // removes last element
-  _remove: function(event) {
+  _remove: function _remove(event) {
     if (!this.state.value) {
       event.preventDefault();
 
@@ -245,7 +254,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
   },
 
   // called from within, removes selected element
-  _removeSelectedContainer: function(event) {
+  _removeSelectedContainer: function _removeSelectedContainer(event) {
     if (this.state.selectedIndex !== -1) {
       event.preventDefault();
 
@@ -258,11 +267,11 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _removeDeletedContainer: function(index) {
+  _removeDeletedContainer: function _removeDeletedContainer(index) {
     this._removeValue(index);
   },
 
-  _selectValue: function(index, event) {
+  _selectValue: function _selectValue(index, event) {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -275,7 +284,7 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     this.refs.container.getDOMNode().focus();
   },
 
-  _handleBlur: function(event) {
+  _handleBlur: function _handleBlur(event) {
     if (this._optionsMouseDown === true) {
       this._optionsMouseDown = false;
       this.refs.input.getDOMNode().focus();
@@ -289,11 +298,11 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  _handleOptionsMouseDown: function() {
+  _handleOptionsMouseDown: function _handleOptionsMouseDown() {
     this._optionsMouseDown = true;
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     if (_.isEqual(nextProps.values, this.props.values)) {
       var options = this._getAvailableOptions(nextProps.values);
 
@@ -305,50 +314,53 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
     }
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate: function componentDidUpdate() {
     this._updateScrollPosition();
   },
 
-  render: function() {
-    var values = _.map(this.state.values, function(v, i) {
+  render: function render() {
+    var values = _.map(this.state.values, function (v, i) {
       var key = v[this.props.valueField];
 
       var selected = i === this.state.selectedIndex;
 
       var label = v[this.props.labelField];
 
-      return (
-        React.createElement(ValueWrapper, {key: i, 
-          onClick: this._selectValue.bind(null, i), 
-          onDeleteClick: this._removeDeletedContainer.bind(null, i), 
-          selected: selected}, 
-          React.createElement("div", null, label)
+      return React.createElement(
+        ValueWrapper,
+        { key: i,
+          onClick: this._selectValue.bind(null, i),
+          onDeleteClick: this._removeDeletedContainer.bind(null, i),
+          selected: selected },
+        React.createElement(
+          'div',
+          null,
+          label
         )
       );
     }, this);
 
-    var options = _.map(this.state.searchResults, function(option) {
+    var options = _.map(this.state.searchResults, function (option) {
       var valueField = this.props.valueField;
       var v = option[valueField];
 
-      var child = _.find(this.props.children, function(c) {
+      var child = _.find(this.props.children, function (c) {
         return c.props[valueField] === v;
       });
 
-      var highlighted = this.state.highlighted &&
-        v === this.state.highlighted[valueField];
+      var highlighted = this.state.highlighted && v === this.state.highlighted[valueField];
 
       child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
-      return (
-        React.createElement(OptionWrapper, {key: v, 
-          selected: highlighted, 
-          ref: highlighted ? 'highlighted' : null, 
-          option: option, 
-          onHover: this._handleOptionHover, 
-          onClick: this._handleOptionClick}, 
-          child
-        )
+      return React.createElement(
+        OptionWrapper,
+        { key: v,
+          selected: highlighted,
+          ref: highlighted ? 'highlighted' : null,
+          option: option,
+          onHover: this._handleOptionHover,
+          onClick: this._handleOptionClick },
+        child
       );
     }, this);
 
@@ -361,34 +373,36 @@ var MultipleChoice = React.createClass({displayName: 'MultipleChoice',
       'react-choice-multiple--not-in-focus': !this.state.focus
     });
 
-    return (
-      React.createElement("div", {className: "react-choice"}, 
-        React.createElement("div", {className: wrapperClasses, onClick: this._handleClick, 
-          tabIndex: "-1", ref: "container", onKeyDown: this._handleContainerInput, 
-          onBlur: this._handleContainerBlur}, 
-          values, 
-          React.createElement("input", {type: "text", 
-            placeholder: this.props.placeholder, 
-            value: value, 
-            className: "react-choice-input react-choice-multiple__input", 
+    return React.createElement(
+      'div',
+      { className: 'react-choice' },
+      React.createElement(
+        'div',
+        { className: wrapperClasses, onClick: this._handleClick,
+          tabIndex: '-1', ref: 'container', onKeyDown: this._handleContainerInput,
+          onBlur: this._handleContainerBlur },
+        values,
+        React.createElement('input', { type: 'text',
+          placeholder: this.props.placeholder,
+          value: value,
+          className: 'react-choice-input react-choice-multiple__input',
 
-            onKeyDown: this._handleInput, 
-            onChange: this._handleChange, 
-            onFocus: this._handleFocus, 
-            onBlur: this._handleBlur, 
+          onKeyDown: this._handleInput,
+          onChange: this._handleChange,
+          onFocus: this._handleFocus,
+          onBlur: this._handleBlur,
 
-            autoComplete: "off", 
-            role: "combobox", 
-            'aria-autocomplete': "list", 
-            'aria-expanded': this.state.focus, 
-            ref: "input"})
-        ), 
-
-        this.state.focus ?
-          React.createElement(Options, {onMouseDown: this._handleOptionsMouseDown, ref: "options"}, 
-            options
-          ) : null
-      )
+          autoComplete: 'off',
+          role: 'combobox',
+          'aria-autocomplete': 'list',
+          'aria-expanded': this.state.focus,
+          ref: 'input' })
+      ),
+      this.state.focus ? React.createElement(
+        Options,
+        { onMouseDown: this._handleOptionsMouseDown, ref: 'options' },
+        options
+      ) : null
     );
   }
 });

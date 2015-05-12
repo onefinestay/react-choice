@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _ = require('lodash');
 var Sifter = require('sifter');
@@ -7,22 +7,22 @@ var SearchMixin = {
   //
   // Public methods
   //
-  focus: function(openOptions) {
+  focus: function focus(openOptions) {
     this.refs.input.getDOMNode().focus();
   },
 
-  _sort: function(list) {
+  _sort: function _sort(list) {
     if (typeof this.props.sorter === 'function') {
       return this.props.sorter(list);
     }
     return _.sortBy(list, this.props.labelField);
   },
 
-  _handleClick: function(event) {
+  _handleClick: function _handleClick(event) {
     this.refs.input.getDOMNode().focus();
   },
 
-  _handleInput: function(event) {
+  _handleInput: function _handleInput(event) {
     var keys = {
       13: this._enter,
       37: this._moveLeft,
@@ -37,7 +37,7 @@ var SearchMixin = {
     }
   },
 
-  _handleChange: function(event) {
+  _handleChange: function _handleChange(event) {
     event.preventDefault();
 
     var query = event.target.value;
@@ -50,7 +50,7 @@ var SearchMixin = {
       fields: this.props.searchField
     });
 
-    var searchResults = _.map(result.items, function(res) {
+    var searchResults = _.map(result.items, function (res) {
       return options[res.id];
     });
 
@@ -61,16 +61,15 @@ var SearchMixin = {
       searchResults: searchResults,
       searchTokens: result.tokens,
       highlighted: highlighted,
-      selected: null,
-    });
+      selected: null });
   },
 
-  _handleFocus: function(event) {
+  _handleFocus: function _handleFocus(event) {
     event.preventDefault();
 
     var highlighted;
     if (this.state.selected) {
-      highlighted = _.find(this.state.searchResults, function(option) {
+      highlighted = _.find(this.state.searchResults, function (option) {
         return option[this.props.valueField] == this.state.selected[this.props.valueField];
       }, this);
     } else {
@@ -83,20 +82,20 @@ var SearchMixin = {
     });
   },
 
-  _handleOptionHover: function(option, event) {
+  _handleOptionHover: function _handleOptionHover(option, event) {
     event.preventDefault();
     this.setState({
       highlighted: option
     });
   },
 
-  _handleOptionClick: function(option, event) {
+  _handleOptionClick: function _handleOptionClick(option, event) {
     event.preventDefault();
     event.stopPropagation();
     this._selectOption(option);
   },
 
-  _moveUp: function(event) {
+  _moveUp: function _moveUp(event) {
     var options = this.state.searchResults;
     if (options.length > 0) {
       event.preventDefault();
@@ -109,7 +108,7 @@ var SearchMixin = {
     }
   },
 
-  _moveDown: function(event) {
+  _moveDown: function _moveDown(event) {
     var options = this.state.searchResults;
     if (options.length > 0) {
       event.preventDefault();
@@ -122,12 +121,12 @@ var SearchMixin = {
     }
   },
 
-  _enter: function(event) {
+  _enter: function _enter(event) {
     event.preventDefault();
     this._selectOption(this.state.highlighted);
   },
 
-  _updateScrollPosition: function() {
+  _updateScrollPosition: function _updateScrollPosition() {
     var highlighted = this.refs.highlighted;
     if (highlighted) {
       // find if highlighted option is not visible
@@ -139,20 +138,20 @@ var SearchMixin = {
       if (offsetTop > parent.clientHeight) {
         var diff = el.offsetTop + el.clientHeight - parent.clientHeight;
         parent.scrollTop = diff;
-      } else if (offsetTop - el.clientHeight < 0) { // scroll up
+      } else if (offsetTop - el.clientHeight < 0) {
+        // scroll up
         parent.scrollTop = el.offsetTop;
       }
     }
   },
 
-  _resetSearch: function(options) {
+  _resetSearch: function _resetSearch(options) {
     return {
       value: '',
       searchResults: options,
       searchTokens: [],
       highlighted: _.first(options)
     };
-  },
-};
+  } };
 
 module.exports = SearchMixin;

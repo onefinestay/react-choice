@@ -12,7 +12,7 @@ var Install = require('./components/install.jsx');
 var Features = require('./components/features.jsx');
 var CustomRender = require('./components/custom-render.jsx');
 
-var Choice = require('../');
+var Choice = require('../src');
 
 var singleExample = fs.readFileSync(__dirname + '/code-snippets/single.jsx', 'utf8');
 var multipleExample = fs.readFileSync(__dirname + '/code-snippets/multiple.jsx', 'utf8');
