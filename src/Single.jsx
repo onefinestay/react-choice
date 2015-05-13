@@ -121,14 +121,10 @@ const SingleChoice = React.createClass({
     this.refs.input.getDOMNode().focus();
   },
 
-  // TODO
-  _handleArrowClick(event) {
-    debugger;
-    if (this.state.focus) {
-      this._handleBlur(event);
+  _handleArrowClick() {
+    if (this.state.focus === true) {
       this.refs.input.getDOMNode().blur();
     } else {
-      this._handleFocus(event);
       this.refs.input.getDOMNode().focus();
     }
   },
@@ -151,18 +147,12 @@ const SingleChoice = React.createClass({
     this.setState({
       focus: true
     });
-  },
 
-  // TODO
-  _remove(event) {
-    if (this.state.selected) {
-      event.preventDefault();
-
-      var state = this._resetSearch(this.state.initialOptions);
-      state.selected = null;
-
-      this.setState(state);
-    }
+    setTimeout(() => {
+      if (this.isMounted()) {
+        this.refs.input.getDOMNode().select();
+      }
+    }, 10);
   },
 
   _selectOption(option) {
@@ -186,18 +176,8 @@ const SingleChoice = React.createClass({
       };
       this.props.onSelect(fakeEvent);
     });
-
-    /*
-    var options = this._getAvailableOptions();
-    var state = this._resetSearch(options);
-    state.selected = option;
-
-    this.setState(state);
-    this.props.onSelect(option);
-     */
   },
 
-  // TODO
   _handleBlur(event) {
     event.preventDefault();
     if (this._optionsMouseDown === true) {
@@ -316,7 +296,7 @@ const SingleChoice = React.createClass({
 
     let inputValue;
 
-    if (searchQuery) {
+    if (searchQuery !== null) {
       inputValue = searchQuery;
     } else if (selectedOption) {
       inputValue = selectedOption.props[labelField];
@@ -336,8 +316,7 @@ const SingleChoice = React.createClass({
     return (
       <div className="react-choice">
         <input type="hidden" name={name}
-          value={selectedValue}
-          ref="input"/>
+          value={selectedValue} />
 
         <div className={wrapperClasses} onClick={this._handleClick}>
           <input type="text"
