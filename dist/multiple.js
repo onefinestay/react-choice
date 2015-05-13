@@ -5,8 +5,8 @@ var _ = require('lodash');
 var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
-var Options = require('./options');
-var OptionWrapper = require('./option-wrapper');
+var Options = require('./Options');
+var OptionWrapper = require('./OptionWrapper');
 
 var SearchMixin = require('./search-mixin');
 

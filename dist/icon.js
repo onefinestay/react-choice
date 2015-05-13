@@ -1,24 +1,38 @@
 'use strict';
 
-var React = require('react/addons');
-var cx = React.addons.classSet;
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-var Icon = React.createClass({
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _reactAddons = require('react/addons');
+
+var _reactAddons2 = _interopRequireDefault(_reactAddons);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var Icon = _reactAddons2['default'].createClass({
   displayName: 'Icon',
 
   propTypes: {
-    focused: React.PropTypes.bool.isRequired
+    focused: _reactAddons2['default'].PropTypes.bool.isRequired
   },
 
   render: function render() {
-    var arrowClasses = cx({
+    var focused = this.props.focused;
+
+    var arrowClasses = _classnames2['default']({
       'react-choice-icon__arrow': true,
-      'react-choice-icon__arrow--up': this.props.focused,
-      'react-choice-icon__arrow--down': !this.props.focused
+      'react-choice-icon__arrow--up': focused,
+      'react-choice-icon__arrow--down': !focused
     });
 
-    return React.createElement('div', { className: arrowClasses });
+    return _reactAddons2['default'].createElement('div', { className: arrowClasses });
   }
 });
 
-module.exports = Icon;
+exports['default'] = Icon;
+module.exports = exports['default'];

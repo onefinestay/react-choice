@@ -1,83 +1,82 @@
 'use strict';
 
-var React = require('react/addons');
-var _ = require('lodash');
-var cx = React.addons.classSet;
-var cloneWithProps = React.addons.cloneWithProps;
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-var Icon = require('./icon');
-var Options = require('./options');
-var OptionWrapper = require('./option-wrapper');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var SearchMixin = require('./search-mixin');
+var _reactAddons = require('react/addons');
+
+var _reactAddons2 = _interopRequireDefault(_reactAddons);
+
+var _lodashMap = require('lodash.map');
+
+var _lodashMap2 = _interopRequireDefault(_lodashMap);
+
+var _lodashFind = require('lodash.find');
+
+var _lodashFind2 = _interopRequireDefault(_lodashFind);
+
+var _lodashFindindex = require('lodash.findindex');
+
+var _lodashFindindex2 = _interopRequireDefault(_lodashFindindex);
+
+var _lodashFilter = require('lodash.filter');
+
+var _lodashFilter2 = _interopRequireDefault(_lodashFilter);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Icon = require('./Icon');
+
+var _Icon2 = _interopRequireDefault(_Icon);
+
+var _Options = require('./Options');
+
+var _Options2 = _interopRequireDefault(_Options);
+
+var _OptionWrapper = require('./OptionWrapper');
+
+var _OptionWrapper2 = _interopRequireDefault(_OptionWrapper);
+
+var cloneWithProps = _reactAddons2['default'].addons.cloneWithProps;
+
+function noop() {}
+
+function isDefined(value) {
+  return typeof value !== 'undefined';
+}
+
+function escapeRegexCharacters(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 //
 // Auto complete select box
 //
-var SingleChoice = React.createClass({
+var SingleChoice = _reactAddons2['default'].createClass({
   displayName: 'SingleChoice',
 
-  mixins: [SearchMixin],
-
   propTypes: {
-    name: React.PropTypes.string, // name of input
-    placeholder: React.PropTypes.string, // input placeholder
-    value: React.PropTypes.string, // initial value for input field
-    children: React.PropTypes.array.isRequired,
+    value: _reactAddons2['default'].PropTypes.oneOfType([_reactAddons2['default'].PropTypes.string, _reactAddons2['default'].PropTypes.number]),
+    defaultValue: _reactAddons2['default'].PropTypes.oneOfType([_reactAddons2['default'].PropTypes.string, _reactAddons2['default'].PropTypes.number]),
 
-    valueField: React.PropTypes.string, // value field name
-    labelField: React.PropTypes.string, // label field name
+    children: _reactAddons2['default'].PropTypes.array.isRequired, // options
 
-    searchField: React.PropTypes.array, // array of search fields
+    name: _reactAddons2['default'].PropTypes.string, // name of input
+    placeholder: _reactAddons2['default'].PropTypes.string, // input placeholder
+    disabled: _reactAddons2['default'].PropTypes.bool,
 
-    icon: React.PropTypes.func, // icon render
+    valueField: _reactAddons2['default'].PropTypes.string, // value field name
+    labelField: _reactAddons2['default'].PropTypes.string, // label field name
 
-    onSelect: React.PropTypes.func // function called when option is selected
-  },
+    icon: _reactAddons2['default'].PropTypes.func, // icon render
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      valueField: 'value',
-      labelField: 'children',
-      searchField: ['children']
-    };
-  },
-
-  _getAvailableOptions: function _getAvailableOptions() {
-    var options = this.state.initialOptions;
-
-    return this._sort(options);
-  },
-
-  getInitialState: function getInitialState() {
-    var selected = null;
-
-    var props = this.props.searchField;
-    props.push(this.props.valueField);
-    props.push(this.props.searchField);
-    props = _.uniq(props);
-
-    var options = _.map(this.props.children, function (child) {
-      // TODO Validation ?
-      return _.pick(child.props, props);
-    }, this);
-
-    if (this.props.value) {
-      // find selected value
-      selected = _.find(options, function (option) {
-        return option[this.props.valueField] === this.props.value;
-      }, this);
-    }
-
-    return {
-      value: selected ? selected[this.props.labelField] : this.props.value,
-      focus: false,
-      searchResults: this._sort(options),
-      initialOptions: options,
-      highlighted: null,
-      selected: selected,
-      searchTokens: []
-    };
+    getSuggestions: _reactAddons2['default'].PropTypes.func, // custom search function
+    onSelect: _reactAddons2['default'].PropTypes.func // function called when option is selected
   },
 
   //
@@ -88,47 +87,130 @@ var SingleChoice = React.createClass({
   },
 
   //
+  // Internal methods
+  //
+  getDefaultProps: function getDefaultProps() {
+    return {
+      valueField: 'value',
+      labelField: 'children',
+      onSelect: noop
+    };
+  },
+
+  getInitialState: function getInitialState() {
+    return {
+      focus: false,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
+    };
+  },
+
+  _getSelectedValue: function _getSelectedValue() {
+    var _props = this.props;
+    var value = _props.value;
+    var defaultValue = _props.defaultValue;
+    var chosenValue = this.state.chosenValue;
+
+    // value property overrides all
+    if (typeof value !== 'undefined') {
+      return value;
+    }
+
+    if (typeof chosenValue !== 'undefined') {
+      return chosenValue;
+    }
+
+    return defaultValue;
+  },
+
+  _getOption: function _getOption(value) {
+    var _props2 = this.props;
+    var children = _props2.children;
+    var valueField = _props2.valueField;
+
+    return _lodashFind2['default'](children, function (child) {
+      return child.props[valueField] === value;
+    });
+  },
+
+  _isActive: function _isActive() {
+    return !this.props.disabled && this.state.focus;
+  },
+
+  _getSuggestions: function _getSuggestions(query) {
+    var _props3 = this.props;
+    var labelField = _props3.labelField;
+    var children = _props3.children;
+    var getSuggestions = _props3.getSuggestions;
+
+    if (typeof getSuggestions === 'function') {
+      return getSuggestions(query);
+    }
+
+    var escapedQuery = escapeRegexCharacters(query.trim());
+    var regex = new RegExp('\\b' + escapedQuery, 'i');
+
+    return _lodashFilter2['default'](children, function (child) {
+      return regex.test(child.props[labelField]);
+    });
+  },
+
+  //
   // Events
   //
-  _handleArrowClick: function _handleArrowClick(event) {
-    if (this.state.focus) {
-      this._handleBlur(event);
+  _handleClick: function _handleClick(event) {
+    event.preventDefault();
+    this.refs.input.getDOMNode().focus();
+  },
+
+  _handleArrowClick: function _handleArrowClick() {
+    if (this.state.focus === true) {
       this.refs.input.getDOMNode().blur();
     } else {
-      this._handleFocus(event);
       this.refs.input.getDOMNode().focus();
     }
   },
 
-  _remove: function _remove(event) {
-    if (this.state.selected) {
-      event.preventDefault();
+  _handleFocus: function _handleFocus(event) {
+    var _this = this;
 
-      var state = this._resetSearch(this.state.initialOptions);
-      state.selected = null;
+    event.preventDefault();
 
-      this.setState(state);
-    }
+    this.setState({
+      focus: true
+    });
+
+    setTimeout(function () {
+      if (_this.isMounted()) {
+        _this.refs.input.getDOMNode().select();
+      }
+    }, 10);
   },
 
   _selectOption: function _selectOption(option) {
+    var _this2 = this;
+
+    // reset mousedown latch
     this._optionsMouseDown = false;
     this.refs.input.getDOMNode().blur();
+
+    var valueField = this.props.valueField;
+
     this.setState({
-      focus: false
+      chosenValue: option.props[valueField],
+      focus: false,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
+    }, function () {
+      // Try and replicate normal dom event
+      var fakeEvent = {
+        target: _this2.refs.input.getDOMNode(),
+        option: option
+      };
+      _this2.props.onSelect(fakeEvent);
     });
-
-    if (option) {
-      var options = this._getAvailableOptions();
-      var state = this._resetSearch(options);
-      state.selected = option;
-
-      this.setState(state);
-
-      if (typeof this.props.onSelect === 'function') {
-        this.props.onSelect(option);
-      }
-    }
   },
 
   _handleBlur: function _handleBlur(event) {
@@ -144,89 +226,220 @@ var SingleChoice = React.createClass({
     }
   },
 
+  _handleOptionHover: function _handleOptionHover(child) {
+    var valueField = this.props.valueField;
+
+    this.setState({
+      hoverValue: child.props[valueField]
+    });
+  },
+
+  _handleOptionClick: function _handleOptionClick(child, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this._selectOption(child);
+  },
+
   _handleOptionsMouseDown: function _handleOptionsMouseDown() {
+    // prevent windows issue where clicking on scrollbar triggers blur on input
     this._optionsMouseDown = true;
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      var options = this._getAvailableOptions();
+  _handleInput: function _handleInput(event) {
+    var keys = {
+      13: this._enter,
+      37: this._moveLeft,
+      38: this._moveUp,
+      39: this._moveRight,
+      40: this._moveDown,
+      8: this._remove
+    };
 
-      var selected = _.find(options, function (option) {
-        return option[this.props.valueField] === nextProps.value;
-      }, this);
-
-      var state = this._resetSearch(options);
-      state.value = selected ? selected[this.props.labelField] : nextProps.value;
-      state.selected = selected;
-
-      this.setState(state);
+    if (typeof keys[event.keyCode] === 'function') {
+      keys[event.keyCode](event);
     }
   },
+
+  _move: function _move(options, operator) {
+    var _this3 = this;
+
+    if (operator !== 1 && operator !== -1) {
+      throw new Error('Movement operator is not 1 or -1. It\'s ' + operator);
+    }
+
+    var valueField = this.props.valueField;
+    var _state = this.state;
+    var hoverValue = _state.hoverValue;
+    var selectedValue = _state.selectedValue;
+
+    var highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
+    var highlightedIndex = _lodashFindindex2['default'](options, function (result) {
+      return result.props[valueField] === highlightedValue;
+    });
+
+    if (typeof options[highlightedIndex + operator] !== 'undefined') {
+      this.setState({
+        hoverValue: options[highlightedIndex + operator].props[valueField]
+      }, function () {
+        // update scroll position
+        _this3._updateScrollPosition();
+      });
+    }
+  },
+
+  _moveUp: function _moveUp(event) {
+    var children = this.props.children;
+    var searchResults = this.state.searchResults;
+
+    var options = searchResults || children;
+
+    if (options && options.length > 0) {
+      event.preventDefault();
+      this._move(options, -1);
+    }
+  },
+
+  _moveDown: function _moveDown(event) {
+    var children = this.props.children;
+    var searchResults = this.state.searchResults;
+
+    var options = searchResults || children;
+
+    if (options && options.length > 0) {
+      event.preventDefault();
+      this._move(options, 1);
+    }
+  },
+
+  _enter: function _enter(event) {
+    event.preventDefault();
+
+    var hoverValue = this.state.hoverValue;
+
+    if (hoverValue) {
+      var option = this._getOption(hoverValue);
+      this._selectOption(option);
+    }
+  },
+
+  _handleChange: function _handleChange(event) {
+    event.preventDefault();
+
+    var query = event.target.value;
+    var searchResults = this._getSuggestions(query);
+
+    this.setState({
+      searchQuery: query,
+      searchResults: searchResults
+    });
+  },
+
+  _updateScrollPosition: function _updateScrollPosition() {
+    var highlighted = this.refs ? this.refs.highlighted : null;
+    if (highlighted) {
+      // find if highlighted option is not visible
+      var el = highlighted.getDOMNode();
+      var _parent = this.refs.options.getDOMNode();
+      var offsetTop = el.offsetTop + el.clientHeight - _parent.scrollTop;
+
+      // scroll down
+      if (offsetTop > _parent.clientHeight) {
+        var diff = el.offsetTop + el.clientHeight - _parent.clientHeight;
+        _parent.scrollTop = diff;
+      } else if (offsetTop - el.clientHeight < 0) {
+        // scroll up
+        _parent.scrollTop = el.offsetTop;
+      }
+    }
+  },
+
+  /*
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      var options = this._getAvailableOptions();
+       var selected = _find(options, (option) => option[this.props.valueField] === nextProps.value);
+       var state = this._resetSearch(options);
+      state.value = selected ? selected[this.props.labelField] : nextProps.value;
+      state.selected = selected;
+       this.setState(state);
+    }
+  },
+   */
 
   componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
       this._updateScrollPosition();
     }
-
-    // select selected text in input box
-    if (this.state.selected && this.state.focus) {
-      setTimeout((function () {
-        if (this.isMounted()) {
-          this.refs.input.getDOMNode().select();
-        }
-      }).bind(this), 50);
-    }
   },
 
   render: function render() {
-    var options = _.map(this.state.searchResults, function (option) {
-      var valueField = this.props.valueField;
-      var v = option[valueField];
+    var _this4 = this;
 
-      var child = _.find(this.props.children, function (c) {
-        return c.props[valueField] === v;
-      });
+    var _props4 = this.props;
+    var name = _props4.name;
+    var valueField = _props4.valueField;
+    var labelField = _props4.labelField;
+    var placeholder = _props4.placeholder;
+    var children = _props4.children;
+    var icon = _props4.icon;
+    var _state2 = this.state;
+    var hoverValue = _state2.hoverValue;
+    var searchQuery = _state2.searchQuery;
+    var searchResults = _state2.searchResults;
 
-      var highlighted = this.state.highlighted && v === this.state.highlighted[valueField];
+    var selectedValue = this._getSelectedValue();
+    var selectedOption = selectedValue !== null ? this._getOption(selectedValue) : null;
 
-      child = cloneWithProps(child, { tokens: this.state.searchTokens });
+    var options = _lodashMap2['default'](searchResults || children, function (child, index) {
+      var highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
 
-      return React.createElement(
-        OptionWrapper,
-        { key: v,
+      var highlighted = child.props[valueField] === highlightedValue;
+
+      var key = '' + index + '-' + child.props[valueField];
+
+      return _reactAddons2['default'].createElement(
+        _OptionWrapper2['default'],
+        { key: key,
           selected: highlighted,
           ref: highlighted ? 'highlighted' : null,
-          option: option,
-          onHover: this._handleOptionHover,
-          onClick: this._handleOptionClick },
-        child
+          onHover: _this4._handleOptionHover,
+          onClick: _this4._handleOptionClick },
+        cloneWithProps(child, { query: searchQuery || '' })
       );
-    }, this);
-
-    var value = this.state.selected ? this.state.selected[this.props.valueField] : null;
-    var label = this.state.selected ? this.state.selected[this.props.labelField] : this.state.value;
-
-    var wrapperClasses = cx({
-      'react-choice-wrapper': true,
-      'react-choice-single': true,
-      'react-choice-single--in-focus': this.state.focus,
-      'react-choice-single--not-in-focus': !this.state.focus
     });
 
-    var IconRenderer = this.props.icon || Icon;
+    var inputValue = undefined;
 
-    return React.createElement(
+    if (searchQuery !== null) {
+      inputValue = searchQuery;
+    } else if (selectedOption) {
+      inputValue = selectedOption.props[labelField];
+    }
+
+    var isActive = this._isActive();
+
+    var wrapperClasses = _classnames2['default']({
+      'react-choice-wrapper': true,
+      'react-choice-single': true,
+      'react-choice-single--in-focus': isActive,
+      'react-choice-single--not-in-focus': !isActive
+    });
+
+    var IconRenderer = icon || _Icon2['default'];
+
+    return _reactAddons2['default'].createElement(
       'div',
       { className: 'react-choice' },
-      React.createElement('input', { type: 'hidden', name: this.props.name, value: value }),
-      React.createElement(
+      _reactAddons2['default'].createElement('input', { type: 'hidden', name: name,
+        value: selectedValue }),
+      _reactAddons2['default'].createElement(
         'div',
         { className: wrapperClasses, onClick: this._handleClick },
-        React.createElement('input', { type: 'text',
+        _reactAddons2['default'].createElement('input', { type: 'text',
           className: 'react-choice-input react-choice-single__input',
-          placeholder: this.props.placeholder,
-          value: label,
+          placeholder: placeholder,
+          value: inputValue,
 
           onKeyDown: this._handleInput,
           onChange: this._handleChange,
@@ -236,16 +449,16 @@ var SingleChoice = React.createClass({
           autoComplete: 'off',
           role: 'combobox',
           'aria-autocomplete': 'list',
-          'aria-expanded': this.state.focus,
+          'aria-expanded': isActive,
           ref: 'input' })
       ),
-      React.createElement(
+      _reactAddons2['default'].createElement(
         'div',
         { className: 'react-choice-icon', onMouseDown: this._handleArrowClick },
-        React.createElement(IconRenderer, { focused: this.state.focus })
+        _reactAddons2['default'].createElement(IconRenderer, { focused: isActive })
       ),
-      this.state.focus ? React.createElement(
-        Options,
+      isActive ? _reactAddons2['default'].createElement(
+        _Options2['default'],
         { onMouseDown: this._handleOptionsMouseDown, ref: 'options' },
         options
       ) : null
@@ -253,4 +466,5 @@ var SingleChoice = React.createClass({
   }
 });
 
-module.exports = SingleChoice;
+exports['default'] = SingleChoice;
+module.exports = exports['default'];

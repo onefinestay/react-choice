@@ -4,10 +4,8 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = {
-  'Select': require('./single'),
+  'Select': require('./Single'),
   'SelectMultiple': require('./multiple'),
-  'Option': require('./option'),
-  'OptionMixin': require('./option-mixin'),
-  'TextHighlight': require('./text-highlight')
+  'Option': require('./Option')
 };
 module.exports = exports['default'];

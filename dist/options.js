@@ -1,13 +1,21 @@
 "use strict";
 
-var React = require("react/addons");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var Options = React.createClass({
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _reactAddons = require("react/addons");
+
+var _reactAddons2 = _interopRequireDefault(_reactAddons);
+
+var Options = _reactAddons2["default"].createClass({
   displayName: "Options",
 
   propTypes: {
-    children: React.PropTypes.array.isRequired,
-    onMouseDown: React.PropTypes.func.isRequired
+    children: _reactAddons2["default"].PropTypes.array.isRequired,
+    onMouseDown: _reactAddons2["default"].PropTypes.func.isRequired
   },
 
   _handleMouseDown: function _handleMouseDown(event) {
@@ -15,12 +23,12 @@ var Options = React.createClass({
   },
 
   render: function render() {
-    return React.createElement(
+    return _reactAddons2["default"].createElement(
       "div",
       { className: "react-choice-options",
         onMouseDown: this._handleMouseDown,
         onMouseUp: this._handleMouseUp },
-      React.createElement(
+      _reactAddons2["default"].createElement(
         "ul",
         { className: "react-choice-options__list" },
         this.props.children
@@ -29,4 +37,5 @@ var Options = React.createClass({
   }
 });
 
-module.exports = Options;
+exports["default"] = Options;
+module.exports = exports["default"];

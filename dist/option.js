@@ -1,30 +1,48 @@
 'use strict';
 
-var React = require('react/addons');
-var cx = React.addons.classSet;
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-var OptionMixin = require('./option-mixin');
-var TextHighlight = require('./text-highlight');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _reactAddons = require('react/addons');
+
+var _reactAddons2 = _interopRequireDefault(_reactAddons);
+
+var _reactHighlighter = require('react-highlighter');
+
+var _reactHighlighter2 = _interopRequireDefault(_reactHighlighter);
 
 //
 // Select option
 //
-var SelectOption = React.createClass({
-  displayName: 'SelectOption',
+var Option = _reactAddons2['default'].createClass({
+  displayName: 'Option',
 
-  mixins: [OptionMixin],
+  mixins: [_reactAddons2['default'].addons.PureRenderMixin],
+
+  propTypes: {
+    children: _reactAddons2['default'].PropTypes.string.isRequired,
+    query: _reactAddons2['default'].PropTypes.string
+  },
 
   render: function render() {
-    return React.createElement(
+    var _props = this.props;
+    var query = _props.query;
+    var children = _props.children;
+
+    return _reactAddons2['default'].createElement(
       'div',
       null,
-      React.createElement(
-        TextHighlight,
-        { tokens: this.props.tokens },
-        this.props.children
+      _reactAddons2['default'].createElement(
+        _reactHighlighter2['default'],
+        { search: query },
+        children
       )
     );
   }
 });
 
-module.exports = SelectOption;
+exports['default'] = Option;
+module.exports = exports['default'];
