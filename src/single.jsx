@@ -1,7 +1,5 @@
 import React from 'react/addons';
 import _map from 'lodash.map';
-import _uniq from 'lodash.uniq';
-import _pick from 'lodash.pick';
 import _find from 'lodash.find';
 import cx from 'classnames';
 
@@ -65,13 +63,16 @@ const SingleChoice = React.createClass({
     var {value, defaultValue} = this.props;
     var {chosenValue} = this.state;
 
-    var selectedValue = chosenValue;
-
-    if (chosenValue === null) {
-      selectedValue = value || defaultValue || null;
+    // value property overrides all
+    if (typeof value !== 'undefined') {
+      return value;
     }
 
-    return selectedValue;
+    if (typeof chosenValue !== 'undefined') {
+      return chosenValue;
+    }
+
+    return defaultValue;
   },
 
   _getOption(value) {
@@ -142,20 +143,33 @@ const SingleChoice = React.createClass({
   },
 
   _selectOption(option) {
+    // reset mousedown latch
     this._optionsMouseDown = false;
     this.refs.input.getDOMNode().blur();
+
+    const {valueField} = this.props;
+
     this.setState({
-      focus: false
+      chosenValue: option.props[valueField],
+      focus: false,
+      hoverValue: null
+    }, () => {
+      // Try and replicate normal dom event
+      var fakeEvent = {
+        target: this.refs.input.getDOMNode(),
+        option
+      };
+      this.props.onSelect(fakeEvent);
     });
 
-    if (option) {
-      var options = this._getAvailableOptions();
-      var state = this._resetSearch(options);
-      state.selected = option;
+    /*
+    var options = this._getAvailableOptions();
+    var state = this._resetSearch(options);
+    state.selected = option;
 
-      this.setState(state);
-      this.props.onSelect(option);
-    }
+    this.setState(state);
+    this.props.onSelect(option);
+     */
   },
 
   _handleBlur(event) {
@@ -179,7 +193,15 @@ const SingleChoice = React.createClass({
     });
   },
 
+  _handleOptionClick: function(child, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this._selectOption(child);
+  },
+
   _handleOptionsMouseDown() {
+    // prevent windows issue where clicking on scrollbar triggers blur on input
     this._optionsMouseDown = true;
   },
 
