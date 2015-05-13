@@ -83,11 +83,11 @@ const SingleChoice = React.createClass({
     var {value, defaultValue} = this.props;
     var {chosenValue} = this.state;
 
-    if (typeof chosenValue !== 'undefined') {
+    if (typeof chosenValue !== 'undefined' && chosenValue !== null) {
       return chosenValue;
     }
 
-    if (typeof value !== 'undefined') {
+    if (typeof value !== 'undefined' && chosenValue === null) {
       return value;
     }
 
@@ -121,14 +121,14 @@ const SingleChoice = React.createClass({
   //
   _handleClick(event) {
     event.preventDefault();
-    this.refs.input.getDOMNode().focus();
+    this.refs.textInput.getDOMNode().focus();
   },
 
   _handleArrowClick() {
     if (this.state.focus === true) {
-      this.refs.input.getDOMNode().blur();
+      this.refs.textInput.getDOMNode().blur();
     } else {
-      this.refs.input.getDOMNode().focus();
+      this.refs.textInput.getDOMNode().focus();
     }
   },
 
@@ -141,7 +141,7 @@ const SingleChoice = React.createClass({
 
     setTimeout(() => {
       if (this.isMounted()) {
-        this.refs.input.getDOMNode().select();
+        this.refs.textInput.getDOMNode().select();
       }
     }, 10);
   },
@@ -149,7 +149,7 @@ const SingleChoice = React.createClass({
   _selectOption(option) {
     // reset mousedown latch
     this._optionsMouseDown = false;
-    this.refs.input.getDOMNode().blur();
+    this.refs.textInput.getDOMNode().blur();
 
     const {valueField} = this.props;
 
@@ -173,7 +173,7 @@ const SingleChoice = React.createClass({
     event.preventDefault();
     if (this._optionsMouseDown === true) {
       this._optionsMouseDown = false;
-      this.refs.input.getDOMNode().focus();
+      this.refs.textInput.getDOMNode().focus();
       event.stopPropagation();
     } else {
       this.setState({
@@ -365,7 +365,7 @@ const SingleChoice = React.createClass({
     return (
       <div className="react-choice">
         <input type="hidden" name={name}
-          value={selectedValue} />
+          value={selectedValue} ref="input" />
 
         <div className={wrapperClasses} onClick={this._handleClick}>
           <input type="text"
@@ -382,7 +382,7 @@ const SingleChoice = React.createClass({
             role="combobox"
             aria-autocomplete="list"
             aria-expanded={isActive}
-            ref="input" />
+            ref="textInput" />
         </div>
 
         <div className="react-choice-icon" onMouseDown={this._handleArrowClick}>

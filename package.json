@@ -15,6 +15,9 @@
   "peerDependencies": {
     "react": ">=0.12.0"
   },
+  "scripts": {
+    "test": "mocha 'src/__tests__/*.{js,jsx}'"
+  },
   "dependencies": {
     "classnames": "^2.1.1",
     "lodash.filter": "^3.1.0",
@@ -40,7 +43,10 @@
     "gulp-util": "^3.0.1",
     "gulp-watch": "^2.0.0",
     "gulp-webpack": "^1.4.0",
+    "mocha": "^2.2.4",
+    "node-jsdom": "^3.1.5",
     "object.assign": "^1.1.1",
+    "sinon": "^1.14.1",
     "transform-loader": "^0.2.1",
     "webpack": "^1.5.3"
   }
