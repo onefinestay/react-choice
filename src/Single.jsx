@@ -1,6 +1,7 @@
 import React from 'react/addons';
 import _map from 'lodash.map';
 import _find from 'lodash.find';
+import _filter from 'lodash.filter';
 import cx from 'classnames';
 
 import Icon from './icon';
@@ -11,6 +12,10 @@ function noop() {}
 
 function isDefined(value) {
   return typeof value !== 'undefined';
+}
+
+function escapeRegexCharacters(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 //
@@ -36,18 +41,27 @@ const SingleChoice = React.createClass({
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
 
-    searchField: React.PropTypes.array, // array of search fields
-
     icon: React.PropTypes.func, // icon render
 
+    getSuggestions: React.PropTypes.func, // custom search function
     onSelect: React.PropTypes.func // function called when option is selected
   },
 
+  //
+  // Public methods
+  //
+  getValue() {
+    return this.state.selected ?
+      this.state.selected[this.props.valueField] : null;
+  },
+
+  //
+  // Internal methods
+  //
   getDefaultProps() {
     return {
       valueField: 'value',
       labelField: 'children',
-      searchField: ['children'],
       onSelect: noop
     };
   },
@@ -55,7 +69,9 @@ const SingleChoice = React.createClass({
   getInitialState() {
     return {
       focus: false,
-      hoverValue: null
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
     };
   },
 
@@ -84,12 +100,17 @@ const SingleChoice = React.createClass({
     return !this.props.disabled && this.state.focus;
   },
 
-  //
-  // Public methods
-  //
-  getValue() {
-    return this.state.selected ?
-      this.state.selected[this.props.valueField] : null;
+  _getSuggestions(query) {
+    const {labelField, children, getSuggestions} = this.props;
+
+    if (typeof getSuggestions === 'function') {
+      return getSuggestions(query);
+    }
+
+    const escapedQuery = escapeRegexCharacters(query.trim());
+    const regex = new RegExp('\\b' + escapedQuery, 'i');
+
+    return _filter(children, (child) => regex.test(child.props[labelField]));
   },
 
   //
@@ -112,6 +133,7 @@ const SingleChoice = React.createClass({
     }
   },
 
+  // TODO
   _handleFocus: function(event) {
     event.preventDefault();
 
@@ -131,6 +153,7 @@ const SingleChoice = React.createClass({
     });
   },
 
+  // TODO
   _remove(event) {
     if (this.state.selected) {
       event.preventDefault();
@@ -152,7 +175,9 @@ const SingleChoice = React.createClass({
     this.setState({
       chosenValue: option.props[valueField],
       focus: false,
-      hoverValue: null
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
     }, () => {
       // Try and replicate normal dom event
       var fakeEvent = {
@@ -172,6 +197,7 @@ const SingleChoice = React.createClass({
      */
   },
 
+  // TODO
   _handleBlur(event) {
     event.preventDefault();
     if (this._optionsMouseDown === true) {
@@ -203,6 +229,33 @@ const SingleChoice = React.createClass({
   _handleOptionsMouseDown() {
     // prevent windows issue where clicking on scrollbar triggers blur on input
     this._optionsMouseDown = true;
+  },
+
+  _handleInput: function(event) {
+    var keys = {
+      13: this._enter,
+      37: this._moveLeft,
+      38: this._moveUp,
+      39: this._moveRight,
+      40: this._moveDown,
+      8: this._remove
+    };
+
+    if (typeof keys[event.keyCode] === 'function') {
+      keys[event.keyCode](event);
+    }
+  },
+
+  _handleChange: function(event) {
+    event.preventDefault();
+
+    const query = event.target.value;
+    const searchResults = this._getSuggestions(query);
+
+    this.setState({
+      searchQuery: query,
+      searchResults: searchResults
+    });
   },
 
   /*
@@ -238,12 +291,12 @@ const SingleChoice = React.createClass({
 
   render() {
     const {name, valueField, labelField, placeholder, children} = this.props;
-    const {hoverValue} = this.state;
+    const {hoverValue, searchQuery, searchResults} = this.state;
 
     const selectedValue = this._getSelectedValue();
     const selectedOption = (selectedValue !== null) ? this._getOption(selectedValue) : null;
 
-    const options = _map(children, (child, index) => {
+    const options = _map((searchResults || children), (child, index) => {
       const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
 
       const highlighted = (child.props[valueField] === highlightedValue);
@@ -261,7 +314,13 @@ const SingleChoice = React.createClass({
       );
     });
 
-    let label = selectedOption ? selectedOption.props[labelField] : null;
+    let inputValue;
+
+    if (searchQuery) {
+      inputValue = searchQuery;
+    } else if (selectedOption) {
+      inputValue = selectedOption.props[labelField];
+    }
 
     const isActive = this._isActive();
 
@@ -284,7 +343,7 @@ const SingleChoice = React.createClass({
           <input type="text"
             className="react-choice-input react-choice-single__input"
             placeholder={placeholder}
-            value={label}
+            value={inputValue}
 
             onKeyDown={this._handleInput}
             onChange={this._handleChange}
