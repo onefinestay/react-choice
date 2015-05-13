@@ -100,6 +100,7 @@ var SingleChoice = _reactAddons2['default'].createClass({
   getInitialState: function getInitialState() {
     return {
       focus: false,
+      chosenValue: null,
       hoverValue: null,
       searchQuery: null,
       searchResults: null
@@ -112,13 +113,12 @@ var SingleChoice = _reactAddons2['default'].createClass({
     var defaultValue = _props.defaultValue;
     var chosenValue = this.state.chosenValue;
 
-    // value property overrides all
-    if (typeof value !== 'undefined') {
-      return value;
+    if (typeof chosenValue !== 'undefined' && chosenValue !== null) {
+      return chosenValue;
     }
 
-    if (typeof chosenValue !== 'undefined') {
-      return chosenValue;
+    if (typeof value !== 'undefined' && chosenValue === null) {
+      return value;
     }
 
     return defaultValue;
@@ -161,14 +161,14 @@ var SingleChoice = _reactAddons2['default'].createClass({
   //
   _handleClick: function _handleClick(event) {
     event.preventDefault();
-    this.refs.input.getDOMNode().focus();
+    this.refs.textInput.getDOMNode().focus();
   },
 
   _handleArrowClick: function _handleArrowClick() {
     if (this.state.focus === true) {
-      this.refs.input.getDOMNode().blur();
+      this.refs.textInput.getDOMNode().blur();
     } else {
-      this.refs.input.getDOMNode().focus();
+      this.refs.textInput.getDOMNode().focus();
     }
   },
 
@@ -183,7 +183,7 @@ var SingleChoice = _reactAddons2['default'].createClass({
 
     setTimeout(function () {
       if (_this.isMounted()) {
-        _this.refs.input.getDOMNode().select();
+        _this.refs.textInput.getDOMNode().select();
       }
     }, 10);
   },
@@ -193,7 +193,7 @@ var SingleChoice = _reactAddons2['default'].createClass({
 
     // reset mousedown latch
     this._optionsMouseDown = false;
-    this.refs.input.getDOMNode().blur();
+    this.refs.textInput.getDOMNode().blur();
 
     var valueField = this.props.valueField;
 
@@ -217,7 +217,7 @@ var SingleChoice = _reactAddons2['default'].createClass({
     event.preventDefault();
     if (this._optionsMouseDown === true) {
       this._optionsMouseDown = false;
-      this.refs.input.getDOMNode().focus();
+      this.refs.textInput.getDOMNode().focus();
       event.stopPropagation();
     } else {
       this.setState({
@@ -354,18 +354,14 @@ var SingleChoice = _reactAddons2['default'].createClass({
     }
   },
 
-  /*
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      var options = this._getAvailableOptions();
-       var selected = _find(options, (option) => option[this.props.valueField] === nextProps.value);
-       var state = this._resetSearch(options);
-      state.value = selected ? selected[this.props.labelField] : nextProps.value;
-      state.selected = selected;
-       this.setState(state);
-    }
+  componentWillReceiveProps: function componentWillReceiveProps() {
+    this.setState({
+      chosenValue: null,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
+    });
   },
-   */
 
   componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
@@ -432,7 +428,7 @@ var SingleChoice = _reactAddons2['default'].createClass({
       'div',
       { className: 'react-choice' },
       _reactAddons2['default'].createElement('input', { type: 'hidden', name: name,
-        value: selectedValue }),
+        value: selectedValue, ref: 'input' }),
       _reactAddons2['default'].createElement(
         'div',
         { className: wrapperClasses, onClick: this._handleClick },
@@ -450,14 +446,14 @@ var SingleChoice = _reactAddons2['default'].createClass({
           role: 'combobox',
           'aria-autocomplete': 'list',
           'aria-expanded': isActive,
-          ref: 'input' })
+          ref: 'textInput' })
       ),
       _reactAddons2['default'].createElement(
         'div',
         { className: 'react-choice-icon', onMouseDown: this._handleArrowClick },
         _reactAddons2['default'].createElement(IconRenderer, { focused: isActive })
       ),
-      isActive ? _reactAddons2['default'].createElement(
+      isActive && options.length > 0 ? _reactAddons2['default'].createElement(
         _Options2['default'],
         { onMouseDown: this._handleOptionsMouseDown, ref: 'options' },
         options

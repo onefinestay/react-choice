@@ -71,7 +71,7 @@ var webpackConfig = {
 
 gulp.task('build-dist-js', function() {
   // build javascript files
-  return gulp.src('src/**/*.{js,jsx}')
+  return gulp.src(['src/**/*.{js,jsx}', '!**/__tests__/**'])
     .pipe(babel({
       stage: 1
     }))
