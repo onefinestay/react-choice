@@ -4,7 +4,7 @@ import _find from 'lodash.find';
 import _filter from 'lodash.filter';
 import cx from 'classnames';
 
-import Icon from './icon';
+import Icon from './Icon';
 import Options from './Options';
 import OptionWrapper from './OptionWrapper';
 
@@ -275,7 +275,7 @@ const SingleChoice = React.createClass({
   },
 
   render() {
-    const {name, valueField, labelField, placeholder, children} = this.props;
+    const {name, valueField, labelField, placeholder, children, icon} = this.props;
     const {hoverValue, searchQuery, searchResults} = this.state;
 
     const selectedValue = this._getSelectedValue();
@@ -316,7 +316,7 @@ const SingleChoice = React.createClass({
       'react-choice-single--not-in-focus': !isActive
     });
 
-    var IconRenderer = this.props.icon || Icon;
+    var IconRenderer = icon || Icon;
 
     return (
       <div className="react-choice">
