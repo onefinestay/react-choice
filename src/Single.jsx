@@ -8,6 +8,8 @@ import Icon from './Icon';
 import Options from './Options';
 import OptionWrapper from './OptionWrapper';
 
+const {cloneWithProps} = React.addons;
+
 function noop() {}
 
 function isDefined(value) {
@@ -294,7 +296,7 @@ const SingleChoice = React.createClass({
           ref={highlighted ? 'highlighted' : null}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
-          {child}
+          {cloneWithProps(child, { query: searchQuery || '' })}
         </OptionWrapper>
       );
     });
