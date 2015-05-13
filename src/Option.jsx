@@ -6,8 +6,8 @@ import Highlight from 'react-highlighter';
 //
 const Option = React.createClass({
   propTypes: {
-    query: React.PropTypes.string.isRequired,
-    children: React.PropTypes.string.isRequired
+    children: React.PropTypes.string.isRequired,
+    query: React.PropTypes.string
   },
 
   render() {

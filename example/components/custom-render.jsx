@@ -13,8 +13,8 @@ var POKEMON = require('../data/pokemon.js');
 
 var PokemonRenderer = React.createClass({
   propTypes: {
-    query: React.PropTypes.string.isRequired,
-    pokemon: React.PropTypes.object.isRequired
+    pokemon: React.PropTypes.object.isRequired,
+    query: React.PropTypes.string
   },
   render() {
     var query = this.props.query;

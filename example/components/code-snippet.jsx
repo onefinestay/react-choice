@@ -1,30 +1,29 @@
 /* global hljs */
-"use strict";
+import React from 'react/addons';
+import cx from 'classnames';
 
-var React = require('react/addons');
-var cx = React.addons.classSet;
-
-var CodeSnippet = React.createClass({
+const CodeSnippet = React.createClass({
   propTypes: {
     language: React.PropTypes.string.isRequired,
     toggle: React.PropTypes.bool,
-    visible: React.PropTypes.bool
+    visible: React.PropTypes.bool,
+    children: React.PropTypes.string
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       toggle: true,
       visible: false
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       visible: this.props.visible || !this.props.toggle
     };
   },
 
-  handleClick: function(event) {
+  handleClick(event) {
     event.preventDefault();
     var value = !this.state.visible;
 
@@ -40,15 +39,15 @@ var CodeSnippet = React.createClass({
     });
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     if (this.state.visible) {
       var el = this.refs.codeBlock.getDOMNode();
       hljs.highlightBlock(el);
     }
   },
 
-  render: function() {
-    var arrowClasses = cx({
+  render() {
+    const arrowClasses = cx({
       'code-snippet__arrow': true,
       'code-snippet__arrow--right': !this.state.visible,
       'code-snippet__arrow--up': this.state.visible,
@@ -72,4 +71,4 @@ var CodeSnippet = React.createClass({
   }
 });
 
-module.exports = CodeSnippet;
+export default CodeSnippet;
