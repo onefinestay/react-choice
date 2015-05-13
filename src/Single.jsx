@@ -72,6 +72,7 @@ const SingleChoice = React.createClass({
   getInitialState() {
     return {
       focus: false,
+      chosenValue: null,
       hoverValue: null,
       searchQuery: null,
       searchResults: null
@@ -82,13 +83,12 @@ const SingleChoice = React.createClass({
     var {value, defaultValue} = this.props;
     var {chosenValue} = this.state;
 
-    // value property overrides all
-    if (typeof value !== 'undefined') {
-      return value;
-    }
-
     if (typeof chosenValue !== 'undefined') {
       return chosenValue;
+    }
+
+    if (typeof value !== 'undefined') {
+      return value;
     }
 
     return defaultValue;
@@ -303,21 +303,14 @@ const SingleChoice = React.createClass({
     }
   },
 
-  /*
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      var options = this._getAvailableOptions();
-
-      var selected = _find(options, (option) => option[this.props.valueField] === nextProps.value);
-
-      var state = this._resetSearch(options);
-      state.value = selected ? selected[this.props.labelField] : nextProps.value;
-      state.selected = selected;
-
-      this.setState(state);
-    }
+  componentWillReceiveProps() {
+    this.setState({
+      chosenValue: null,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
+    });
   },
-   */
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
