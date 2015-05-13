@@ -389,7 +389,7 @@ const SingleChoice = React.createClass({
           <IconRenderer focused={isActive} />
         </div>
 
-        {isActive ?
+        {isActive && options.length > 0 ?
           <Options onMouseDown={this._handleOptionsMouseDown} ref="options">
             {options}
           </Options> : null}
