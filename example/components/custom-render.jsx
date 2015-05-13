@@ -1,17 +1,19 @@
-"use strict";
+'use strict';
 
 var fs = require('fs');
 var React = require('react/addons');
+var _map = require('lodash.map');
+var _sortBy = require('lodash.sortby');
+
 var CodeSnippet = require('./code-snippet');
-var Choice = require('../../');
-var _ = require('lodash');
+var Choice = require('../../src');
 
 var POKEMON = require('../data/pokemon.js');
 
 var PokemonRenderer = React.createClass({
   mixins: [Choice.OptionMixin],
 
-  render: function() {
+  render() {
     var pokemon = this.props.pokemon;
 
     var weight = pokemon.weight / 10;
@@ -42,7 +44,7 @@ var customExample = fs.readFileSync(__dirname + '/../code-snippets/custom-render
 
 var CustomRender = React.createClass({
   render: function() {
-    var options = _.map(POKEMON, function(pokemon) {
+    var options = _map(POKEMON, function(pokemon) {
       var value = pokemon.national_id;
       return (
         <PokemonRenderer key={value} value={value} pokemon={pokemon}>
@@ -52,7 +54,7 @@ var CustomRender = React.createClass({
     });
 
     var sorter = function(list) {
-      return _.sortBy(list, 'national_id');
+      return _sortBy(list, 'national_id');
     };
 
     return (

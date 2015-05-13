@@ -1,20 +1,22 @@
-"use strict";
+import React from 'react/addons';
+import _map from 'lodash.map';
+import _uniq from 'lodash.uniq';
+import _pick from 'lodash.pick';
+import _find from 'lodash.find';
+import cx from 'classnames';
 
-var React = require('react/addons');
-var _ = require('lodash');
-var cx = React.addons.classSet;
-var cloneWithProps = React.addons.cloneWithProps;
+import Icon from './icon';
+import Options from './options';
+import OptionWrapper from './option-wrapper';
 
-var Icon = require('./icon');
-var Options = require('./options');
-var OptionWrapper = require('./option-wrapper');
+import SearchMixin from './search-mixin';
 
-var SearchMixin = require('./search-mixin');
+const {cloneWithProps} = React.addons;
 
 //
 // Auto complete select box
 //
-var SingleChoice = React.createClass({
+const SingleChoice = React.createClass({
   mixins: [SearchMixin],
 
   propTypes: {
@@ -33,7 +35,7 @@ var SingleChoice = React.createClass({
     onSelect: React.PropTypes.func // function called when option is selected
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       valueField: 'value',
       labelField: 'children',
@@ -41,30 +43,28 @@ var SingleChoice = React.createClass({
     };
   },
 
-  _getAvailableOptions: function() {
+  _getAvailableOptions() {
     var options = this.state.initialOptions;
 
     return this._sort(options);
   },
 
-  getInitialState: function() {
+  getInitialState() {
     var selected = null;
 
     var props = this.props.searchField;
     props.push(this.props.valueField);
     props.push(this.props.searchField);
-    props = _.uniq(props);
+    props = _uniq(props);
 
-    var options = _.map(this.props.children, function(child) {
+    var options = _map(this.props.children, (child) => {
       // TODO Validation ?
-      return _.pick(child.props, props);
-    }, this);
+      return _pick(child.props, props);
+    });
 
     if (this.props.value) {
       // find selected value
-      selected = _.find(options, function(option) {
-        return option[this.props.valueField] === this.props.value;
-      }, this);
+      selected = _find(options, (option) => option[this.props.valueField] === this.props.value);
     }
 
     return {
@@ -81,7 +81,7 @@ var SingleChoice = React.createClass({
   //
   // Public methods
   //
-  getValue: function() {
+  getValue() {
     return this.state.selected ?
       this.state.selected[this.props.valueField] : null;
   },
@@ -89,7 +89,7 @@ var SingleChoice = React.createClass({
   //
   // Events
   //
-  _handleArrowClick: function(event) {
+  _handleArrowClick(event) {
     if (this.state.focus) {
       this._handleBlur(event);
       this.refs.input.getDOMNode().blur();
@@ -99,7 +99,7 @@ var SingleChoice = React.createClass({
     }
   },
 
-  _remove: function(event) {
+  _remove(event) {
     if (this.state.selected) {
       event.preventDefault();
 
@@ -110,7 +110,7 @@ var SingleChoice = React.createClass({
     }
   },
 
-  _selectOption: function(option) {
+  _selectOption(option) {
     this._optionsMouseDown = false;
     this.refs.input.getDOMNode().blur();
     this.setState({
@@ -130,7 +130,7 @@ var SingleChoice = React.createClass({
     }
   },
 
-  _handleBlur: function(event) {
+  _handleBlur(event) {
     event.preventDefault();
     if (this._optionsMouseDown === true) {
       this._optionsMouseDown = false;
@@ -143,17 +143,15 @@ var SingleChoice = React.createClass({
     }
   },
 
-  _handleOptionsMouseDown: function() {
+  _handleOptionsMouseDown() {
     this._optionsMouseDown = true;
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
       var options = this._getAvailableOptions();
 
-      var selected = _.find(options, function(option) {
-        return option[this.props.valueField] === nextProps.value;
-      }, this);
+      var selected = _find(options, (option) => option[this.props.valueField] === nextProps.value);
 
       var state = this._resetSearch(options);
       state.value = selected ? selected[this.props.labelField] : nextProps.value;
@@ -163,27 +161,27 @@ var SingleChoice = React.createClass({
     }
   },
 
-  componentDidUpdate: function(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
       this._updateScrollPosition();
     }
 
     // select selected text in input box
     if (this.state.selected && this.state.focus) {
-      setTimeout(function() {
+      setTimeout(() => {
         if (this.isMounted()) {
           this.refs.input.getDOMNode().select();
         }
-      }.bind(this), 50);
+      }, 50);
     }
   },
 
   render: function() {
-    var options = _.map(this.state.searchResults, function(option) {
+    var options = _map(this.state.searchResults, (option) => {
       var valueField = this.props.valueField;
       var v = option[valueField];
 
-      var child = _.find(this.props.children, function(c) {
+      var child = _find(this.props.children, function(c) {
         return c.props[valueField] === v;
       });
 
@@ -202,7 +200,7 @@ var SingleChoice = React.createClass({
           {child}
         </OptionWrapper>
       );
-    }, this);
+    });
 
     var value = this.state.selected ?
       this.state.selected[this.props.valueField] : null;
@@ -253,4 +251,4 @@ var SingleChoice = React.createClass({
   }
 });
 
-module.exports = SingleChoice;
+export default SingleChoice;

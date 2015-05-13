@@ -1,5 +1,5 @@
 export default {
-  'Select': require('./single'),
+  'Select': require('./Single'),
   'SelectMultiple': require('./multiple'),
   'Option': require('./option'),
   'OptionMixin': require('./option-mixin'),

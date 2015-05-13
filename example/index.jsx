@@ -2,7 +2,7 @@
 
 var React = require('react/addons');
 var fs = require('fs');
-var _ = require('lodash');
+var _map = require('lodash.map');
 
 var Header = require('./components/header.jsx');
 var Footer = require('./components/footer.jsx');
@@ -25,7 +25,7 @@ var Index = React.createClass({
   },
 
   render: function() {
-    var options = _.map(COUNTRIES, function(option) {
+    var options = _map(COUNTRIES, function(option) {
       return (
         <Choice.Option key={option.value} value={option.value}>
           {option.label}
