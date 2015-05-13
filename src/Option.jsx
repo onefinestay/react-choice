@@ -5,6 +5,8 @@ import Highlight from 'react-highlighter';
 // Select option
 //
 const Option = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   propTypes: {
     children: React.PropTypes.string.isRequired,
     query: React.PropTypes.string
