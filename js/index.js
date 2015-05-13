@@ -7,5 +7,5 @@ window.React = React;
 
 React.render(
   Index(),
-  document
+  document.getElementById('app')
 );
