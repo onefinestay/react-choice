@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var React = require('react/addons');
 var _ = require('lodash');
@@ -14,7 +14,9 @@ var SearchMixin = require('./search-mixin');
 //
 // Auto complete select box
 //
-var SingleChoice = React.createClass({displayName: 'SingleChoice',
+var SingleChoice = React.createClass({
+  displayName: 'SingleChoice',
+
   mixins: [SearchMixin],
 
   propTypes: {
@@ -33,7 +35,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     onSelect: React.PropTypes.func // function called when option is selected
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       valueField: 'value',
       labelField: 'children',
@@ -41,13 +43,13 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     };
   },
 
-  _getAvailableOptions: function() {
+  _getAvailableOptions: function _getAvailableOptions() {
     var options = this.state.initialOptions;
 
     return this._sort(options);
   },
 
-  getInitialState: function() {
+  getInitialState: function getInitialState() {
     var selected = null;
 
     var props = this.props.searchField;
@@ -55,14 +57,14 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     props.push(this.props.searchField);
     props = _.uniq(props);
 
-    var options = _.map(this.props.children, function(child) {
+    var options = _.map(this.props.children, function (child) {
       // TODO Validation ?
       return _.pick(child.props, props);
     }, this);
 
     if (this.props.value) {
       // find selected value
-      selected = _.find(options, function(option) {
+      selected = _.find(options, function (option) {
         return option[this.props.valueField] === this.props.value;
       }, this);
     }
@@ -81,15 +83,14 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
   //
   // Public methods
   //
-  getValue: function() {
-    return this.state.selected ?
-      this.state.selected[this.props.valueField] : null;
+  getValue: function getValue() {
+    return this.state.selected ? this.state.selected[this.props.valueField] : null;
   },
 
   //
   // Events
   //
-  _handleArrowClick: function(event) {
+  _handleArrowClick: function _handleArrowClick(event) {
     if (this.state.focus) {
       this._handleBlur(event);
       this.refs.input.getDOMNode().blur();
@@ -99,7 +100,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     }
   },
 
-  _remove: function(event) {
+  _remove: function _remove(event) {
     if (this.state.selected) {
       event.preventDefault();
 
@@ -110,7 +111,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     }
   },
 
-  _selectOption: function(option) {
+  _selectOption: function _selectOption(option) {
     this._optionsMouseDown = false;
     this.refs.input.getDOMNode().blur();
     this.setState({
@@ -130,7 +131,7 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     }
   },
 
-  _handleBlur: function(event) {
+  _handleBlur: function _handleBlur(event) {
     event.preventDefault();
     if (this._optionsMouseDown === true) {
       this._optionsMouseDown = false;
@@ -143,15 +144,15 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     }
   },
 
-  _handleOptionsMouseDown: function() {
+  _handleOptionsMouseDown: function _handleOptionsMouseDown() {
     this._optionsMouseDown = true;
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
       var options = this._getAvailableOptions();
 
-      var selected = _.find(options, function(option) {
+      var selected = _.find(options, function (option) {
         return option[this.props.valueField] === nextProps.value;
       }, this);
 
@@ -163,51 +164,48 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
     }
   },
 
-  componentDidUpdate: function(prevProps, prevState) {
+  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
       this._updateScrollPosition();
     }
 
     // select selected text in input box
     if (this.state.selected && this.state.focus) {
-      setTimeout(function() {
+      setTimeout((function () {
         if (this.isMounted()) {
           this.refs.input.getDOMNode().select();
         }
-      }.bind(this), 50);
+      }).bind(this), 50);
     }
   },
 
-  render: function() {
-    var options = _.map(this.state.searchResults, function(option) {
+  render: function render() {
+    var options = _.map(this.state.searchResults, function (option) {
       var valueField = this.props.valueField;
       var v = option[valueField];
 
-      var child = _.find(this.props.children, function(c) {
+      var child = _.find(this.props.children, function (c) {
         return c.props[valueField] === v;
       });
 
-      var highlighted = this.state.highlighted &&
-        v === this.state.highlighted[valueField];
+      var highlighted = this.state.highlighted && v === this.state.highlighted[valueField];
 
       child = cloneWithProps(child, { tokens: this.state.searchTokens });
 
-      return (
-        React.createElement(OptionWrapper, {key: v, 
-          selected: highlighted, 
-          ref: highlighted ? 'highlighted' : null, 
-          option: option, 
-          onHover: this._handleOptionHover, 
-          onClick: this._handleOptionClick}, 
-          child
-        )
+      return React.createElement(
+        OptionWrapper,
+        { key: v,
+          selected: highlighted,
+          ref: highlighted ? 'highlighted' : null,
+          option: option,
+          onHover: this._handleOptionHover,
+          onClick: this._handleOptionClick },
+        child
       );
     }, this);
 
-    var value = this.state.selected ?
-      this.state.selected[this.props.valueField] : null;
-    var label = this.state.selected ?
-      this.state.selected[this.props.labelField] : this.state.value;
+    var value = this.state.selected ? this.state.selected[this.props.valueField] : null;
+    var label = this.state.selected ? this.state.selected[this.props.labelField] : this.state.value;
 
     var wrapperClasses = cx({
       'react-choice-wrapper': true,
@@ -218,37 +216,39 @@ var SingleChoice = React.createClass({displayName: 'SingleChoice',
 
     var IconRenderer = this.props.icon || Icon;
 
-    return (
-      React.createElement("div", {className: "react-choice"}, 
-        React.createElement("input", {type: "hidden", name: this.props.name, value: value}), 
+    return React.createElement(
+      'div',
+      { className: 'react-choice' },
+      React.createElement('input', { type: 'hidden', name: this.props.name, value: value }),
+      React.createElement(
+        'div',
+        { className: wrapperClasses, onClick: this._handleClick },
+        React.createElement('input', { type: 'text',
+          className: 'react-choice-input react-choice-single__input',
+          placeholder: this.props.placeholder,
+          value: label,
 
-        React.createElement("div", {className: wrapperClasses, onClick: this._handleClick}, 
-          React.createElement("input", {type: "text", 
-            className: "react-choice-input react-choice-single__input", 
-            placeholder: this.props.placeholder, 
-            value: label, 
+          onKeyDown: this._handleInput,
+          onChange: this._handleChange,
+          onFocus: this._handleFocus,
+          onBlur: this._handleBlur,
 
-            onKeyDown: this._handleInput, 
-            onChange: this._handleChange, 
-            onFocus: this._handleFocus, 
-            onBlur: this._handleBlur, 
-
-            autoComplete: "off", 
-            role: "combobox", 
-            'aria-autocomplete': "list", 
-            'aria-expanded': this.state.focus, 
-            ref: "input"})
-        ), 
-
-        React.createElement("div", {className: "react-choice-icon", onMouseDown: this._handleArrowClick}, 
-          React.createElement(IconRenderer, {focused: this.state.focus})
-        ), 
-
-        this.state.focus ?
-          React.createElement(Options, {onMouseDown: this._handleOptionsMouseDown, ref: "options"}, 
-            options
-          ) : null
-      )
+          autoComplete: 'off',
+          role: 'combobox',
+          'aria-autocomplete': 'list',
+          'aria-expanded': this.state.focus,
+          ref: 'input' })
+      ),
+      React.createElement(
+        'div',
+        { className: 'react-choice-icon', onMouseDown: this._handleArrowClick },
+        React.createElement(IconRenderer, { focused: this.state.focus })
+      ),
+      this.state.focus ? React.createElement(
+        Options,
+        { onMouseDown: this._handleOptionsMouseDown, ref: 'options' },
+        options
+      ) : null
     );
   }
 });

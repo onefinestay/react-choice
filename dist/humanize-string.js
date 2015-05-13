@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-module.exports = function(string, upperCase) {
+module.exports = function (string, upperCase) {
   if (typeof string == 'string') {
     var firstCharacter = string.charAt(0);
 

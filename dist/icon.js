@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 
 var React = require('react/addons');
 var cx = React.addons.classSet;
 
-var Icon = React.createClass({displayName: 'Icon',
+var Icon = React.createClass({
+  displayName: 'Icon',
+
   propTypes: {
     focused: React.PropTypes.bool.isRequired
   },
 
-  render: function() {
+  render: function render() {
     var arrowClasses = cx({
       'react-choice-icon__arrow': true,
       'react-choice-icon__arrow--up': this.props.focused,
       'react-choice-icon__arrow--down': !this.props.focused
     });
 
-    return (
-      React.createElement("div", {className: arrowClasses})
-    );
+    return React.createElement('div', { className: arrowClasses });
   }
 });
 
