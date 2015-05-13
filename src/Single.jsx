@@ -1,6 +1,7 @@
 import React from 'react/addons';
 import _map from 'lodash.map';
 import _find from 'lodash.find';
+import _findIndex from 'lodash.findindex';
 import _filter from 'lodash.filter';
 import cx from 'classnames';
 
@@ -93,8 +94,8 @@ const SingleChoice = React.createClass({
     return defaultValue;
   },
 
-  _getOption(value) {
-    const {children, valueField} = this.props;
+  _getOption(children, value) {
+    const {valueField} = this.props;
     return _find(children, (child) => child.props[valueField] === value);
   },
 
@@ -213,7 +214,7 @@ const SingleChoice = React.createClass({
     this._optionsMouseDown = true;
   },
 
-  _handleInput: function(event) {
+  _handleInput(event) {
     var keys = {
       13: this._enter,
       37: this._moveLeft,
@@ -228,7 +229,52 @@ const SingleChoice = React.createClass({
     }
   },
 
-  _handleChange: function(event) {
+  _move(options, operator) {
+    if (operator !== 1 && operator !== -1) {
+      throw new Error(`Movement operator is not 1 or -1. It's ${operator}`);
+    }
+
+    const {valueField} = this.props;
+    const {hoverValue, selectedValue} = this.state;
+
+    const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
+    const highlightedIndex = _findIndex(options, (result) => result.props[valueField] === highlightedValue);
+
+    if (typeof options[highlightedIndex + operator] !== 'undefined') {
+      this.setState({
+        hoverValue: options[highlightedIndex + operator].props[valueField]
+      }, () => {
+        // update scroll position
+        this._updateScrollPosition();
+      });
+    }
+  },
+
+  _moveUp(event) {
+    const {children} = this.props;
+    const {searchResults} = this.state;
+
+    const options = (searchResults || children);
+
+    if (options && options.length > 0) {
+      event.preventDefault();
+      this._move(options, -1);
+    }
+  },
+
+  _moveDown(event) {
+    const {children} = this.props;
+    const {searchResults} = this.state;
+
+    const options = (searchResults || children);
+
+    if (options && options.length > 0) {
+      event.preventDefault();
+      this._move(options, 1);
+    }
+  },
+
+  _handleChange(event) {
     event.preventDefault();
 
     const query = event.target.value;
@@ -238,6 +284,24 @@ const SingleChoice = React.createClass({
       searchQuery: query,
       searchResults: searchResults
     });
+  },
+
+  _updateScrollPosition() {
+    const highlighted = this.refs ? this.refs.highlighted : null;
+    if (highlighted) {
+      // find if highlighted option is not visible
+      const el = highlighted.getDOMNode();
+      let parent = this.refs.options.getDOMNode();
+      const offsetTop = el.offsetTop + el.clientHeight - parent.scrollTop;
+
+      // scroll down
+      if (offsetTop > parent.clientHeight) {
+        const diff = el.offsetTop + el.clientHeight - parent.clientHeight;
+        parent.scrollTop = diff;
+      } else if (offsetTop - el.clientHeight < 0) { // scroll up
+        parent.scrollTop = el.offsetTop;
+      }
+    }
   },
 
   /*
@@ -258,21 +322,7 @@ const SingleChoice = React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
-      const highlighted = this.refs ? this.refs.highlighted : null;
-      if (highlighted) {
-        // find if highlighted option is not visible
-        const el = highlighted.getDOMNode();
-        let parent = this.refs.options.getDOMNode();
-        const offsetTop = el.offsetTop + el.clientHeight - parent.scrollTop;
-
-        // scroll down
-        if (offsetTop > parent.clientHeight) {
-          const diff = el.offsetTop + el.clientHeight - parent.clientHeight;
-          parent.scrollTop = diff;
-        } else if (offsetTop - el.clientHeight < 0) { // scroll up
-          parent.scrollTop = el.offsetTop;
-        }
-      }
+      this._updateScrollPosition();
     }
   },
 
@@ -281,7 +331,7 @@ const SingleChoice = React.createClass({
     const {hoverValue, searchQuery, searchResults} = this.state;
 
     const selectedValue = this._getSelectedValue();
-    const selectedOption = (selectedValue !== null) ? this._getOption(selectedValue) : null;
+    const selectedOption = (selectedValue !== null) ? this._getOption(children, selectedValue) : null;
 
     const options = _map((searchResults || children), (child, index) => {
       const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
