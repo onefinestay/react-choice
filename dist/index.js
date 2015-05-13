@@ -5,7 +5,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = {
   'Select': require('./Single'),
-  'SelectMultiple': require('./multiple'),
   'Option': require('./Option')
 };
 module.exports = exports['default'];
