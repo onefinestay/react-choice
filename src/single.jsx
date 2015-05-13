@@ -7,23 +7,33 @@ import cx from 'classnames';
 
 import Icon from './icon';
 import Options from './options';
-import OptionWrapper from './option-wrapper';
+import OptionWrapper from './OptionWrapper';
 
-import SearchMixin from './search-mixin';
+function noop() {}
 
-const {cloneWithProps} = React.addons;
+function isDefined(value) {
+  return typeof value !== 'undefined';
+}
 
 //
 // Auto complete select box
 //
 const SingleChoice = React.createClass({
-  mixins: [SearchMixin],
-
   propTypes: {
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number
+    ]),
+    defaultValue: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number
+    ]),
+
+    children: React.PropTypes.array.isRequired, // options
+
     name: React.PropTypes.string, // name of input
     placeholder: React.PropTypes.string, // input placeholder
-    value: React.PropTypes.string, // initial value for input field
-    children: React.PropTypes.array.isRequired,
+    disabled: React.PropTypes.bool,
 
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
@@ -39,43 +49,38 @@ const SingleChoice = React.createClass({
     return {
       valueField: 'value',
       labelField: 'children',
-      searchField: ['children']
+      searchField: ['children'],
+      onSelect: noop
     };
-  },
-
-  _getAvailableOptions() {
-    var options = this.state.initialOptions;
-
-    return this._sort(options);
   },
 
   getInitialState() {
-    var selected = null;
+    return {
+      focus: false,
+      hoverValue: null
+    };
+  },
 
-    var props = this.props.searchField;
-    props.push(this.props.valueField);
-    props.push(this.props.searchField);
-    props = _uniq(props);
+  _getSelectedValue() {
+    var {value, defaultValue} = this.props;
+    var {chosenValue} = this.state;
 
-    var options = _map(this.props.children, (child) => {
-      // TODO Validation ?
-      return _pick(child.props, props);
-    });
+    var selectedValue = chosenValue;
 
-    if (this.props.value) {
-      // find selected value
-      selected = _find(options, (option) => option[this.props.valueField] === this.props.value);
+    if (chosenValue === null) {
+      selectedValue = value || defaultValue || null;
     }
 
-    return {
-      value: selected ? selected[this.props.labelField] : this.props.value,
-      focus: false,
-      searchResults: this._sort(options),
-      initialOptions: options,
-      highlighted: null,
-      selected: selected,
-      searchTokens: []
-    };
+    return selectedValue;
+  },
+
+  _getOption(value) {
+    const {children, valueField} = this.props;
+    return _find(children, (child) => child.props[valueField] === value);
+  },
+
+  _isActive() {
+    return !this.props.disabled && this.state.focus;
   },
 
   //
@@ -89,7 +94,14 @@ const SingleChoice = React.createClass({
   //
   // Events
   //
+  _handleClick: function(event) {
+    event.preventDefault();
+    this.refs.input.getDOMNode().focus();
+  },
+
+  // TODO
   _handleArrowClick(event) {
+    debugger;
     if (this.state.focus) {
       this._handleBlur(event);
       this.refs.input.getDOMNode().blur();
@@ -97,6 +109,25 @@ const SingleChoice = React.createClass({
       this._handleFocus(event);
       this.refs.input.getDOMNode().focus();
     }
+  },
+
+  _handleFocus: function(event) {
+    event.preventDefault();
+
+    /*
+    var highlighted;
+    if (this.state.selected) {
+      highlighted = _.find(this.state.searchResults, function(option) {
+        return option[this.props.valueField] == this.state.selected[this.props.valueField];
+      }, this);
+    } else {
+      highlighted = _.first(this.state.searchResults);
+    }
+     */
+
+    this.setState({
+      focus: true
+    });
   },
 
   _remove(event) {
@@ -123,10 +154,7 @@ const SingleChoice = React.createClass({
       state.selected = option;
 
       this.setState(state);
-
-      if (typeof this.props.onSelect === 'function') {
-        this.props.onSelect(option);
-      }
+      this.props.onSelect(option);
     }
   },
 
@@ -143,10 +171,19 @@ const SingleChoice = React.createClass({
     }
   },
 
+  _handleOptionHover: function(child) {
+    const {valueField} = this.props;
+
+    this.setState({
+      hoverValue: child.props[valueField]
+    });
+  },
+
   _handleOptionsMouseDown() {
     this._optionsMouseDown = true;
   },
 
+  /*
   componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
       var options = this._getAvailableOptions();
@@ -175,26 +212,26 @@ const SingleChoice = React.createClass({
       }, 50);
     }
   },
+   */
 
-  render: function() {
-    var options = _map(this.state.searchResults, (option) => {
-      var valueField = this.props.valueField;
-      var v = option[valueField];
+  render() {
+    const {name, valueField, labelField, placeholder, children} = this.props;
+    const {hoverValue} = this.state;
 
-      var child = _find(this.props.children, function(c) {
-        return c.props[valueField] === v;
-      });
+    const selectedValue = this._getSelectedValue();
+    const selectedOption = (selectedValue !== null) ? this._getOption(selectedValue) : null;
 
-      var highlighted = this.state.highlighted &&
-        v === this.state.highlighted[valueField];
+    const options = _map(children, (child, index) => {
+      const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
 
-      child = cloneWithProps(child, { tokens: this.state.searchTokens });
+      const highlighted = (child.props[valueField] === highlightedValue);
+
+      const key = `${index}-${child.props[valueField]}`;
 
       return (
-        <OptionWrapper key={v}
+        <OptionWrapper key={key}
           selected={highlighted}
           ref={highlighted ? 'highlighted' : null}
-          option={option}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
           {child}
@@ -202,28 +239,29 @@ const SingleChoice = React.createClass({
       );
     });
 
-    var value = this.state.selected ?
-      this.state.selected[this.props.valueField] : null;
-    var label = this.state.selected ?
-      this.state.selected[this.props.labelField] : this.state.value;
+    let label = selectedOption ? selectedOption.props[labelField] : null;
 
-    var wrapperClasses = cx({
+    const isActive = this._isActive();
+
+    const wrapperClasses = cx({
       'react-choice-wrapper': true,
       'react-choice-single': true,
-      'react-choice-single--in-focus': this.state.focus,
-      'react-choice-single--not-in-focus': !this.state.focus
+      'react-choice-single--in-focus': isActive,
+      'react-choice-single--not-in-focus': !isActive
     });
 
     var IconRenderer = this.props.icon || Icon;
 
     return (
       <div className="react-choice">
-        <input type="hidden" name={this.props.name} value={value} />
+        <input type="hidden" name={name}
+          value={selectedValue}
+          ref="input"/>
 
         <div className={wrapperClasses} onClick={this._handleClick}>
           <input type="text"
             className="react-choice-input react-choice-single__input"
-            placeholder={this.props.placeholder}
+            placeholder={placeholder}
             value={label}
 
             onKeyDown={this._handleInput}
@@ -234,15 +272,15 @@ const SingleChoice = React.createClass({
             autoComplete="off"
             role="combobox"
             aria-autocomplete="list"
-            aria-expanded={this.state.focus}
+            aria-expanded={isActive}
             ref="input" />
         </div>
 
         <div className="react-choice-icon" onMouseDown={this._handleArrowClick}>
-          <IconRenderer focused={this.state.focus} />
+          <IconRenderer focused={isActive} />
         </div>
 
-        {this.state.focus ?
+        {isActive ?
           <Options onMouseDown={this._handleOptionsMouseDown} ref="options">
             {options}
           </Options> : null}

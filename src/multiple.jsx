@@ -6,7 +6,7 @@ var cx = React.addons.classSet;
 var cloneWithProps = React.addons.cloneWithProps;
 
 var Options = require('./options');
-var OptionWrapper = require('./option-wrapper');
+var OptionWrapper = require('./OptionWrapper');
 
 var SearchMixin = require('./search-mixin');
 
