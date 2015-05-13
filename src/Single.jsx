@@ -94,8 +94,8 @@ const SingleChoice = React.createClass({
     return defaultValue;
   },
 
-  _getOption(children, value) {
-    const {valueField} = this.props;
+  _getOption(value) {
+    const {children, valueField} = this.props;
     return _find(children, (child) => child.props[valueField] === value);
   },
 
@@ -119,7 +119,7 @@ const SingleChoice = React.createClass({
   //
   // Events
   //
-  _handleClick: function(event) {
+  _handleClick(event) {
     event.preventDefault();
     this.refs.input.getDOMNode().focus();
   },
@@ -132,20 +132,8 @@ const SingleChoice = React.createClass({
     }
   },
 
-  // TODO
-  _handleFocus: function(event) {
+  _handleFocus(event) {
     event.preventDefault();
-
-    /*
-    var highlighted;
-    if (this.state.selected) {
-      highlighted = _.find(this.state.searchResults, function(option) {
-        return option[this.props.valueField] == this.state.selected[this.props.valueField];
-      }, this);
-    } else {
-      highlighted = _.first(this.state.searchResults);
-    }
-     */
 
     this.setState({
       focus: true
@@ -194,7 +182,7 @@ const SingleChoice = React.createClass({
     }
   },
 
-  _handleOptionHover: function(child) {
+  _handleOptionHover(child) {
     const {valueField} = this.props;
 
     this.setState({
@@ -202,7 +190,7 @@ const SingleChoice = React.createClass({
     });
   },
 
-  _handleOptionClick: function(child, event) {
+  _handleOptionClick(child, event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -274,6 +262,17 @@ const SingleChoice = React.createClass({
     }
   },
 
+  _enter(event) {
+    event.preventDefault();
+
+    const {hoverValue} = this.state;
+
+    if (hoverValue) {
+      const option = this._getOption(hoverValue);
+      this._selectOption(option);
+    }
+  },
+
   _handleChange(event) {
     event.preventDefault();
 
@@ -331,7 +330,7 @@ const SingleChoice = React.createClass({
     const {hoverValue, searchQuery, searchResults} = this.state;
 
     const selectedValue = this._getSelectedValue();
-    const selectedOption = (selectedValue !== null) ? this._getOption(children, selectedValue) : null;
+    const selectedOption = (selectedValue !== null) ? this._getOption(selectedValue) : null;
 
     const options = _map((searchResults || children), (child, index) => {
       const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
