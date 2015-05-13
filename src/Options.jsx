@@ -1,18 +1,16 @@
-"use strict";
+import React from 'react/addons';
 
-var React = require('react/addons');
-
-var Options = React.createClass({
+const Options = React.createClass({
   propTypes: {
     children: React.PropTypes.array.isRequired,
     onMouseDown: React.PropTypes.func.isRequired
   },
 
-  _handleMouseDown: function(event) {
+  _handleMouseDown(event) {
     this.props.onMouseDown(event);
   },
 
-  render: function() {
+  render() {
     return (
       <div className="react-choice-options"
         onMouseDown={this._handleMouseDown}
@@ -25,4 +23,4 @@ var Options = React.createClass({
   }
 });
 
-module.exports = Options;
+export default Options;

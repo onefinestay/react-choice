@@ -5,7 +5,7 @@ import _filter from 'lodash.filter';
 import cx from 'classnames';
 
 import Icon from './icon';
-import Options from './options';
+import Options from './Options';
 import OptionWrapper from './OptionWrapper';
 
 function noop() {}
@@ -252,22 +252,27 @@ const SingleChoice = React.createClass({
       this.setState(state);
     }
   },
+   */
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.focus === false && this.state.focus === true) {
-      this._updateScrollPosition();
-    }
+      const highlighted = this.refs ? this.refs.highlighted : null;
+      if (highlighted) {
+        // find if highlighted option is not visible
+        const el = highlighted.getDOMNode();
+        let parent = this.refs.options.getDOMNode();
+        const offsetTop = el.offsetTop + el.clientHeight - parent.scrollTop;
 
-    // select selected text in input box
-    if (this.state.selected && this.state.focus) {
-      setTimeout(() => {
-        if (this.isMounted()) {
-          this.refs.input.getDOMNode().select();
+        // scroll down
+        if (offsetTop > parent.clientHeight) {
+          const diff = el.offsetTop + el.clientHeight - parent.clientHeight;
+          parent.scrollTop = diff;
+        } else if (offsetTop - el.clientHeight < 0) { // scroll up
+          parent.scrollTop = el.offsetTop;
         }
-      }, 50);
+      }
     }
   },
-   */
 
   render() {
     const {name, valueField, labelField, placeholder, children} = this.props;
