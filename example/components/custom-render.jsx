@@ -4,6 +4,7 @@ var fs = require('fs');
 var React = require('react/addons');
 var _map = require('lodash.map');
 var _sortBy = require('lodash.sortby');
+var Highlight = require('react-highlighter');
 
 var CodeSnippet = require('./code-snippet');
 var Choice = require('../../src');
@@ -11,9 +12,12 @@ var Choice = require('../../src');
 var POKEMON = require('../data/pokemon.js');
 
 var PokemonRenderer = React.createClass({
-  mixins: [Choice.OptionMixin],
-
+  propTypes: {
+    query: React.PropTypes.string.isRequired,
+    pokemon: React.PropTypes.object.isRequired
+  },
   render() {
+    var query = this.props.query;
     var pokemon = this.props.pokemon;
 
     var weight = pokemon.weight / 10;
@@ -28,9 +32,9 @@ var PokemonRenderer = React.createClass({
           <span className="pokemon__number">
             #{pokemon.national_id}
           </span>
-          <Choice.TextHighlight tokens={this.props.tokens}>
+          <Highlight search={query}>
             {pokemon.name}
-          </Choice.TextHighlight>
+          </Highlight>
           <div className="pokemon__attributes">
             HP: {pokemon.hp} | Height: {height} m | Weight: {weight} kg
           </div>
