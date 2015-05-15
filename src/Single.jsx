@@ -83,12 +83,12 @@ const SingleChoice = React.createClass({
     var {value, defaultValue} = this.props;
     var {chosenValue} = this.state;
 
-    if (typeof chosenValue !== 'undefined' && chosenValue !== null) {
-      return chosenValue;
+    if (typeof value !== 'undefined' && value !== null) {
+      return value;
     }
 
-    if (typeof value !== 'undefined' && chosenValue === null) {
-      return value;
+    if (typeof chosenValue !== 'undefined' && chosenValue !== null) {
+      return chosenValue;
     }
 
     return defaultValue;
@@ -151,7 +151,7 @@ const SingleChoice = React.createClass({
     this._optionsMouseDown = false;
     this.refs.textInput.getDOMNode().blur();
 
-    const {valueField} = this.props;
+    const {valueField, onSelect} = this.props;
 
     this.setState({
       chosenValue: option.props[valueField],
@@ -160,12 +160,14 @@ const SingleChoice = React.createClass({
       searchQuery: null,
       searchResults: null
     }, () => {
-      // Try and replicate normal dom event
-      var fakeEvent = {
-        target: this.refs.input.getDOMNode(),
+      let fakeEvent = {
+        target: {
+          value: option.props[valueField]
+        },
         option
       };
-      this.props.onSelect(fakeEvent);
+
+      onSelect(fakeEvent);
     });
   },
 
