@@ -82,14 +82,14 @@ gulp.task('build-dist-js', function() {
 gulp.task('build-example-js', function() {
   var compiler = gulpWebpack(webpackConfig, webpack);
 
-  return gulp.src('./example/js/index.js')
+  return gulp.src('./example/js/index.jsx')
     .pipe(compiler)
     .pipe(gulp.dest('./example/build'));
 });
 
 gulp.task('watch-example-js', function() {
   var compiler = gulpWebpack(Object.assign({}, {watch: true}, webpackConfig), webpack);
-  return gulp.src('./example/js/index.js')
+  return gulp.src('./example/js/index.jsx')
     .pipe(compiler)
     .pipe(gulp.dest('./example/build'));
 });
