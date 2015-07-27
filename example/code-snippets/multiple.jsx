@@ -1,21 +1,19 @@
-var Choice = require('react-choice');
+import {Multiple, Option} from 'react-choice';
 
-var countries = [
+const countries = [
   {"label": "Afghanistan", "value": "AF"},
   {"label": "Albania", "value": "AL"},
   {"label": "Algeria", "value": "DZ"},
   // etc...
 ];
 
-var options = countries.map(function(country) {
-  return (
-    <Choice.Option value={country.value}>
-      {country.label}
-    </Choice.Option>
-  );
-});
-
 // Render component
-<Choice.SelectMultiple placeholder="Select a country">
-  {options}
-</Choice.SelectMultiple>
+<Multiple placeholder="Select a country">
+  {countries.map((country) => {
+    return (
+      <Option value={country.value}>
+        {country.label}
+      </Option>
+    );
+  })}
+</Multiple>
