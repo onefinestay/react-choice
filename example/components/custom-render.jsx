@@ -65,9 +65,9 @@ var CustomRender = React.createClass({
       <section className="tutorial">
         <h3>Custom Renderer</h3>
         <div className="tutorial__example">
-          <Choice.Select placeholder="Select a pokemon" sorter={sorter}>
+          <Choice.Single placeholder="Select a pokemon" sorter={sorter}>
             {options}
-          </Choice.Select>
+          </Choice.Single>
         </div>
         <div className="tutorial__guide">
           <p>Creating a custom renderer for the options is easy:</p>

@@ -9,22 +9,16 @@ import Icon from './Icon';
 import Options from './Options';
 import OptionWrapper from './OptionWrapper';
 
+import {escapeRegexCharacters, isDefined} from './utils';
+
 const {cloneWithProps} = React.addons;
 
 function noop() {}
 
-function isDefined(value) {
-  return typeof value !== 'undefined';
-}
-
-function escapeRegexCharacters(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 //
 // Auto complete select box
 //
-const SingleChoice = React.createClass({
+const Single = React.createClass({
   propTypes: {
     value: React.PropTypes.oneOfType([
       React.PropTypes.string,
@@ -362,7 +356,7 @@ const SingleChoice = React.createClass({
       'react-choice-single--not-in-focus': !isActive
     });
 
-    var IconRenderer = icon || Icon;
+    const IconRenderer = icon || Icon;
 
     return (
       <div className="react-choice">
@@ -400,4 +394,4 @@ const SingleChoice = React.createClass({
   }
 });
 
-export default SingleChoice;
+export default Single;

@@ -1,4 +1,4 @@
-import {Select, Option} from 'react-choice';
+import {Single, Option} from 'react-choice';
 
 const countries = [
   {"label": "Afghanistan", "value": "AF"},
@@ -8,7 +8,7 @@ const countries = [
 ];
 
 // Render component
-<Select placeholder="Select a country">
+<Single placeholder="Select a country">
   {countries.map((country) => {
     return (
       <Option value={country.value}>
@@ -16,4 +16,4 @@ const countries = [
       </Option>
     );
   })}
-</Select>
+</Single>

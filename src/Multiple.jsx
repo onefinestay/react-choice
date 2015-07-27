@@ -1,16 +1,20 @@
-"use strict";
+import React from 'react/addons';
+import _map from 'lodash.map';
+import _filter from 'lodash.filter';
+import cx from 'classnames';
 
-var React = require('react/addons');
-var _ = require('lodash');
-var cx = React.addons.classSet;
-var cloneWithProps = React.addons.cloneWithProps;
+import Icon from './Icon';
+import Options from './Options';
+import OptionWrapper from './OptionWrapper';
 
-var Options = require('./Options');
-var OptionWrapper = require('./OptionWrapper');
+import {escapeRegexCharacters, isDefined} from './utils';
 
-var SearchMixin = require('./search-mixin');
+const {cloneWithProps} = React.addons;
 
-var ValueWrapper = React.createClass({
+function noop() {}
+
+/*
+const ValueWrapper = React.createClass({
   propTypes: {
     onClick: React.PropTypes.func.isRequired,
     onDeleteClick: React.PropTypes.func.isRequired
@@ -35,50 +39,63 @@ var ValueWrapper = React.createClass({
     );
   }
 });
+ */
 
-var MultipleChoice = React.createClass({
-  mixins: [SearchMixin],
-
+const MultipleChoice = React.createClass({
   propTypes: {
-    name: React.PropTypes.string, // name of input
-    placeholder: React.PropTypes.string, // input placeholder
     values: React.PropTypes.array, // initial values
 
-    children: React.PropTypes.array.isRequired,
+    children: React.PropTypes.array.isRequired, // options
+
+    name: React.PropTypes.string, // name of input
+    placeholder: React.PropTypes.string, // input placeholder
+    disabled: React.PropTypes.bool,
 
     valueField: React.PropTypes.string, // value field name
     labelField: React.PropTypes.string, // label field name
+    allowDuplicates: React.PropTypes.bool, // if true, the same values can be added multiple times
 
-    searchField: React.PropTypes.array, // array of search fields
+    icon: React.PropTypes.func, // icon render
+
+    getSuggestions: React.PropTypes.func, // custom search function
+    /*searchField: React.PropTypes.array, // array of search fields*/
 
     onSelect: React.PropTypes.func, // function called when option is selected
     onDelete: React.PropTypes.func, // function called when option is deleted
-    allowDuplicates: React.PropTypes.bool // if true, the same values can be added multiple times
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       values: [],
       valueField: 'value',
       labelField: 'children',
-      searchField: ['children'],
-      allowDuplicates: false
+      allowDuplicates: false,
+      onSelect: noop,
+      onDelete: noop,
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
+    /*
     var props = this.props.searchField;
     props.push(this.props.valueField);
     props.push(this.props.searchField);
     props = _.uniq(props);
 
-    var options = _.map(this.props.children, function(child) {
+    var options = _map(this.props.children, function(child) {
       // TODO Validation ?
       return _.pick(child.props, props);
     }, this);
+     */
 
     return {
       focus: false,
+      chosenValue: null,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null,
+
+      /*
       searchResults: this._sort(options),
       values: this.props.values,
       initialOptions: options,
@@ -86,9 +103,163 @@ var MultipleChoice = React.createClass({
       selected: null,
       selectedIndex: -1,
       searchTokens: []
+       */
     };
   },
 
+  _isActive() {
+    return !this.props.disabled && this.state.focus;
+  },
+
+  _getSuggestions(query) {
+    const {labelField, children, getSuggestions} = this.props;
+
+    if (typeof getSuggestions === 'function') {
+      return getSuggestions(query);
+    }
+
+    const escapedQuery = escapeRegexCharacters(query.trim());
+    const regex = new RegExp('\\b' + escapedQuery, 'i');
+
+    return _filter(children, (child) => regex.test(child.props[labelField]));
+  },
+
+  //
+  // Events
+  //
+  _handleClick(event) {
+    event.preventDefault();
+    this.refs.textInput.getDOMNode().focus();
+  },
+
+  _handleArrowClick() {
+    if (this.state.focus === true) {
+      this.refs.textInput.getDOMNode().blur();
+    } else {
+      this.refs.textInput.getDOMNode().focus();
+    }
+  },
+
+  _handleFocus(event) {
+    event.preventDefault();
+
+    this.setState({
+      focus: true
+    });
+
+    setTimeout(() => {
+      if (this.isMounted()) {
+        this.refs.textInput.getDOMNode().select();
+      }
+    }, 10);
+  },
+
+  _selectOption(option) {
+    // reset mousedown latch
+    this._optionsMouseDown = false;
+    this.refs.textInput.getDOMNode().blur();
+
+    const {valueField, onSelect} = this.props;
+
+    this.setState({
+      chosenValue: option.props[valueField],
+      focus: false,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
+    }, () => {
+      let fakeEvent = {
+        target: {
+          value: option.props[valueField]
+        },
+        option
+      };
+
+      onSelect(fakeEvent);
+    });
+  },
+
+  _handleBlur(event) {
+    event.preventDefault();
+    if (this._optionsMouseDown === true) {
+      this._optionsMouseDown = false;
+      this.refs.textInput.getDOMNode().focus();
+      event.stopPropagation();
+    } else {
+      this.setState({
+        focus: false
+      });
+    }
+  },
+
+  _handleOptionHover(child) {
+    const {valueField} = this.props;
+
+    this.setState({
+      hoverValue: child.props[valueField]
+    });
+  },
+
+  _handleOptionClick(child, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this._selectOption(child);
+  },
+
+  _handleOptionsMouseDown() {
+    // prevent windows issue where clicking on scrollbar triggers blur on input
+    this._optionsMouseDown = true;
+  },
+
+  _handleInput(event) {
+    var keys = {
+      13: this._enter,
+      37: this._moveLeft,
+      38: this._moveUp,
+      39: this._moveRight,
+      40: this._moveDown,
+      8: this._remove
+    };
+
+    if (typeof keys[event.keyCode] === 'function') {
+      keys[event.keyCode](event);
+    }
+  },
+
+  _handleChange(event) {
+    event.preventDefault();
+
+    const query = event.target.value;
+    const searchResults = this._getSuggestions(query);
+
+    this.setState({
+      searchQuery: query,
+      searchResults: searchResults
+    });
+  },
+
+  _updateScrollPosition() {
+    const highlighted = this.refs ? this.refs.highlighted : null;
+    if (highlighted) {
+      // find if highlighted option is not visible
+      const el = highlighted.getDOMNode();
+      let parent = this.refs.options.getDOMNode();
+      const offsetTop = el.offsetTop + el.clientHeight - parent.scrollTop;
+
+      // scroll down
+      if (offsetTop > parent.clientHeight) {
+        const diff = el.offsetTop + el.clientHeight - parent.clientHeight;
+        parent.scrollTop = diff;
+      } else if (offsetTop - el.clientHeight < 0) { // scroll up
+        parent.scrollTop = el.offsetTop;
+      }
+    }
+  },
+
+  // TODO
+
+  /*
   _handleContainerInput: function(event) {
     var keys = {
       37: this._moveLeft,
@@ -108,7 +279,9 @@ var MultipleChoice = React.createClass({
       });
     }
   },
+   */
 
+  /*
   _selectOption: function(option) {
     if (option) {
       var values = this.state.values.slice(0); // copy
@@ -145,7 +318,9 @@ var MultipleChoice = React.createClass({
       }
     }
   },
+   */
 
+  /*
   _getAvailableOptions: function(values) {
     var options = this.state.initialOptions;
     var valueField = this.props.valueField;
@@ -274,42 +449,28 @@ var MultipleChoice = React.createClass({
 
     this.refs.container.getDOMNode().focus();
   },
+  */
 
-  _handleBlur: function(event) {
-    if (this._optionsMouseDown === true) {
-      this._optionsMouseDown = false;
-      this.refs.input.getDOMNode().focus();
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
-      event.preventDefault();
-      this.setState({
-        focus: false
-      });
+  componentWillReceiveProps() {
+    this.setState({
+      chosenValue: null,
+      hoverValue: null,
+      searchQuery: null,
+      searchResults: null
+    });
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.focus === false && this.state.focus === true) {
+      this._updateScrollPosition();
     }
   },
 
-  _handleOptionsMouseDown: function() {
-    this._optionsMouseDown = true;
-  },
+  render() {
+    const {name, valueField, labelField, placeholder, children, icon} = this.props;
+    const {hoverValue, searchQuery, searchResults} = this.state;
 
-  componentWillReceiveProps: function(nextProps) {
-    if (_.isEqual(nextProps.values, this.props.values)) {
-      var options = this._getAvailableOptions(nextProps.values);
-
-      var state = this._resetSearch(options);
-      state.values = nextProps.values;
-      state.selected = null;
-
-      this.setState(state);
-    }
-  },
-
-  componentDidUpdate: function() {
-    this._updateScrollPosition();
-  },
-
-  render: function() {
+    /*
     var values = _.map(this.state.values, function(v, i) {
       var key = v[this.props.valueField];
 
@@ -326,40 +487,39 @@ var MultipleChoice = React.createClass({
         </ValueWrapper>
       );
     }, this);
+     */
+    const values = [];
 
-    var options = _.map(this.state.searchResults, function(option) {
-      var valueField = this.props.valueField;
-      var v = option[valueField];
+    const options = _map((searchResults || children), (child, index) => {
+      const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : null; //selectedValue;
 
-      var child = _.find(this.props.children, function(c) {
-        return c.props[valueField] === v;
-      });
+      const highlighted = (child.props[valueField] === highlightedValue);
 
-      var highlighted = this.state.highlighted &&
-        v === this.state.highlighted[valueField];
-
-      child = cloneWithProps(child, { tokens: this.state.searchTokens });
+      const key = `${index}-${child.props[valueField]}`;
 
       return (
-        <OptionWrapper key={v}
+        <OptionWrapper key={key}
           selected={highlighted}
           ref={highlighted ? 'highlighted' : null}
-          option={option}
           onHover={this._handleOptionHover}
           onClick={this._handleOptionClick}>
-          {child}
+          {cloneWithProps(child, { query: searchQuery || '' })}
         </OptionWrapper>
       );
-    }, this);
+    });
 
     var value = this.state.value;
 
-    var wrapperClasses = cx({
+    const isActive = this._isActive();
+
+    const wrapperClasses = cx({
       'react-choice-wrapper': true,
       'react-choice-multiple': true,
-      'react-choice-multiple--in-focus': this.state.focus,
-      'react-choice-multiple--not-in-focus': !this.state.focus
+      'react-choice-multiple--in-focus': isActive,
+      'react-choice-multiple--not-in-focus': !isActive,
     });
+
+    const IconRenderer = icon || Icon;
 
     return (
       <div className="react-choice">
@@ -368,7 +528,7 @@ var MultipleChoice = React.createClass({
           onBlur={this._handleContainerBlur}>
           {values}
           <input type="text"
-            placeholder={this.props.placeholder}
+            placeholder={placeholder}
             value={value}
             className="react-choice-input react-choice-multiple__input"
 
@@ -380,11 +540,15 @@ var MultipleChoice = React.createClass({
             autoComplete="off"
             role="combobox"
             aria-autocomplete="list"
-            aria-expanded={this.state.focus}
-            ref="input" />
+            aria-expanded={isActive}
+            ref="textInput" />
         </div>
 
-        {this.state.focus ?
+        <div className="react-choice-icon" onMouseDown={this._handleArrowClick}>
+          <IconRenderer focused={isActive} />
+        </div>
+
+        {isActive && options.length > 0 ?
           <Options onMouseDown={this._handleOptionsMouseDown} ref="options">
             {options}
           </Options> : null}
@@ -393,4 +557,4 @@ var MultipleChoice = React.createClass({
   }
 });
 
-module.exports = MultipleChoice;
+export default MultipleChoice;
