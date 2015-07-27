@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "lodash": "^2.4.1",
-    "sifter": "^0.4.1"
+    "sifter": "stuartleigh/sifter.js"
   },
   "devDependencies": {
     "babel": "^5.2.16",
