@@ -25,8 +25,7 @@
     "lodash.findindex": "^3.2.0",
     "lodash.map": "^3.1.2",
     "lodash.sortby": "^3.1.2",
-    "react-highlighter": "^0.2.2",
-    "sifter": "^0.4.1"
+    "react-highlighter": "^0.2.2"
   },
   "devDependencies": {
     "babel": "^5.2.16",
