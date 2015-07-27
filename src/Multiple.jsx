@@ -2,6 +2,7 @@ import React from 'react/addons';
 import _map from 'lodash.map';
 import _filter from 'lodash.filter';
 import _find from 'lodash.find';
+import _findIndex from 'lodash.findindex';
 import cx from 'classnames';
 
 import Icon from './Icon';
@@ -248,6 +249,62 @@ const MultipleChoice = React.createClass({
 
     if (typeof keys[event.keyCode] === 'function') {
       keys[event.keyCode](event);
+    }
+  },
+
+  _move(options, operator) {
+    if (operator !== 1 && operator !== -1) {
+      throw new Error(`Movement operator is not 1 or -1. It's ${operator}`);
+    }
+
+    const {valueField} = this.props;
+    const {hoverValue, selectedValue} = this.state;
+
+    const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
+    const highlightedIndex = _findIndex(options, (result) => result.props[valueField] === highlightedValue);
+
+    if (typeof options[highlightedIndex + operator] !== 'undefined') {
+      this.setState({
+        hoverValue: options[highlightedIndex + operator].props[valueField]
+      }, () => {
+        // update scroll position
+        this._updateScrollPosition();
+      });
+    }
+  },
+
+  _moveUp(event) {
+    const {children} = this.props;
+    const {searchResults} = this.state;
+
+    const options = (searchResults || children);
+
+    if (options && options.length > 0) {
+      event.preventDefault();
+      this._move(options, -1);
+    }
+  },
+
+  _moveDown(event) {
+    const {children} = this.props;
+    const {searchResults} = this.state;
+
+    const options = (searchResults || children);
+
+    if (options && options.length > 0) {
+      event.preventDefault();
+      this._move(options, 1);
+    }
+  },
+
+  _enter(event) {
+    event.preventDefault();
+
+    const {hoverValue} = this.state;
+
+    if (hoverValue) {
+      const option = this._getOption(hoverValue);
+      this._selectOption(option);
     }
   },
 
@@ -564,6 +621,9 @@ const MultipleChoice = React.createClass({
 
     return (
       <div className="react-choice">
+        <input type="hidden" name={name}
+          value={JSON.stringify(selectedValues)} ref="input" />
+
         <div className={wrapperClasses} onClick={this._handleClick}
           tabIndex="-1" ref="container" onKeyDown={this._handleContainerInput}
           onBlur={this._handleContainerBlur}>
