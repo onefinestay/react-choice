@@ -2,7 +2,6 @@
   float: left;
   border: 1px solid #eee;
   margin-right: 5px;
-  cursor: pointer;
   padding: 4px;
   margin-bottom: 5px;
 
@@ -13,6 +12,7 @@
   &__delete {
     padding-left: 5px;
     font-weight: bold;
+    cursor: pointer;
   }
 
   &__children {

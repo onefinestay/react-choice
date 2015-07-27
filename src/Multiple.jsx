@@ -17,7 +17,6 @@ function noop() {}
 
 const ValueWrapper = React.createClass({
   propTypes: {
-    onClick: React.PropTypes.func.isRequired,
     onDeleteClick: React.PropTypes.func.isRequired
   },
 
@@ -27,15 +26,14 @@ const ValueWrapper = React.createClass({
   },
 
   render: function() {
-    const {selected, onClick, children} = this.props;
+    const {children} = this.props;
 
     var classes = cx({
       'react-choice-value': true,
-      'react-choice-value--is-selected': selected
     });
 
     return (
-      <div className={classes} onClick={onClick}>
+      <div className={classes}>
         <div className="react-choice-value__children">{children}</div>
         <a className="react-choice-value__delete" onClick={this.onDeleteClick}>x</a>
       </div>
@@ -338,27 +336,22 @@ const MultipleChoice = React.createClass({
     }
   },
 
-  _selectValue(index, event) {
-    // TODO
-    /*
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+  _removeValue(value) {
+    const {onDelete} = this.props;
+
+    const selectedValues = this._getSelectedValues().slice(0);
+    const index = _findIndex(selectedValues, (v) => v === value);
+
+    if (index > -1) {
+      // remove value
+      selectedValues.splice(index, 1);
     }
 
     this.setState({
-      selectedIndex: index
+      chosenValues: selectedValues,
     });
 
-    this.refs.container.getDOMNode().focus();
-     */
-  },
-
-  _removeDeletedContainer(index) {
-    // TODO
-    /*
-    this._removeValue(index);
-     */
+    /*onDelete(removedOption, values);*/
   },
 
   // TODO
@@ -382,64 +375,6 @@ const MultipleChoice = React.createClass({
         selectedIndex: -1
       });
     }
-  },
-   */
-
-  /*
-  _selectOption: function(option) {
-    if (option) {
-      var values = this.state.values.slice(0); // copy
-      var options = this._getAvailableOptions(values);
-
-      // determine which item to highlight
-      var valueField = this.props.valueField;
-      var optionIndex = _.findIndex(options, function(o) {
-        return option[valueField] === o[valueField];
-      });
-
-      values.push(option);
-
-      options = this._getAvailableOptions(values);
-      var state = this._resetSearch(options);
-      state.values = values;
-
-      var nextOption = options[optionIndex];
-      if (_.isUndefined(nextOption)) {
-        // at the end of the list so select previous one
-        nextOption = options[optionIndex - 1];
-        if (_.isUndefined(nextOption)) {
-          // bail out
-          nextOption = _.first(options);
-        }
-      }
-
-      state.highlighted = nextOption;
-
-      this.setState(state);
-
-      if (typeof this.props.onSelect === 'function') {
-        this.props.onSelect(option, values);
-      }
-    }
-  },
-   */
-
-  /*
-  _getAvailableOptions: function(values) {
-    var options = this.state.initialOptions;
-    var valueField = this.props.valueField;
-
-    if (this.props.allowDuplicates === false && values) {
-      options = _.filter(options, function(option) {
-        var found = _.find(values, function(value) {
-          return value[valueField] === option[valueField];
-        });
-
-        return typeof found === 'undefined';
-      });
-    }
-
-    return this._sort(options);
   },
 
   _moveLeft: function(event) {
@@ -492,22 +427,6 @@ const MultipleChoice = React.createClass({
           selectedIndex: -1
         });
       }
-    }
-  },
-
-  _removeValue: function(index) {
-    var values = this.state.values.slice(0); // copy
-    var removedOption = values.splice(index, 1);
-
-    var options = this._getAvailableOptions(values);
-
-    var state = this._resetSearch(options);
-    state.values = values;
-
-    this.setState(state);
-
-    if (typeof this.props.onDelete === 'function') {
-      this.props.onDelete(removedOption, values);
     }
   },
 
@@ -582,8 +501,7 @@ const MultipleChoice = React.createClass({
 
       return (
         <ValueWrapper key={key}
-          onClick={this._selectValue.bind(null, index)}
-          onDeleteClick={this._removeDeletedContainer.bind(null, index)}
+          onDeleteClick={this._removeValue.bind(null, value)}
           selected={false}>
           {option.props[labelField]}
         </ValueWrapper>
