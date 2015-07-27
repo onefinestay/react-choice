@@ -1,9 +1,17 @@
 import React from 'react/addons';
 
+function noop() {}
+
 const Options = React.createClass({
   propTypes: {
     children: React.PropTypes.array.isRequired,
-    onMouseDown: React.PropTypes.func.isRequired
+    onMouseDown: React.PropTypes.func,
+  },
+
+  getDefaultProps() {
+    return {
+      onMouseDown: noop,
+    };
   },
 
   _handleMouseDown(event) {

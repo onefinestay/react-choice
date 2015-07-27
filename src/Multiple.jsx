@@ -1,6 +1,7 @@
 import React from 'react/addons';
 import _map from 'lodash.map';
 import _filter from 'lodash.filter';
+import _find from 'lodash.find';
 import cx from 'classnames';
 
 import Icon from './Icon';
@@ -13,7 +14,6 @@ const {cloneWithProps} = React.addons;
 
 function noop() {}
 
-/*
 const ValueWrapper = React.createClass({
   propTypes: {
     onClick: React.PropTypes.func.isRequired,
@@ -26,24 +26,38 @@ const ValueWrapper = React.createClass({
   },
 
   render: function() {
+    const {selected, onClick, children} = this.props;
+
     var classes = cx({
       'react-choice-value': true,
-      'react-choice-value--is-selected': this.props.selected
+      'react-choice-value--is-selected': selected
     });
 
     return (
-      <div className={classes} onClick={this.props.onClick}>
-        <div className="react-choice-value__children">{this.props.children}</div>
+      <div className={classes} onClick={onClick}>
+        <div className="react-choice-value__children">{children}</div>
         <a className="react-choice-value__delete" onClick={this.onDeleteClick}>x</a>
       </div>
     );
   }
 });
- */
+
 
 const MultipleChoice = React.createClass({
   propTypes: {
-    values: React.PropTypes.array, // initial values
+    values: React.PropTypes.arrayOf(
+      React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+      ]),
+    ), // initial values
+
+    defaultValues: React.PropTypes.arrayOf(
+      React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+      ]),
+    ), // initial values
 
     children: React.PropTypes.array.isRequired, // options
 
@@ -67,6 +81,7 @@ const MultipleChoice = React.createClass({
   getDefaultProps() {
     return {
       values: [],
+      defaultValues: [],
       valueField: 'value',
       labelField: 'children',
       allowDuplicates: false,
@@ -90,7 +105,7 @@ const MultipleChoice = React.createClass({
 
     return {
       focus: false,
-      chosenValue: null,
+      chosenValues: [],
       hoverValue: null,
       searchQuery: null,
       searchResults: null,
@@ -105,6 +120,27 @@ const MultipleChoice = React.createClass({
       searchTokens: []
        */
     };
+  },
+
+  _getSelectedValues() {
+    var {values, defaultValues} = this.props;
+    var {chosenValues} = this.state;
+
+    if (typeof values !== 'undefined' && values.length > 0) {
+      return values;
+    }
+
+    if (typeof chosenValues !== 'undefined' && chosenValues.length > 0) {
+      return chosenValues;
+    }
+
+    return defaultValues;
+  },
+
+  _getOption(value) {
+    // TODO make this more efficient
+    const {children, valueField} = this.props;
+    return _find(children, (child) => child.props[valueField] === value);
   },
 
   _isActive() {
@@ -155,18 +191,17 @@ const MultipleChoice = React.createClass({
   },
 
   _selectOption(option) {
-    // reset mousedown latch
-    this._optionsMouseDown = false;
-    this.refs.textInput.getDOMNode().blur();
-
     const {valueField, onSelect} = this.props;
 
+    const selectedValues = this._getSelectedValues().slice(0);
+    selectedValues.push(option.props[valueField]);
+
     this.setState({
-      chosenValue: option.props[valueField],
-      focus: false,
+      chosenValues: selectedValues,
+      /*focus: {'$set': false},*/
       hoverValue: null,
       searchQuery: null,
-      searchResults: null
+      searchResults: null,
     }, () => {
       let fakeEvent = {
         target: {
@@ -181,15 +216,9 @@ const MultipleChoice = React.createClass({
 
   _handleBlur(event) {
     event.preventDefault();
-    if (this._optionsMouseDown === true) {
-      this._optionsMouseDown = false;
-      this.refs.textInput.getDOMNode().focus();
-      event.stopPropagation();
-    } else {
-      this.setState({
-        focus: false
-      });
-    }
+    this.setState({
+      focus: false
+    });
   },
 
   _handleOptionHover(child) {
@@ -205,11 +234,6 @@ const MultipleChoice = React.createClass({
     event.stopPropagation();
 
     this._selectOption(child);
-  },
-
-  _handleOptionsMouseDown() {
-    // prevent windows issue where clicking on scrollbar triggers blur on input
-    this._optionsMouseDown = true;
   },
 
   _handleInput(event) {
@@ -255,6 +279,29 @@ const MultipleChoice = React.createClass({
         parent.scrollTop = el.offsetTop;
       }
     }
+  },
+
+  _selectValue(index, event) {
+    // TODO
+    /*
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    this.setState({
+      selectedIndex: index
+    });
+
+    this.refs.container.getDOMNode().focus();
+     */
+  },
+
+  _removeDeletedContainer(index) {
+    // TODO
+    /*
+    this._removeValue(index);
+     */
   },
 
   // TODO
@@ -470,25 +517,21 @@ const MultipleChoice = React.createClass({
     const {name, valueField, labelField, placeholder, children, icon} = this.props;
     const {hoverValue, searchQuery, searchResults} = this.state;
 
-    /*
-    var values = _.map(this.state.values, function(v, i) {
-      var key = v[this.props.valueField];
+    const selectedValues = this._getSelectedValues();
+    const values = _map(selectedValues, (value, index) => {
+      const option = this._getOption(value);
 
-      var selected = i === this.state.selectedIndex;
-
-      var label = v[this.props.labelField];
+      const key = `${index}-${option.props[valueField]}`;
 
       return (
-        <ValueWrapper key={i}
-          onClick={this._selectValue.bind(null, i)}
-          onDeleteClick={this._removeDeletedContainer.bind(null, i)}
-          selected={selected}>
-          <div>{label}</div>
+        <ValueWrapper key={key}
+          onClick={this._selectValue.bind(null, index)}
+          onDeleteClick={this._removeDeletedContainer.bind(null, index)}
+          selected={false}>
+          {option.props[labelField]}
         </ValueWrapper>
       );
-    }, this);
-     */
-    const values = [];
+    });
 
     const options = _map((searchResults || children), (child, index) => {
       const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : null; //selectedValue;
@@ -507,8 +550,6 @@ const MultipleChoice = React.createClass({
         </OptionWrapper>
       );
     });
-
-    var value = this.state.value;
 
     const isActive = this._isActive();
 
@@ -529,7 +570,7 @@ const MultipleChoice = React.createClass({
           {values}
           <input type="text"
             placeholder={placeholder}
-            value={value}
+            value={searchQuery}
             className="react-choice-input react-choice-multiple__input"
 
             onKeyDown={this._handleInput}
@@ -549,7 +590,7 @@ const MultipleChoice = React.createClass({
         </div>
 
         {isActive && options.length > 0 ?
-          <Options onMouseDown={this._handleOptionsMouseDown} ref="options">
+          <Options ref="options">
             {options}
           </Options> : null}
       </div>
