@@ -4,22 +4,18 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopExportWildcard(obj, defaults) { var newObj = defaults({}, obj); delete newObj['default']; return newObj; }
 
-var _Single2 = require('./Single');
+function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
 
-var _Single3 = _interopRequireDefault(_Single2);
+var _Single = require('./Single');
 
-exports.Single = _Single3['default'];
+_defaults(exports, _interopExportWildcard(_Single, _defaults));
 
-var _Multiple2 = require('./Multiple');
+var _Multiple = require('./Multiple');
 
-var _Multiple3 = _interopRequireDefault(_Multiple2);
+_defaults(exports, _interopExportWildcard(_Multiple, _defaults));
 
-exports.Multiple = _Multiple3['default'];
+var _Option = require('./Option');
 
-var _Option2 = require('./Option');
-
-var _Option3 = _interopRequireDefault(_Option2);
-
-exports.Option = _Option3['default'];
+_defaults(exports, _interopExportWildcard(_Option, _defaults));

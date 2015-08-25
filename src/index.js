@@ -1,3 +1,3 @@
-export Single from './Single';
-export Multiple from './Multiple';
-export Option from './Option';
+export * from './Single';
+export * from './Multiple';
+export * from './Option';
