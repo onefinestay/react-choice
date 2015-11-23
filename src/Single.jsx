@@ -1,6 +1,5 @@
 import React from 'react/addons';
 import _findIndex from 'lodash.findindex';
-import _filter from 'lodash.filter';
 import cx from 'classnames';
 
 import Icon from './Icon';
@@ -105,7 +104,7 @@ const Single = React.createClass({
     const escapedQuery = escapeRegexCharacters(query.trim());
     const regex = new RegExp('\\b' + escapedQuery, 'i');
 
-    return _filter(children, (child) => regex.test(child.props[labelField]));
+    return children.filter((child) => regex.test(child.props[labelField]));
   },
 
   //

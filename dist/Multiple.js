@@ -10,10 +10,6 @@ var _reactAddons = require('react/addons');
 
 var _reactAddons2 = _interopRequireDefault(_reactAddons);
 
-var _lodashFilter = require('lodash.filter');
-
-var _lodashFilter2 = _interopRequireDefault(_lodashFilter);
-
 var _lodashFindindex = require('lodash.findindex');
 
 var _lodashFindindex2 = _interopRequireDefault(_lodashFindindex);
@@ -191,7 +187,7 @@ var MultipleChoice = _reactAddons2['default'].createClass({
     var escapedQuery = (0, _utils.escapeRegexCharacters)(query.trim());
     var regex = new RegExp('\\b' + escapedQuery, 'i');
 
-    return (0, _lodashFilter2['default'])(children, function (child) {
+    return children.filter(function (child) {
       return regex.test(child.props[labelField]);
     });
   },

@@ -1,5 +1,4 @@
 import React from 'react/addons';
-import _filter from 'lodash.filter';
 import _findIndex from 'lodash.findindex';
 import cx from 'classnames';
 
@@ -154,7 +153,7 @@ const MultipleChoice = React.createClass({
     const escapedQuery = escapeRegexCharacters(query.trim());
     const regex = new RegExp('\\b' + escapedQuery, 'i');
 
-    return _filter(children, (child) => regex.test(child.props[labelField]));
+    return children.filter((child) => regex.test(child.props[labelField]));
   },
 
   //
