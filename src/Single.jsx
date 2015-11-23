@@ -1,5 +1,4 @@
 import React from 'react/addons';
-import _find from 'lodash.find';
 import _findIndex from 'lodash.findindex';
 import _filter from 'lodash.filter';
 import cx from 'classnames';
@@ -89,7 +88,7 @@ const Single = React.createClass({
 
   _getOption(value) {
     const {children, valueField} = this.props;
-    return _find(children, (child) => child.props[valueField] === value);
+    return children.find((child) => child.props[valueField] === value);
   },
 
   _isActive() {

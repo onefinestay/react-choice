@@ -10,10 +10,6 @@ var _reactAddons = require('react/addons');
 
 var _reactAddons2 = _interopRequireDefault(_reactAddons);
 
-var _lodashFind = require('lodash.find');
-
-var _lodashFind2 = _interopRequireDefault(_lodashFind);
-
 var _lodashFindindex = require('lodash.findindex');
 
 var _lodashFindindex2 = _interopRequireDefault(_lodashFindindex);
@@ -119,7 +115,7 @@ var Single = _reactAddons2['default'].createClass({
     var children = _props2.children;
     var valueField = _props2.valueField;
 
-    return (0, _lodashFind2['default'])(children, function (child) {
+    return children.find(function (child) {
       return child.props[valueField] === value;
     });
   },

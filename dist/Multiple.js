@@ -14,10 +14,6 @@ var _lodashFilter = require('lodash.filter');
 
 var _lodashFilter2 = _interopRequireDefault(_lodashFilter);
 
-var _lodashFind = require('lodash.find');
-
-var _lodashFind2 = _interopRequireDefault(_lodashFind);
-
 var _lodashFindindex = require('lodash.findindex');
 
 var _lodashFindindex2 = _interopRequireDefault(_lodashFindindex);
@@ -173,7 +169,7 @@ var MultipleChoice = _reactAddons2['default'].createClass({
     var children = _props2.children;
     var valueField = _props2.valueField;
 
-    return (0, _lodashFind2['default'])(children, function (child) {
+    return children.find(function (child) {
       return child.props[valueField] === value;
     });
   },

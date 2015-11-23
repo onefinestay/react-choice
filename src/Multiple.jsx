@@ -1,6 +1,5 @@
 import React from 'react/addons';
 import _filter from 'lodash.filter';
-import _find from 'lodash.find';
 import _findIndex from 'lodash.findindex';
 import cx from 'classnames';
 
@@ -138,7 +137,7 @@ const MultipleChoice = React.createClass({
   _getOption(value) {
     // TODO make this more efficient
     const {children, valueField} = this.props;
-    return _find(children, (child) => child.props[valueField] === value);
+    return children.find((child) => child.props[valueField] === value);
   },
 
   _isActive() {

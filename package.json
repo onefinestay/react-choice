@@ -21,7 +21,6 @@
   "dependencies": {
     "classnames": "^2.1.1",
     "lodash.filter": "^3.1.0",
-    "lodash.find": "^3.1.0",
     "lodash.findindex": "^3.1.0",
     "lodash.sortby": "^3.1.2",
     "react-highlighter": "^0.2.2"
