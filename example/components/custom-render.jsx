@@ -2,7 +2,6 @@
 
 var fs = require('fs');
 var React = require('react/addons');
-var _map = require('lodash.map');
 var _sortBy = require('lodash.sortby');
 var Highlight = require('react-highlighter');
 
@@ -48,7 +47,7 @@ var customExample = fs.readFileSync(__dirname + '/../code-snippets/custom-render
 
 var CustomRender = React.createClass({
   render: function() {
-    var options = _map(POKEMON, function(pokemon) {
+    var options = POKEMON.map(function(pokemon) {
       var value = pokemon.national_id;
       return (
         <PokemonRenderer key={value} value={value} pokemon={pokemon}>

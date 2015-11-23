@@ -10,10 +10,6 @@ var _reactAddons = require('react/addons');
 
 var _reactAddons2 = _interopRequireDefault(_reactAddons);
 
-var _lodashMap = require('lodash.map');
-
-var _lodashMap2 = _interopRequireDefault(_lodashMap);
-
 var _lodashFind = require('lodash.find');
 
 var _lodashFind2 = _interopRequireDefault(_lodashFind);
@@ -383,7 +379,7 @@ var Single = _reactAddons2['default'].createClass({
     var selectedValue = this._getSelectedValue();
     var selectedOption = selectedValue !== null ? this._getOption(selectedValue) : null;
 
-    var options = (0, _lodashMap2['default'])(searchResults || children, function (child, index) {
+    var options = (searchResults || children).map(function (child, index) {
       var highlightedValue = (0, _utils.isDefined)(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
 
       var highlighted = child.props[valueField] === highlightedValue;

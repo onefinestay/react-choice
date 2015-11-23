@@ -1,5 +1,4 @@
 import React from 'react/addons';
-import _map from 'lodash.map';
 import _filter from 'lodash.filter';
 import _find from 'lodash.find';
 import _findIndex from 'lodash.findindex';
@@ -494,7 +493,7 @@ const MultipleChoice = React.createClass({
     const {hoverValue, searchQuery, searchResults} = this.state;
 
     const selectedValues = this._getSelectedValues();
-    const values = _map(selectedValues, (value, index) => {
+    const values = selectedValues.map((value, index) => {
       const option = this._getOption(value);
 
       const key = `${index}-${option.props[valueField]}`;
@@ -508,7 +507,7 @@ const MultipleChoice = React.createClass({
       );
     });
 
-    const options = _map((searchResults || children), (child, index) => {
+    const options = (searchResults || children).map((child, index) => {
       const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : null; //selectedValue;
 
       const highlighted = (child.props[valueField] === highlightedValue);

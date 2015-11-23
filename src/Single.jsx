@@ -1,5 +1,4 @@
 import React from 'react/addons';
-import _map from 'lodash.map';
 import _find from 'lodash.find';
 import _findIndex from 'lodash.findindex';
 import _filter from 'lodash.filter';
@@ -321,7 +320,7 @@ const Single = React.createClass({
     const selectedValue = this._getSelectedValue();
     const selectedOption = (selectedValue !== null) ? this._getOption(selectedValue) : null;
 
-    const options = _map((searchResults || children), (child, index) => {
+    const options = (searchResults || children).map((child, index) => {
       const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
 
       const highlighted = (child.props[valueField] === highlightedValue);

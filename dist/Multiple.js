@@ -10,10 +10,6 @@ var _reactAddons = require('react/addons');
 
 var _reactAddons2 = _interopRequireDefault(_reactAddons);
 
-var _lodashMap = require('lodash.map');
-
-var _lodashMap2 = _interopRequireDefault(_lodashMap);
-
 var _lodashFilter = require('lodash.filter');
 
 var _lodashFilter2 = _interopRequireDefault(_lodashFilter);
@@ -544,7 +540,7 @@ var MultipleChoice = _reactAddons2['default'].createClass({
     var searchResults = _state2.searchResults;
 
     var selectedValues = this._getSelectedValues();
-    var values = (0, _lodashMap2['default'])(selectedValues, function (value, index) {
+    var values = selectedValues.map(function (value, index) {
       var option = _this3._getOption(value);
 
       var key = index + '-' + option.props[valueField];
@@ -558,7 +554,7 @@ var MultipleChoice = _reactAddons2['default'].createClass({
       );
     });
 
-    var options = (0, _lodashMap2['default'])(searchResults || children, function (child, index) {
+    var options = (searchResults || children).map(function (child, index) {
       var highlightedValue = (0, _utils.isDefined)(hoverValue) && hoverValue !== null ? hoverValue : null; //selectedValue;
 
       var highlighted = child.props[valueField] === highlightedValue;
