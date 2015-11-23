@@ -2,7 +2,6 @@
 
 var fs = require('fs');
 var React = require('react/addons');
-var _sortBy = require('lodash.sortby');
 var Highlight = require('react-highlighter');
 
 var CodeSnippet = require('./code-snippet');
@@ -56,15 +55,11 @@ var CustomRender = React.createClass({
       );
     });
 
-    var sorter = function(list) {
-      return _sortBy(list, 'national_id');
-    };
-
     return (
       <section className="tutorial">
         <h3>Custom Renderer</h3>
         <div className="tutorial__example">
-          <Choice.Single placeholder="Select a pokemon" sorter={sorter}>
+          <Choice.Single placeholder="Select a pokemon">
             {options}
           </Choice.Single>
         </div>
