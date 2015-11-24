@@ -10,10 +10,6 @@ var _reactAddons = require('react/addons');
 
 var _reactAddons2 = _interopRequireDefault(_reactAddons);
 
-var _lodashFindindex = require('lodash.findindex');
-
-var _lodashFindindex2 = _interopRequireDefault(_lodashFindindex);
-
 var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -258,9 +254,9 @@ var Single = _reactAddons2['default'].createClass({
     var selectedValue = _state.selectedValue;
 
     var highlightedValue = (0, _utils.isDefined)(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
-    var highlightedIndex = (0, _lodashFindindex2['default'])(options, function (result) {
-      return result.props[valueField] === highlightedValue;
-    });
+    var highlightedIndex = options.map(function (result) {
+      return result.props[valueField];
+    }).indexOf(highlightedValue);
 
     if (typeof options[highlightedIndex + operator] !== 'undefined') {
       this.setState({

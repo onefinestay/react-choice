@@ -300,9 +300,9 @@ var MultipleChoice = _reactAddons2['default'].createClass({
     var selectedValue = _state.selectedValue;
 
     var highlightedValue = (0, _utils.isDefined)(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
-    var highlightedIndex = (0, _lodashFindindex2['default'])(options, function (result) {
-      return result.props[valueField] === highlightedValue;
-    });
+    var highlightedIndex = options.map(function (result) {
+      return result.props[valueField];
+    }).indexOf(highlightedValue);
 
     if (typeof options[highlightedIndex + operator] !== 'undefined') {
       this.setState({

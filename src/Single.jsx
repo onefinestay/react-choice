@@ -1,5 +1,4 @@
 import React from 'react/addons';
-import _findIndex from 'lodash.findindex';
 import cx from 'classnames';
 
 import Icon from './Icon';
@@ -219,7 +218,9 @@ const Single = React.createClass({
     const {hoverValue, selectedValue} = this.state;
 
     const highlightedValue = isDefined(hoverValue) && hoverValue !== null ? hoverValue : selectedValue;
-    const highlightedIndex = _findIndex(options, (result) => result.props[valueField] === highlightedValue);
+    const highlightedIndex = options
+      .map((result) => result.props[valueField])
+      .indexOf(highlightedValue);
 
     if (typeof options[highlightedIndex + operator] !== 'undefined') {
       this.setState({
