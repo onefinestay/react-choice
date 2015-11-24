@@ -10,10 +10,6 @@ var _reactAddons = require('react/addons');
 
 var _reactAddons2 = _interopRequireDefault(_reactAddons);
 
-var _lodashFindindex = require('lodash.findindex');
-
-var _lodashFindindex2 = _interopRequireDefault(_lodashFindindex);
-
 var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -384,9 +380,7 @@ var MultipleChoice = _reactAddons2['default'].createClass({
     var onDelete = this.props.onDelete;
 
     var selectedValues = this._getSelectedValues().slice(0);
-    var index = (0, _lodashFindindex2['default'])(selectedValues, function (v) {
-      return v === value;
-    });
+    var index = selectedValues.indexOf(value);
 
     if (index > -1) {
       // remove value

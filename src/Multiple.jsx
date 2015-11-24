@@ -1,5 +1,4 @@
 import React from 'react/addons';
-import _findIndex from 'lodash.findindex';
 import cx from 'classnames';
 
 import Icon from './Icon';
@@ -339,7 +338,7 @@ const MultipleChoice = React.createClass({
     const {onDelete} = this.props;
 
     const selectedValues = this._getSelectedValues().slice(0);
-    const index = _findIndex(selectedValues, (v) => v === value);
+    const index = selectedValues.indexOf(value);
 
     if (index > -1) {
       // remove value
